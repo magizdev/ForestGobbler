@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Forest Gobbler</string>
+    <string name="time">Score：$!</string>
+    <string name="win">Misson Complete!</string>
+    <string name="lose">Misson Failed!</string>
+    <string name="share">I got score $ in Forest Gobbler. How much you can? https://play.google.com/store/apps/details?id=com.magizdev.gobbler</string>
+    
+    <string name = "highScore">High Score</string>
+</resources>

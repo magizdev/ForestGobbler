@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MagizdevLib</string>
+    <string name="score">得分:</string>
+    <color name="score_text_color">#60ADFF</color>
+</resources>

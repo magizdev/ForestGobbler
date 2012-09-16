@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">动物连连看</string>
+    <string name="time">得分：$!</string>
+    <string name="win">完成!</string>
+    <string name="lose">失败!</string>
+    <string name="share">我玩动物连连看得了$分. 你也来试试看吧。 https://play.google.com/store/apps/details?id=com.magizdev.gobbler</string>
+</resources>
