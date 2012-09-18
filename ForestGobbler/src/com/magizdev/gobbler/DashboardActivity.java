@@ -38,7 +38,7 @@ public class DashboardActivity extends Activity {
 		
 		// LinearLayout adContainer = (LinearLayout) this
 		// .findViewById(R.id.adContainer);
-		// adView = new AdView(this, AdSize.BANNER, "a15042e99a83c4f");
+		// adView = new AdView(this, AdSize.BANNER, "");
 		// adContainer.addView(adView);
 		// AdRequest adRequest = new AdRequest();
 		// adView.loadAd(adRequest);
