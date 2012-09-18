@@ -28,13 +28,13 @@ public class DashboardActivity extends Activity {
 		setContentView(R.layout.dashboard);
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		font = Typeface.createFromAsset(getAssets(), "fonts/rmwl_uncialic.ttf");
 
 		setHighScore(R.id.highScore1, HIGH_SCORE_1, 1);
 		setHighScore(R.id.highScore2, HIGH_SCORE_2, 2);
 		setHighScore(R.id.highScore3, HIGH_SCORE_3, 3);
 		setHighScore(R.id.highScore4, HIGH_SCORE_4, 4);
 		setHighScore(R.id.highScore5, HIGH_SCORE_5, 5);
-		font = Typeface.createFromAsset(getAssets(), "fonts/rmwl_uncialic.ttf");
 		
 		// LinearLayout adContainer = (LinearLayout) this
 		// .findViewById(R.id.adContainer);
