@@ -8,7 +8,6 @@ public class GameModel {
 	public class Node {
 		public int x;
 		public int y;
-		public int data;
 
 		public Node(int x, int y) {
 			this.x = x;
@@ -20,18 +19,18 @@ public class GameModel {
 
 	private int xCount;
 	private int yCount;
+	private int iconCounts;
 	private int[][] map;
-	private int iconCounts = 17;
-	private List<Node> path = null;
-	List<Node> n1E = new ArrayList<Node>();
-	List<Node> n2E = new ArrayList<Node>();
+
+	private List<Node> path = new ArrayList<Node>();
+	private List<Node> n1E = new ArrayList<Node>();
+	private List<Node> n2E = new ArrayList<Node>();
 
 	public GameModel(int x, int y, int iconCount) {
 		xCount = x;
 		yCount = y;
 		this.iconCounts = iconCount;
 		map = new int[xCount][yCount];
-		path = new ArrayList<Node>();
 	}
 
 	public int getNode(int x, int y) {
@@ -40,9 +39,10 @@ public class GameModel {
 
 	public void init() {
 		int x = 0;
+		int temp = iconCounts - 1;
 		for (int i = 1; i < xCount - 1; i++) {
 			for (int j = 1; j < yCount - 1; j++) {
-				map[i][j] = (x++) % (iconCounts - 1) + 1;
+				map[i][j] = (x++ / 2) % temp + 1;
 			}
 		}
 		change();
@@ -72,15 +72,13 @@ public class GameModel {
 					for (int j = y; j < yCount - 1; j++) {
 						if (j == y) {
 							for (int i = x + 1; i < xCount - 1; i++) {
-								if (map[i][j] == map[x][y]
-										&& link(new Node(x, y), new Node(i, j))) {
+								if (link(new Node(x, y), new Node(i, j))) {
 									return false;
 								}
 							}
 						} else {
 							for (int i = 1; i < xCount - 1; i++) {
-								if (map[i][j] == map[x][y]
-										&& link(new Node(x, y), new Node(i, j))) {
+								if (link(new Node(x, y), new Node(i, j))) {
 									return false;
 								}
 							}
@@ -93,7 +91,7 @@ public class GameModel {
 	}
 
 	private boolean link(Node n1, Node n2) {
-		if (n1.equals(n2)) {
+		if (n1.equals(n2) || map[n1.x][n1.y] != map[n2.x][n2.y]) {
 			return false;
 		}
 		path.clear();
