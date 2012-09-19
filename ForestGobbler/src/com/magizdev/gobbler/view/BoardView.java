@@ -21,25 +21,20 @@ import com.magizdev.gobbler.R;
 
 public class BoardView extends View {
 
-	protected static int xCount = 8;
-	protected static int yCount = 9;
-	protected int[][] map = new int[xCount][yCount];
 	protected int iconSize;
 	protected int iconCounts = 17;
 	protected Bitmap[] icons = new Bitmap[iconCounts];
-	private Point[] path = null;
 	protected List<Point> selected = new ArrayList<Point>();
+	private GameModel gameModel; 
 
 	public BoardView(Context context, AttributeSet atts) {
 		super(context, atts);
 	}
 
 	public void setBoardSize(int xCount, int yCount) {
-		BoardView.xCount = xCount;
-		BoardView.yCount = yCount;
-
-		calIconSize();
-		map = new int[xCount][yCount];
+		gameModel = new GameModel(xCount, yCount, iconCounts);
+		gameModel.init();
+		calIconSize(xCount);
 
 		Resources r = getResources();
 		loadBitmaps(1, r.getDrawable(R.drawable.animal_1));
@@ -60,7 +55,7 @@ public class BoardView extends View {
 		loadBitmaps(16, r.getDrawable(R.drawable.animal_16));
 	}
 
-	private void calIconSize() {
+	private void calIconSize(int xCount) {
 		DisplayMetrics dm = new DisplayMetrics();
 		((Activity) this.getContext()).getWindowManager().getDefaultDisplay()
 				.getMetrics(dm);
