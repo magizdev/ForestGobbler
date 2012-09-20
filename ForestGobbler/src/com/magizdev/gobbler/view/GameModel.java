@@ -46,9 +46,26 @@ public class GameModel {
 			}
 		}
 		change();
+		path.clear();
+	}
+	
+	public List<Node> getPath(){
+		return this.path;
+	}
+	
+	public int getWidth(){
+		return yCount;
+	}
+	
+	public int getHeight(){
+		return xCount;
+	}
+	
+	public void clear(int x, int y){
+		map[x][y] = BLANK;
 	}
 
-	private void change() {
+	public void change() {
 		Random random = new Random();
 		int tmpV, tmpX, tmpY;
 		for (int x = 1; x < xCount - 1; x++) {
@@ -65,7 +82,13 @@ public class GameModel {
 		}
 	}
 
-	private boolean die() {
+	public boolean die() {
+		boolean die = noLivePath();
+		path.clear();
+		return die;
+	}
+	
+	public boolean noLivePath(){
 		for (int y = 1; y < yCount - 1; y++) {
 			for (int x = 1; x < xCount - 1; x++) {
 				if (map[x][y] != 0) {
@@ -89,8 +112,19 @@ public class GameModel {
 		}
 		return true;
 	}
+	
+	public boolean win() {
+		for (int x = 0; x < xCount; x++) {
+			for (int y = 0; y < yCount; y++) {
+				if (map[x][y] != 0) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
-	private boolean link(Node n1, Node n2) {
+	public boolean link(Node n1, Node n2) {
 		if (n1.equals(n2) || map[n1.x][n1.y] != map[n2.x][n2.y]) {
 			return false;
 		}

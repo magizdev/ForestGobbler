@@ -1,6 +1,5 @@
 package com.magizdev.gobbler.view;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -18,14 +17,15 @@ import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.magizdev.gobbler.R;
+import com.magizdev.gobbler.view.GameModel.Node;
 
 public class BoardView extends View {
 
 	protected int iconSize;
 	protected int iconCounts = 17;
 	protected Bitmap[] icons = new Bitmap[iconCounts];
-	protected List<Point> selected = new ArrayList<Point>();
-	private GameModel gameModel; 
+	protected Node selected = null;
+	protected GameModel gameModel; 
 
 	public BoardView(Context context, AttributeSet atts) {
 		super(context, atts);
@@ -74,46 +74,40 @@ public class BoardView extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 
-		if (path != null && path.length >= 2) {
-			for (int i = 0; i < path.length - 1; i++) {
+		List<Node> path = gameModel.getPath();
+		if (path != null && path.size() >= 2) {
+			for (int i = 0; i < path.size() - 1; i++) {
 				Paint paint = new Paint();
 				paint.setColor(Color.CYAN);
 				paint.setStyle(Paint.Style.STROKE);
 				paint.setStrokeWidth(3);
-				Point p1 = indextoScreen(path[i].x, path[i].y);
-				Point p2 = indextoScreen(path[i + 1].x, path[i + 1].y);
+				Point p1 = indextoScreen(path.get(i).x, path.get(i).y);
+				Point p2 = indextoScreen(path.get(i + 1).x, path.get(i + 1).y);
 				canvas.drawLine(p1.x + iconSize / 2, p1.y + iconSize / 2, p2.x
 						+ iconSize / 2, p2.y + iconSize / 2, paint);
 			}
-			Point p = path[0];
-			map[p.x][p.y] = 0;
-			p = path[path.length - 1];
-			map[p.x][p.y] = 0;
-			selected.clear();
-			path = null;
+			Node n = path.get(0);
+			gameModel.clear(n.x, n.y);
+			n = path.get(path.size()-1);
+			gameModel.clear(n.x, n.y);
+			gameModel.getPath().clear();
+			selected = null;
 		}
-		for (int x = 0; x < map.length; x += 1) {
-			for (int y = 0; y < map[x].length; y += 1) {
-				if (map[x][y] > 0) {
+		for (int x = 0; x < gameModel.getHeight(); x ++) {
+			for (int y = 0; y < gameModel.getWidth(); y ++) {
+				if (gameModel.getNode(x, y) > 0) {
 					Point p = indextoScreen(x, y);
-					canvas.drawBitmap(icons[map[x][y]], p.x, p.y, null);
+					canvas.drawBitmap(icons[gameModel.getNode(x, y)], p.x, p.y, null);
 				}
 			}
 		}
 
-		for (Point position : selected) {
-			Point p = indextoScreen(position.x, position.y);
-			if (map[position.x][position.y] >= 1) {
-				canvas.drawBitmap(icons[map[position.x][position.y]], null,
+		if(selected != null && gameModel.getNode(selected.x,selected.y) >= 1) {
+			Point p = indextoScreen(selected.x, selected.y);
+				canvas.drawBitmap(icons[gameModel.getNode(selected.x,selected.y)], null,
 						new Rect(p.x - 5, p.y - 5, p.x + iconSize + 5, p.y
 								+ iconSize + 5), null);
-			}
 		}
-	}
-
-	public void drawLine(Point[] path) {
-		this.path = path;
-		this.invalidate();
 	}
 
 	public Point indextoScreen(int x, int y) {
@@ -123,7 +117,7 @@ public class BoardView extends View {
 	public Point screenToindex(int x, int y) {
 		int ix = x / iconSize;
 		int iy = y / iconSize;
-		if (ix < xCount && iy < yCount) {
+		if (ix < gameModel.getHeight() && iy < gameModel.getWidth()) {
 			return new Point(ix, iy);
 		} else {
 			return new Point(0, 0);
