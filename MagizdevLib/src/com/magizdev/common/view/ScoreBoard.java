@@ -31,8 +31,6 @@ public class ScoreBoard extends ViewGroup implements IScoreListener {
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		inflate(context, R.layout.score_board, this);
 		totalScore = (TextView) findViewById(R.id.totalScore);
-		Typeface font = Typeface.createFromAsset(context.getAssets(), "fonts/rmwl_uncialic.ttf");
-		totalScore.setTypeface(font);
 		linearLayout = (LinearLayout) findViewById(R.id.scoreBoardRoot);
 		linearLayout.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
 		linearLayout.layout(r - linearLayout.getMeasuredWidth() - linearLayout.getPaddingRight(), 0, r,

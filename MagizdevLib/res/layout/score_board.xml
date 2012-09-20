@@ -12,6 +12,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:textSize="20dp"
+        android:typeface="serif"
         android:textColor="@color/score_text_color"
         android:text="@string/score"/>
 
@@ -21,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textSize="20dp"
+        android:typeface="serif"
         android:textColor="@color/score_text_color"
         android:text="000000"
         android:gravity="right" />
