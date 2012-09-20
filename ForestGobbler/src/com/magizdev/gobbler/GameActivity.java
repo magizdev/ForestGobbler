@@ -96,9 +96,9 @@ public class GameActivity extends Activity implements OnClickListener,
 		score.setScoreListener(scoreBoard);
 
 		if (gameMode == GAME_MODE_EASY) {
-			gameView.startPlay(8, 9);
+			gameView.startPlay(GameView.EASY_MODE);
 		} else {
-			gameView.startPlay(10, 11);
+			gameView.startPlay(GameView.HARD_MODE);
 		}
 	}
 

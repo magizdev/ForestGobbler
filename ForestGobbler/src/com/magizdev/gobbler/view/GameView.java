@@ -58,15 +58,16 @@ public class GameView extends BoardView {
 	public static final int ID_SOUND_TIP = 7;
 	public static final int ID_SOUND_ERROR = 8;
 
-	public void startPlay(int xCount, int yCount) {
-		setBoardSize(xCount, yCount);
-		switch (xCount) {
-		case 8:
-			gameMode = EASY_MODE;
+	public void startPlay(int gameMode) {
+		switch (gameMode) {
+		case EASY_MODE:
+			setBoardSize(8, 9);
 			break;
-		case 10:
-			gameMode = HARD_MODE;
+		case HARD_MODE:
+			setBoardSize(10, 11);
+			break;
 		default:
+			setBoardSize(8, 9);
 			break;
 		}
 		startPlay();
@@ -84,7 +85,6 @@ public class GameView extends BoardView {
 		toolsChangedListener.onTipChanged(Help);
 
 		leftTime = totalTime;
-		setBoardSize(8, 9);
 
 		if (player.isPlaying() == false) {
 			player.start();

@@ -28,7 +28,6 @@ public class DashboardActivity extends Activity {
 		setContentView(R.layout.dashboard);
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		font = Typeface.createFromAsset(getAssets(), "fonts/rmwl_uncialic.ttf");
 
 		setHighScore(R.id.highScore1, HIGH_SCORE_1, 1);
 		setHighScore(R.id.highScore2, HIGH_SCORE_2, 2);
@@ -36,6 +35,7 @@ public class DashboardActivity extends Activity {
 		setHighScore(R.id.highScore4, HIGH_SCORE_4, 4);
 		setHighScore(R.id.highScore5, HIGH_SCORE_5, 5);
 		
+		setStarScore(R.id.starRecord, STAR_ACHIEVEMENT);
 		// LinearLayout adContainer = (LinearLayout) this
 		// .findViewById(R.id.adContainer);
 		// adView = new AdView(this, AdSize.BANNER, "");
@@ -47,9 +47,15 @@ public class DashboardActivity extends Activity {
 
 	public void setHighScore(int textViewId, String highScoreTag, int index) {
 		highScore = (TextView) findViewById(textViewId);
-		highScore.setTypeface(font);
 		int score = prefs.getInt(highScoreTag, 0);
-		String scoreString = String.format("#%1d   %2$06d", index, score);
+		String scoreString = String.format("%1d.    %2$06d", index, score);
+		highScore.setText(scoreString);
+	}
+	
+	public void setStarScore(int textViewId, String highScoreTag) {
+		highScore = (TextView) findViewById(textViewId);
+		int score = prefs.getInt(highScoreTag, 0);
+		String scoreString = String.format("%1$04d", score);
 		highScore.setText(scoreString);
 	}
 

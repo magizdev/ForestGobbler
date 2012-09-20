@@ -125,7 +125,7 @@ public class GameModel {
 	}
 
 	public boolean link(Node n1, Node n2) {
-		if (n1.equals(n2) || map[n1.x][n1.y] != map[n2.x][n2.y]) {
+		if ((n1.x == n2.x && n1.y == n2.y) || map[n1.x][n1.y] != map[n2.x][n2.y]) {
 			return false;
 		}
 		path.clear();

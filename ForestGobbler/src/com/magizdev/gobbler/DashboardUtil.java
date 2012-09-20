@@ -40,7 +40,14 @@ public class DashboardUtil {
 		temp = insert(DashboardActivity.HIGH_SCORE_3, temp);
 		temp = insert(DashboardActivity.HIGH_SCORE_4, temp);
 		temp = insert(DashboardActivity.HIGH_SCORE_5, temp);
-		editor.apply();
+		editor.commit();
+	}
+	
+	public void addStar(int star){
+		int temp = prefs.getInt(DashboardActivity.STAR_ACHIEVEMENT, 0);
+		editor=prefs.edit();
+		editor.putInt(DashboardActivity.STAR_ACHIEVEMENT, temp + star);
+		editor.commit();
 	}
 
 	public int insert(String tag, int highScore){

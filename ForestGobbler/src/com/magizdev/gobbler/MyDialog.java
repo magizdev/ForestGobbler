@@ -54,6 +54,7 @@ public class MyDialog extends Dialog implements OnClickListener {
 
 		DashboardUtil dashboardUtil = new DashboardUtil(context);
 		dashboardUtil.insertHighScore(score.getScore());
+		dashboardUtil.addStar(this.rating);
 		
 		text_msg.setText(msg);
 		scoreString = text_score.getText().toString()
