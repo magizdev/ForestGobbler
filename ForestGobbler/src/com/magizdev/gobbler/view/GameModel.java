@@ -54,6 +54,38 @@ public class GameModel {
 		path.clear();
 	}
 
+	public boolean refill() {
+		boolean die = false;
+
+		List<Node> emptyNodes = new ArrayList<Node>();
+		for (int i = 1; i < xCount - 1; i++) {
+			for (int j = 1; j < yCount - 1; j++) {
+				if (map[i][j] == BLANK) {
+					emptyNodes.add(new Node(i, j));
+				}
+			}
+		}
+
+		if (emptyNodes.size() < 10) {
+			die = true;
+			return die;
+		}
+		
+		int calculatedSize = emptyNodes.size() * 3 / 10 * 2;
+		int increase = Math.max(calculatedSize, 10);
+		
+		int x = 0;
+		int temp = iconCounts -1;
+		for(Node node: emptyNodes){
+			map[node.x][node.y] = (x++ / 2) % temp + 1;
+			increase --;
+			if(increase == 0){
+				break;
+			}
+		}
+		return die;
+	}
+
 	public void setGravity(int gravity) {
 		this.gravity = gravity;
 	}
