@@ -24,6 +24,7 @@ public class GameView extends BoardView {
 	
 	public static final int EASY_MODE = 10;
 	public static final int HARD_MODE = 11;
+	public static final int ENDLESS_MODE = 12;
 
 	private int Help = 3;
 	private int Refresh = 3;
@@ -59,6 +60,7 @@ public class GameView extends BoardView {
 	public static final int ID_SOUND_ERROR = 8;
 
 	public void startPlay(int gameMode) {
+		this.gameMode = gameMode;
 		switch (gameMode) {
 		case EASY_MODE:
 			setBoardSize(8, 9);
@@ -67,7 +69,7 @@ public class GameView extends BoardView {
 			setBoardSize(10, 11);
 			break;
 		default:
-			setBoardSize(8, 9);
+			setBoardSize(9, 10);
 			break;
 		}
 		startPlay();
@@ -77,7 +79,7 @@ public class GameView extends BoardView {
 		return gameMode;
 	}
 
-	public void startPlay() {
+	private void startPlay() {
 		Help = 3;
 		Refresh = 3;
 		isStop = false;

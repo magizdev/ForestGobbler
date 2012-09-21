@@ -32,6 +32,7 @@ public class GameActivity extends Activity implements OnClickListener,
 	public static final String GAME_MODE_TAG = "GAME_MODE_TAG";
 	public static final int GAME_MODE_EASY = 1;
 	public static final int GAME_MODE_HARD = 2;
+	public static final int GAME_MODE_ENDLESS = 3;
 
 	private ImageButton btnRefresh;
 	private ImageButton btnTip;
@@ -97,8 +98,10 @@ public class GameActivity extends Activity implements OnClickListener,
 
 		if (gameMode == GAME_MODE_EASY) {
 			gameView.startPlay(GameView.EASY_MODE);
-		} else {
+		} else if (gameMode == GAME_MODE_HARD) {
 			gameView.startPlay(GameView.HARD_MODE);
+		} else {
+			gameView.startPlay(GameView.ENDLESS_MODE);
 		}
 	}
 
