@@ -94,7 +94,7 @@ public class MyDialog extends Dialog implements OnClickListener {
 		case R.id.replay_imgbtn:
 			this.dismiss();
 			score.Clear();
-			gameview.startPlay();
+			gameview.startPlay(gameview.getGameMode());
 			break;
 		case R.id.next_imgbtn:
 			Drawable ratingPic = context.getResources().getDrawable(

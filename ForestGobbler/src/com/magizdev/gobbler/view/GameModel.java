@@ -16,11 +16,16 @@ public class GameModel {
 	}
 
 	public static final int BLANK = 0;
+	public static final int GRAVITY_UP = 1;
+	public static final int GRAVITY_RIGHT = 2;
+	public static final int GRAVITY_DOWN = 3;
+	public static final int GRAVITY_LEFT = 4;
 
 	private int xCount;
 	private int yCount;
 	private int iconCounts;
 	private int[][] map;
+	private int gravity = 3;
 
 	private List<Node> path = new ArrayList<Node>();
 	private List<Node> n1E = new ArrayList<Node>();
@@ -48,34 +53,108 @@ public class GameModel {
 		change();
 		path.clear();
 	}
-	
-	public List<Node> getPath(){
+
+	public void setGravity(int gravity) {
+		this.gravity = gravity;
+	}
+
+	public List<Node> getPath() {
 		return this.path;
 	}
-	
-	public int getWidth(){
+
+	public int getWidth() {
 		return yCount;
 	}
-	
-	public int getHeight(){
+
+	public int getHeight() {
 		return xCount;
 	}
-	
-	public void clear(int x, int y){
-		map[x][y] = BLANK;
+
+	public void clear(Node pair1, Node pair2) {
+		map[pair1.x][pair1.y] = BLANK;
+		map[pair2.x][pair2.y] = BLANK;
+		onGravity(pair1);
+		onGravity(pair2);
+	}
+
+	private void onGravity(Node node) {
+		int x = node.x;
+		int y = node.y;
+		int move = 0;
+		switch (this.gravity) {
+		case GRAVITY_UP:
+			for (int i = 1; i + move < yCount; i++) {
+				if (map[x][i] == BLANK) {
+					while (i + move != yCount && map[x][i + move] == BLANK) {
+						move++;
+					}
+					map[x][i] = map[x][i + move];
+					map[x][i + move] = BLANK;
+				}
+			}
+			break;
+		case GRAVITY_RIGHT:
+			for (int i = xCount - 1; i - move >= 0; i--) {
+				if (map[i][y] == BLANK) {
+					while (i - move != 0 && map[i - move][y] == BLANK) {
+						move++;
+					}
+					map[i][y] = map[i - move][y];
+					map[i - move][y] = BLANK;
+				}
+			}
+			break;
+		case GRAVITY_DOWN:
+			for (int i = xCount - 1; i - move >= 0; i--) {
+				if (map[x][i] == BLANK) {
+					while (i - move != 0 && map[x][i - move] == BLANK) {
+						move++;
+					}
+					map[x][i] = map[x][i - move];
+					map[x][i - move] = BLANK;
+				}
+			}
+			break;
+		case GRAVITY_LEFT:
+			for (int i = 1; i + move < xCount; i++) {
+				if (map[i][y] == BLANK) {
+					while (i + move != xCount && map[i + move][y] == BLANK) {
+						move++;
+					}
+					map[i][y] = map[i + move][y];
+					map[i + move][y] = BLANK;
+				}
+			}
+			break;
+		default:
+			break;
+		}
 	}
 
 	public void change() {
 		Random random = new Random();
+		List<Node> nonEmptyNodes = new ArrayList<Node>();
 		int tmpV, tmpX, tmpY;
 		for (int x = 1; x < xCount - 1; x++) {
 			for (int y = 1; y < yCount - 1; y++) {
-				tmpX = 1 + random.nextInt(xCount - 2);
-				tmpY = 1 + random.nextInt(yCount - 2);
-				tmpV = map[x][y];
-				map[x][y] = map[tmpX][tmpY];
-				map[tmpX][tmpY] = tmpV;
+				// tmpX = 1 + random.nextInt(xCount - 2);
+				// tmpY = 1 + random.nextInt(yCount - 2);
+				// tmpV = map[x][y];
+				// map[x][y] = map[tmpX][tmpY];
+				// map[tmpX][tmpY] = tmpV;
+
+				if (map[x][y] != BLANK) {
+					nonEmptyNodes.add(new Node(x, y));
+				}
 			}
+		}
+
+		for (int i = 0; i < nonEmptyNodes.size(); i++) {
+			int temp = random.nextInt(nonEmptyNodes.size());
+			tmpV = map[nonEmptyNodes.get(i).x][nonEmptyNodes.get(i).y];
+			map[nonEmptyNodes.get(i).x][nonEmptyNodes.get(i).y] = map[nonEmptyNodes
+					.get(temp).x][nonEmptyNodes.get(temp).y];
+			map[nonEmptyNodes.get(temp).x][nonEmptyNodes.get(temp).y] = tmpV;
 		}
 		if (die()) {
 			change();
@@ -87,8 +166,8 @@ public class GameModel {
 		path.clear();
 		return die;
 	}
-	
-	public boolean noLivePath(){
+
+	public boolean noLivePath() {
 		for (int y = 1; y < yCount - 1; y++) {
 			for (int x = 1; x < xCount - 1; x++) {
 				if (map[x][y] != 0) {
@@ -112,7 +191,7 @@ public class GameModel {
 		}
 		return true;
 	}
-	
+
 	public boolean win() {
 		for (int x = 0; x < xCount; x++) {
 			for (int y = 0; y < yCount; y++) {
@@ -125,7 +204,8 @@ public class GameModel {
 	}
 
 	public boolean link(Node n1, Node n2) {
-		if ((n1.x == n2.x && n1.y == n2.y) || map[n1.x][n1.y] != map[n2.x][n2.y]) {
+		if ((n1.x == n2.x && n1.y == n2.y)
+				|| map[n1.x][n1.y] != map[n2.x][n2.y]) {
 			return false;
 		}
 		path.clear();

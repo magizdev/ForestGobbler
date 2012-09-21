@@ -86,10 +86,9 @@ public class BoardView extends View {
 				canvas.drawLine(p1.x + iconSize / 2, p1.y + iconSize / 2, p2.x
 						+ iconSize / 2, p2.y + iconSize / 2, paint);
 			}
-			Node n = path.get(0);
-			gameModel.clear(n.x, n.y);
-			n = path.get(path.size()-1);
-			gameModel.clear(n.x, n.y);
+			Node n1 = path.get(0);
+			Node n2 = path.get(path.size()-1);
+			gameModel.clear(n1, n2);
 			gameModel.getPath().clear();
 			selected = null;
 		}
