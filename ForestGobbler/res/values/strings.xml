@@ -8,10 +8,10 @@
     
     <string name = "highScore">High Score</string>
     
-    <string name = "feature_gravity_up">Move up (250 stars)</string>
-    <string name = "feature_gravity_down">Move down (150 stars)</string>
-    <string name = "feature_gravity_left">Move left (300 stars)</string>
-    <string name = "feature_gravity_right">Move right (200 stars)</string>
-    <string name = "feature_rotate">Rotate (100 stars)</string>
+    <string name = "feature_gravity_up">Move up (200 stars)</string>
+    <string name = "feature_gravity_down">Move down (100 stars)</string>
+    <string name = "feature_gravity_left">Move left (250 stars)</string>
+    <string name = "feature_gravity_right">Move right (150 stars)</string>
+    <string name = "feature_rotate">Rotate (50 stars)</string>
     
 </resources>

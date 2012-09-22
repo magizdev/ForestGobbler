@@ -37,15 +37,15 @@ public class FeatureSettingUtil {
 	public int getFeatureRequirement(int featureId) {
 		switch (featureId) {
 		case R.string.feature_rotate:
-			return 100;
+			return 50;
 		case R.string.feature_gravity_down:
-			return 150;
+			return 100;
 		case R.string.feature_gravity_right:
-			return 200;
+			return 150;
 		case R.string.feature_gravity_up:
-			return 250;
+			return 200;
 		case R.string.feature_gravity_left:
-			return 300;
+			return 250;
 		}
 		return 0;
 	}
