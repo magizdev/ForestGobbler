@@ -79,7 +79,7 @@ public class FeatureListAdapter extends BaseAdapter {
 		holder.toggle.setTag(id);
 		holder.toggle.setChecked(featureUtil.getFeature(id));
 
-		if (featureUtil.getFeatureRequirement(id) <= 500) {
+		if (featureUtil.getFeatureRequirement(id) <= dashboardUtil.getStars()) {
 			holder.toggle.setEnabled(true);
 		} else {
 			holder.toggle.setEnabled(false);

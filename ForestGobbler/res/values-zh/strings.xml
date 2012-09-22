@@ -7,6 +7,7 @@
     <string name="lose">失败!</string>
     <string name="share">我玩动物连连看得了$分. 你也来试试看吧。 https://play.google.com/store/apps/details?id=com.magizdev.gobbler</string>
     
+    <string name = "highScore">积分榜</string>
     <string name="feature_gravity_up">向上滑动 (200颗星)</string>
     <string name="feature_gravity_down">向下滑动 (100颗星)</string>
     <string name="feature_gravity_left">向左滑动 (250颗星)</string>
