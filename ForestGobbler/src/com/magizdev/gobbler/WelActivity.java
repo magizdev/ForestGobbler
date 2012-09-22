@@ -22,19 +22,11 @@ public class WelActivity extends Activity implements OnClickListener {
 	private ImageButton btnDashboard;
 
 	private MediaPlayer player;
-	private AdView adView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.welcome);
-
-		LinearLayout adContainer = (LinearLayout) this
-				.findViewById(R.id.adContainer);
-		adView = new AdView(this, AdSize.BANNER, "");
-		adContainer.addView(adView);
-		AdRequest adRequest = new AdRequest();
-		adView.loadAd(adRequest);
 
 		btnPlayEasy = (ImageButton) findViewById(R.id.play_btn_easy);
 		btnPlayHard = (ImageButton) findViewById(R.id.play_btn_hard);
@@ -57,12 +49,6 @@ public class WelActivity extends Activity implements OnClickListener {
 	protected void onPause() {
 		super.onPause();
 		player.pause();
-	}
-
-	@Override
-	protected void onDestroy() {
-		adView.destroy();
-		super.onDestroy();
 	}
 
 	@Override

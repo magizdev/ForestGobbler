@@ -2,12 +2,10 @@ package com.magizdev.gobbler;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.widget.ListView;
 import android.widget.TextView;
-
-import com.google.ads.AdView;
 
 public class DashboardActivity extends Activity {
 	public static final String HIGH_SCORE_1 = "HIGH_SCORE_1";
@@ -17,16 +15,18 @@ public class DashboardActivity extends Activity {
 	public static final String HIGH_SCORE_5 = "HIGH_SCORE_5";
 	public static final String STAR_ACHIEVEMENT = "STAR_ACHIEVEMENT";
 
-	private AdView adView;
 	private SharedPreferences prefs;
-	private Typeface font;
 	private TextView highScore;
+	private ListView featureList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dashboard);
 
+		featureList = (ListView) findViewById(R.id.listFeatures);
+		FeatureListAdapter adapter= new FeatureListAdapter(this);
+		featureList.setAdapter(adapter);
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		setHighScore(R.id.highScore1, HIGH_SCORE_1, 1);
@@ -36,12 +36,6 @@ public class DashboardActivity extends Activity {
 		setHighScore(R.id.highScore5, HIGH_SCORE_5, 5);
 		
 		setStarScore(R.id.starRecord, STAR_ACHIEVEMENT);
-		// LinearLayout adContainer = (LinearLayout) this
-		// .findViewById(R.id.adContainer);
-		// adView = new AdView(this, AdSize.BANNER, "");
-		// adContainer.addView(adView);
-		// AdRequest adRequest = new AdRequest();
-		// adView.loadAd(adRequest);
 
 	}
 
@@ -58,26 +52,4 @@ public class DashboardActivity extends Activity {
 		String scoreString = String.format("%1$04d", score);
 		highScore.setText(scoreString);
 	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	protected void onDestroy() {
-		// adView.destroy();
-		super.onDestroy();
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-
-	}
-
-	public void quit() {
-		this.finish();
-	}
-
 }

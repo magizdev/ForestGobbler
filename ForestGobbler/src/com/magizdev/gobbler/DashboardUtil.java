@@ -9,12 +9,10 @@ import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
 public class DashboardUtil {
-	private Context context;
 	SharedPreferences prefs;
 	Editor editor;
 	
 	public DashboardUtil(Context context){
-		this.context = context;
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 	
@@ -27,6 +25,10 @@ public class DashboardUtil {
 		highScores.add(prefs.getInt(DashboardActivity.HIGH_SCORE_5, 0));
 		
 		return highScores;
+	}
+	
+	public int getStars(){
+		return prefs.getInt(DashboardActivity.STAR_ACHIEVEMENT, 0);
 	}
 	
 	public void insertHighScore(int highScore){

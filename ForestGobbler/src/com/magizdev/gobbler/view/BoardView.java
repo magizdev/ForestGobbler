@@ -1,6 +1,8 @@
 package com.magizdev.gobbler.view;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,6 +10,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -16,6 +19,7 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 
+import com.magizdev.gobbler.FeatureSettingUtil;
 import com.magizdev.gobbler.R;
 import com.magizdev.gobbler.view.GameModel.Node;
 
@@ -25,15 +29,46 @@ public class BoardView extends View {
 	protected int iconCounts = 17;
 	protected Bitmap[] icons = new Bitmap[iconCounts];
 	protected Node selected = null;
-	protected GameModel gameModel; 
+	protected GameModel gameModel;
+	protected FeatureSettingUtil featureUtil;
+	private Random r;
 
 	public BoardView(Context context, AttributeSet atts) {
 		super(context, atts);
+		featureUtil = new FeatureSettingUtil(context);
+		r = new Random();
 	}
 
 	public void setBoardSize(int xCount, int yCount) {
 		gameModel = new GameModel(xCount, yCount, iconCounts);
 		gameModel.init();
+
+		List<Integer> enabledGravity = new ArrayList<Integer>();
+		for (int id : featureUtil.getFeatures()) {
+			if (featureUtil.getFeature(id)) {
+				enabledGravity.add(id);
+			}
+		}
+
+		if (enabledGravity.size() > 0) {
+			int gravityId = enabledGravity
+					.get(r.nextInt(enabledGravity.size()));
+			switch (gravityId) {
+			case R.string.feature_gravity_down:
+				gameModel.setGravity(GameModel.GRAVITY_DOWN);
+				break;
+			case R.string.feature_gravity_left:
+				gameModel.setGravity(GameModel.GRAVITY_LEFT);
+				break;
+			case R.string.feature_gravity_right:
+				gameModel.setGravity(GameModel.GRAVITY_RIGHT);
+				break;
+			case R.string.feature_gravity_up:
+				gameModel.setGravity(GameModel.GRAVITY_UP);
+				break;
+			}
+		}
+
 		calIconSize(xCount);
 
 		Resources r = getResources();
@@ -87,25 +122,38 @@ public class BoardView extends View {
 						+ iconSize / 2, p2.y + iconSize / 2, paint);
 			}
 			Node n1 = path.get(0);
-			Node n2 = path.get(path.size()-1);
+			Node n2 = path.get(path.size() - 1);
 			gameModel.clear(n1, n2);
 			gameModel.getPath().clear();
 			selected = null;
 		}
-		for (int x = 0; x < gameModel.getHeight(); x ++) {
-			for (int y = 0; y < gameModel.getWidth(); y ++) {
+		for (int x = 0; x < gameModel.getHeight(); x++) {
+			for (int y = 0; y < gameModel.getWidth(); y++) {
 				if (gameModel.getNode(x, y) > 0) {
 					Point p = indextoScreen(x, y);
-					canvas.drawBitmap(icons[gameModel.getNode(x, y)], p.x, p.y, null);
+					if (featureUtil.getFeature(R.string.feature_rotate)) {
+						Matrix matrix = new Matrix();
+						int random = r.nextInt(10);
+						if (random > 8) {
+							matrix.postRotate(90 * r.nextInt(4));
+						}
+						Bitmap temp = Bitmap.createBitmap(
+								icons[gameModel.getNode(x, y)], 0, 0, iconSize,
+								iconSize, matrix, true);
+						canvas.drawBitmap(temp, p.x, p.y, null);
+					} else {
+						canvas.drawBitmap(icons[gameModel.getNode(x, y)], p.x,
+								p.y, null);
+					}
 				}
 			}
 		}
 
-		if(selected != null && gameModel.getNode(selected.x,selected.y) >= 1) {
+		if (selected != null && gameModel.getNode(selected.x, selected.y) >= 1) {
 			Point p = indextoScreen(selected.x, selected.y);
-				canvas.drawBitmap(icons[gameModel.getNode(selected.x,selected.y)], null,
-						new Rect(p.x - 5, p.y - 5, p.x + iconSize + 5, p.y
-								+ iconSize + 5), null);
+			canvas.drawBitmap(icons[gameModel.getNode(selected.x, selected.y)],
+					null, new Rect(p.x - 5, p.y - 5, p.x + iconSize + 5, p.y
+							+ iconSize + 5), null);
 		}
 	}
 

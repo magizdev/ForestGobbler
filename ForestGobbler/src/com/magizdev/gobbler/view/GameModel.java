@@ -25,7 +25,7 @@ public class GameModel {
 	private int yCount;
 	private int iconCounts;
 	private int[][] map;
-	private int gravity = 3;
+	private int gravity = 0;
 
 	private List<Node> path = new ArrayList<Node>();
 	private List<Node> n1E = new ArrayList<Node>();
@@ -70,16 +70,16 @@ public class GameModel {
 			die = true;
 			return die;
 		}
-		
+
 		int calculatedSize = emptyNodes.size() * 3 / 10 * 2;
 		int increase = Math.max(calculatedSize, 10);
-		
+
 		int x = 0;
-		int temp = iconCounts -1;
-		for(Node node: emptyNodes){
+		int temp = iconCounts - 1;
+		for (Node node : emptyNodes) {
 			map[node.x][node.y] = (x++ / 2) % temp + 1;
-			increase --;
-			if(increase == 0){
+			increase--;
+			if (increase == 0) {
 				break;
 			}
 		}
@@ -117,7 +117,7 @@ public class GameModel {
 		case GRAVITY_UP:
 			for (int i = 1; i + move < yCount; i++) {
 				if (map[x][i] == BLANK) {
-					while (i + move != yCount && map[x][i + move] == BLANK) {
+					while (i + move != yCount - 1 && map[x][i + move] == BLANK) {
 						move++;
 					}
 					map[x][i] = map[x][i + move];
@@ -126,7 +126,7 @@ public class GameModel {
 			}
 			break;
 		case GRAVITY_RIGHT:
-			for (int i = xCount - 1; i - move >= 0; i--) {
+			for (int i = xCount - 2; i - move >= 0; i--) {
 				if (map[i][y] == BLANK) {
 					while (i - move != 0 && map[i - move][y] == BLANK) {
 						move++;
@@ -137,7 +137,7 @@ public class GameModel {
 			}
 			break;
 		case GRAVITY_DOWN:
-			for (int i = xCount - 1; i - move >= 0; i--) {
+			for (int i = yCount - 2; i - move >= 0; i--) {
 				if (map[x][i] == BLANK) {
 					while (i - move != 0 && map[x][i - move] == BLANK) {
 						move++;
@@ -150,7 +150,7 @@ public class GameModel {
 		case GRAVITY_LEFT:
 			for (int i = 1; i + move < xCount; i++) {
 				if (map[i][y] == BLANK) {
-					while (i + move != xCount && map[i + move][y] == BLANK) {
+					while (i + move != xCount - 1 && map[i + move][y] == BLANK) {
 						move++;
 					}
 					map[i][y] = map[i + move][y];

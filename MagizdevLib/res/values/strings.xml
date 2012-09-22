@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">MagizdevLib</string>
     <string name="score">Score:</string>
-    <color name="score_text_color">#60ADFF</color>
+    <color name="score_text_color">#2A0AFF</color>
 </resources>

@@ -4,14 +4,6 @@
     android:layout_height="fill_parent"
     android:background="@drawable/background" >
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/adContainer"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-    </LinearLayout>
-
     <ImageButton
         android:id="@+id/dashboard_btn"
         android:layout_width="wrap_content"
@@ -19,7 +11,6 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="40dp"
         android:layout_marginRight="47dp"
-        android:layout_below="@id/adContainer"
         android:background="@android:color/transparent"
         android:src="@drawable/high_score" />
 
