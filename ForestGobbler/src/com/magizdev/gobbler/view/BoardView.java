@@ -28,6 +28,7 @@ public class BoardView extends View {
 	protected int iconSize;
 	protected int iconCounts = 17;
 	protected Bitmap[] icons = new Bitmap[iconCounts];
+	private Bitmap selectBox;
 	protected Node selected = null;
 	protected GameModel gameModel;
 	protected FeatureSettingUtil featureUtil;
@@ -88,6 +89,7 @@ public class BoardView extends View {
 		loadBitmaps(14, r.getDrawable(R.drawable.animal_14));
 		loadBitmaps(15, r.getDrawable(R.drawable.animal_15));
 		loadBitmaps(16, r.getDrawable(R.drawable.animal_16));
+		selectBox = DrawableToBitmap(r.getDrawable(R.drawable.selected));
 	}
 
 	private void calIconSize(int xCount) {
@@ -98,12 +100,16 @@ public class BoardView extends View {
 	}
 
 	public void loadBitmaps(int key, Drawable d) {
+		icons[key] = DrawableToBitmap(d);
+	}
+	
+	private Bitmap DrawableToBitmap(Drawable d){
 		Bitmap bitmap = Bitmap.createBitmap(iconSize, iconSize,
 				Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
 		d.setBounds(0, 0, iconSize, iconSize);
 		d.draw(canvas);
-		icons[key] = bitmap;
+		return bitmap;
 	}
 
 	@Override
@@ -151,9 +157,9 @@ public class BoardView extends View {
 
 		if (selected != null && gameModel.getNode(selected.x, selected.y) >= 1) {
 			Point p = indextoScreen(selected.x, selected.y);
-			canvas.drawBitmap(icons[gameModel.getNode(selected.x, selected.y)],
-					null, new Rect(p.x - 5, p.y - 5, p.x + iconSize + 5, p.y
-							+ iconSize + 5), null);
+			canvas.drawBitmap(selectBox,
+					null, new Rect(p.x, p.y, p.x + iconSize, p.y
+							+ iconSize), null);
 		}
 	}
 

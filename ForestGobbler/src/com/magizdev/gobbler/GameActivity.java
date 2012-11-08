@@ -102,6 +102,7 @@ public class GameActivity extends Activity implements OnClickListener,
 			gameView.startPlay(GameView.HARD_MODE);
 		} else {
 			gameView.startPlay(GameView.ENDLESS_MODE);
+			progress.setMax(10);
 		}
 	}
 

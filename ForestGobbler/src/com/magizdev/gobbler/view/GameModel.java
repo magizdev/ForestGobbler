@@ -1,6 +1,7 @@
 package com.magizdev.gobbler.view;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -68,14 +69,14 @@ public class GameModel {
 
 		if (emptyNodes.size() < 10) {
 			die = true;
-			return die;
 		}
 
 		int calculatedSize = emptyNodes.size() * 3 / 10 * 2;
-		int increase = Math.max(calculatedSize, 10);
+		int increase = Math.max(calculatedSize, 8);
 
 		int x = 0;
 		int temp = iconCounts - 1;
+		Collections.shuffle(emptyNodes);
 		for (Node node : emptyNodes) {
 			map[node.x][node.y] = (x++ / 2) % temp + 1;
 			increase--;

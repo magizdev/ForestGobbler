@@ -5,6 +5,7 @@ import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
+import android.renderscript.Mesh.Primitive;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
@@ -21,7 +22,7 @@ public class GameView extends BoardView {
 	public static final int PAUSE = 3;
 	public static final int PLAY = 4;
 	public static final int QUIT = 5;
-	
+
 	public static final int EASY_MODE = 10;
 	public static final int HARD_MODE = 11;
 	public static final int ENDLESS_MODE = 12;
@@ -35,7 +36,7 @@ public class GameView extends BoardView {
 	public static SoundPlay soundPlay;
 	public MediaPlayer player;
 
-	private RefreshTime refreshTime;
+	private Thread refreshTime;
 	private RefreshHandler refreshHandler = new RefreshHandler();
 	private boolean isStop;
 	private int state;
@@ -44,6 +45,13 @@ public class GameView extends BoardView {
 	private OnStateListener stateListener = null;
 	private OnToolsChangeListener toolsChangedListener = null;
 	private OnScoreListener scoreListener = null;
+
+	private Handler uiHandler = new Handler() {
+		@Override
+		public void handleMessage(Message what) {
+			invalidate();
+		}
+	};
 
 	public GameView(Context context, AttributeSet atts) {
 		super(context, atts);
@@ -63,6 +71,7 @@ public class GameView extends BoardView {
 		this.gameMode = gameMode;
 		switch (gameMode) {
 		case EASY_MODE:
+		case ENDLESS_MODE:
 			setBoardSize(8, 9);
 			break;
 		case HARD_MODE:
@@ -74,8 +83,8 @@ public class GameView extends BoardView {
 		}
 		startPlay();
 	}
-	
-	public int getGameMode(){
+
+	public int getGameMode() {
 		return gameMode;
 	}
 
@@ -91,7 +100,12 @@ public class GameView extends BoardView {
 		if (player.isPlaying() == false) {
 			player.start();
 		}
-		refreshTime = new RefreshTime();
+
+		if (this.gameMode == ENDLESS_MODE) {
+			refreshTime = new EndlessRefreshTime();
+		} else {
+			refreshTime = new RefreshTime();
+		}
 		refreshTime.start();
 		GameView.this.invalidate();
 	}
@@ -134,8 +148,8 @@ public class GameView extends BoardView {
 		refreshTime = new RefreshTime();
 		refreshTime.start();
 	}
-	
-	public boolean win(){
+
+	public boolean win() {
 		return gameModel.win();
 	}
 
@@ -181,6 +195,31 @@ public class GameView extends BoardView {
 				soundPlay.play(ID_SOUND_LOSE, 0);
 			}
 
+		}
+	}
+
+	class EndlessRefreshTime extends Thread {
+		public void run() {
+			boolean die = false;
+			int i = 0;
+			while (!die && !isStop) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				i++;
+				timerListener.onTimer(i);
+				if (i == 10) {
+					die = gameModel.refill();
+					uiHandler.sendEmptyMessage(1);
+					i = 0;
+				}
+			}
+			if (die) {
+				setMode(LOSE);
+				soundPlay.play(ID_SOUND_LOSE, 0);
+			}
 		}
 	}
 
@@ -230,7 +269,6 @@ public class GameView extends BoardView {
 		return this.state;
 	}
 
-
 	public void autoClear() {
 		if (Help == 0) {
 			soundPlay.play(ID_SOUND_ERROR, 0);
@@ -256,9 +294,9 @@ public class GameView extends BoardView {
 			invalidate();
 		}
 	}
-	
+
 	@Override
-	public boolean isInEditMode(){
+	public boolean isInEditMode() {
 		return true;
 	}
 }
