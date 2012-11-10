@@ -4,34 +4,60 @@
     android:layout_height="fill_parent"
     android:background="@drawable/background" >
 
-    <ImageButton
-        android:id="@+id/dashboard_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="40dp"
-        android:layout_marginRight="47dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/high_score" />
-
-    <ImageButton
-        android:id="@+id/play_btn_hard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="51dp"
-        android:layout_marginRight="47dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/title_hard" />
-
-    <ImageButton
+    <Button
         android:id="@+id/play_btn_easy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/play_btn_hard"
-        android:layout_marginLeft="47dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/title_easy" />
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/btn_background"
+        android:text="Easy" />
+
+    <ImageView
+        android:layout_width="240dp"
+        android:layout_height="184dp"
+        android:layout_above="@+id/play_btn_easy"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:src="@drawable/head" />
+
+    <Button
+        android:id="@+id/play_btn_hard"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/play_btn_easy"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_background"
+        android:text="Hard" />
+
+    <Button
+        android:id="@+id/play_btn_endless"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/play_btn_hard"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_background"
+        android:text="Endless" />
+
+    <Button
+        android:id="@+id/dashboard_btn"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/play_btn_endless"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_background"
+        android:text="High Score" />
+
+    <Button
+        android:id="@+id/setting_btn"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/dashboard_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_background"
+        android:text="Settings" />
 
 </RelativeLayout>

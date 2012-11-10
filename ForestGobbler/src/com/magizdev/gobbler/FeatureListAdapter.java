@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -66,8 +67,8 @@ public class FeatureListAdapter extends BaseAdapter {
 			holder = new ViewHolder();
 			convertView = mInflater.inflate(R.layout.featurelist, null);
 			holder.title = (TextView) convertView.findViewById(R.id.title);
-			holder.toggle = (ToggleButton) convertView
-					.findViewById(R.id.switch1);
+			holder.toggle = (CheckBox) convertView
+					.findViewById(R.id.checkBox);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -123,7 +124,7 @@ public class FeatureListAdapter extends BaseAdapter {
 
 	public class ViewHolder {
 		public TextView title;
-		public ToggleButton toggle;
+		public CheckBox toggle;
 	}
 
 }

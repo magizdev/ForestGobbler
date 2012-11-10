@@ -67,7 +67,7 @@ public class GameModel {
 			}
 		}
 
-		if (emptyNodes.size() < 10) {
+		if (emptyNodes.size() < 8) {
 			die = true;
 		}
 

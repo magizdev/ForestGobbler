@@ -5,7 +5,6 @@ import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
-import android.renderscript.Mesh.Primitive;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
@@ -71,8 +70,11 @@ public class GameView extends BoardView {
 		this.gameMode = gameMode;
 		switch (gameMode) {
 		case EASY_MODE:
+			setBoardSize(8, 9);
+			break;
 		case ENDLESS_MODE:
 			setBoardSize(8, 9);
+			gameModel.setGravity(GameModel.BLANK);
 			break;
 		case HARD_MODE:
 			setBoardSize(10, 11);

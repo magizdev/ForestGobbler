@@ -7,6 +7,8 @@
     <string name="share">I got score $ in Forest Gobbler. How much you can? https://play.google.com/store/apps/details?id=com.magizdev.gobbler</string>
     
     <string name = "highScore">High Score</string>
+    <string name = "setting">Settings</string>
+	<string name = "settingDesc">Collect Star to unlock settings</string>
     
     <string name = "feature_gravity_up">Move up (200 stars)</string>
     <string name = "feature_gravity_down">Move down (100 stars)</string>

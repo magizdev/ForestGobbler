@@ -8,18 +8,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-
-import com.google.ads.AdRequest;
-import com.google.ads.AdSize;
-import com.google.ads.AdView;
+import android.widget.Button;
 
 public class WelActivity extends Activity implements OnClickListener {
 
-	private ImageButton btnPlayEasy;
-	private ImageButton btnPlayHard;
-	private ImageButton btnDashboard;
+	private Button btnPlayEasy;
+	private Button btnPlayHard;
+	private Button btnPlayEndless;
+	private Button btnDashboard;
+	private Button btnSetting;
 
 	private MediaPlayer player;
 
@@ -28,18 +25,22 @@ public class WelActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.welcome);
 
-		btnPlayEasy = (ImageButton) findViewById(R.id.play_btn_easy);
-		btnPlayHard = (ImageButton) findViewById(R.id.play_btn_hard);
-		btnDashboard = (ImageButton) findViewById(R.id.dashboard_btn);
+		btnPlayEasy = (Button) findViewById(R.id.play_btn_easy);
+		btnPlayHard = (Button) findViewById(R.id.play_btn_hard);
+		btnDashboard = (Button) findViewById(R.id.dashboard_btn);
+		btnPlayEndless = (Button) findViewById(R.id.play_btn_endless);
+		btnSetting = (Button) findViewById(R.id.setting_btn);
 
 		btnPlayEasy.setOnClickListener(this);
 		btnPlayHard.setOnClickListener(this);
 		btnDashboard.setOnClickListener(this);
-		
+		btnPlayEndless.setOnClickListener(this);
+		btnSetting.setOnClickListener(this);
 
-		Animation scale = AnimationUtils.loadAnimation(this, R.anim.scale_anim);
-		btnPlayEasy.startAnimation(scale);
-		btnPlayHard.startAnimation(scale);
+		// Animation scale = AnimationUtils.loadAnimation(this,
+		// R.anim.scale_anim);
+		// btnPlayEasy.startAnimation(scale);
+		// btnPlayHard.startAnimation(scale);
 		player = MediaPlayer.create(this, R.raw.bg);
 		player.setLooping(true);
 		player.start();
@@ -54,18 +55,32 @@ public class WelActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		Intent gameIntent = new Intent(this, GameActivity.class);
+		
+		Animation flyOut=AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right);
 
 		switch (v.getId()) {
 		case R.id.play_btn_hard:
 			gameIntent.putExtra(GameActivity.GAME_MODE_TAG,
 					GameActivity.GAME_MODE_HARD);
+			btnPlayHard.startAnimation(flyOut);
 			break;
 		case R.id.play_btn_easy:
 			gameIntent.putExtra(GameActivity.GAME_MODE_TAG,
 					GameActivity.GAME_MODE_EASY);
+			btnPlayEasy.startAnimation(flyOut);
+			break;
+		case R.id.play_btn_endless:
+			gameIntent.putExtra(GameActivity.GAME_MODE_TAG,
+					GameActivity.GAME_MODE_ENDLESS);
+			btnPlayEndless.startAnimation(flyOut);
 			break;
 		case R.id.dashboard_btn:
 			gameIntent = new Intent(this, DashboardActivity.class);
+			btnDashboard.startAnimation(flyOut);
+			break;
+		case R.id.setting_btn:
+			gameIntent = new Intent(this, SettingActivity.class);
+			btnSetting.startAnimation(flyOut);
 			break;
 		}
 

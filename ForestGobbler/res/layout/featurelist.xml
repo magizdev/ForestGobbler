@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal"
     android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp" >
+    android:layout_marginRight="10dp"
+    android:orientation="horizontal" >
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -15,15 +15,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:textSize="20dp"
-            android:textColor="@color/score_text_color" />
+            android:textColor="@color/score_text_color"
+            android:textSize="20dp" />
 
-        <ToggleButton
-            android:id="@+id/switch1"
+        <CheckBox
+            android:id="@+id/checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
+            android:layout_alignParentRight="true" />
     </RelativeLayout>
 
 </LinearLayout>
