@@ -90,9 +90,9 @@ public class FeatureListAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				ToggleButton button = (ToggleButton) v;
+				CheckBox checkBox = (CheckBox) v;
 				int id = (Integer) v.getTag();
-				featureUtil.setFeature(id, button.isChecked());
+				featureUtil.setFeature(id, checkBox.isChecked());
 			}
 		});
 		return convertView;
