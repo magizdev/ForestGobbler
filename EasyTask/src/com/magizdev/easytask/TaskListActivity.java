@@ -4,11 +4,14 @@ import java.util.Date;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -28,7 +31,7 @@ public class TaskListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_list);
 		listView = (ListView) this.findViewById(R.id.taskList);
-		inputArea = (RelativeLayout)this.findViewById(R.id.inputArea);
+		inputArea = (RelativeLayout) this.findViewById(R.id.inputArea);
 		util = new EasyTaskUtil(this);
 		final TaskListAdapter adapter = new TaskListAdapter(this);
 		listView.setAdapter(adapter);
@@ -45,8 +48,18 @@ public class TaskListActivity extends Activity {
 					}
 				});
 		listView.setOnTouchListener(touchListener);
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				Intent editTaskIntent = new Intent(TaskListActivity.this, TaskEditActivity.class);
+				editTaskIntent.putExtra("easyTaskId", listView.getAdapter().getItemId(arg2));
+				startActivity(editTaskIntent);
+			}
+		});
 		listView.setOnScrollListener(touchListener.makeScrollListener());
-		final InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
 		ImageButton sendButton = (ImageButton) this.findViewById(R.id.addTask);
 		final EditText note = (EditText) this.findViewById(R.id.taskInput);
@@ -56,24 +69,25 @@ public class TaskListActivity extends Activity {
 				String noteString = note.getText().toString();
 				if (!noteString.isEmpty()) {
 					Analyzer ana = new Analyzer(noteString);
-					Date dueDate=new Date();
-					if(ana.getHasTime()){
+					Date dueDate = new Date();
+					if (ana.getHasTime()) {
 						dueDate = ana.getDateTime();
 					}
-					EasyTaskInfo task = new EasyTaskInfo(0, noteString, new Date(), dueDate);
+					EasyTaskInfo task = new EasyTaskInfo(0, noteString,
+							new Date(), dueDate);
 					util.addTask(task);
 					note.getText().clear();
 					adapter.refresh();
 					adapter.notifyDataSetChanged();
-					imm.hideSoftInputFromWindow(TaskListActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+					inputArea.requestFocus();
 				}
 			}
 
 		});
 	}
-	
+
 	@Override
-	public void onResume(){
+	public void onResume() {
 		super.onResume();
 		inputArea.requestFocus();
 	}

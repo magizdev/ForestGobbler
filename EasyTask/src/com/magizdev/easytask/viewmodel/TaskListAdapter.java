@@ -1,5 +1,7 @@
 package com.magizdev.easytask.viewmodel;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -8,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.magizdev.easytask.R;
@@ -28,9 +31,9 @@ public class TaskListAdapter extends BaseAdapter {
 		util.deleteTask(deleteTask.Id);
 		tasks.remove(index);
 	}
-	
-	public void refresh(){
-		tasks=util.getTasks();
+
+	public void refresh() {
+		tasks = util.getTasks();
 	}
 
 	@Override
@@ -52,8 +55,7 @@ public class TaskListAdapter extends BaseAdapter {
 	}
 
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
-		return 0;
+		return tasks.get(position).Id;
 	}
 
 	@Override
@@ -70,8 +72,8 @@ public class TaskListAdapter extends BaseAdapter {
 			holder.note = (TextView) convertView.findViewById(R.id.note);
 			holder.start_date = (TextView) convertView
 					.findViewById(R.id.start_date);
-			holder.create_date = (TextView) convertView
-					.findViewById(R.id.create_date);
+			holder.notification = (LinearLayout) convertView
+					.findViewById(R.id.notification);
 			convertView.setTag(holder);
 
 		} else {
@@ -79,10 +81,13 @@ public class TaskListAdapter extends BaseAdapter {
 		}
 
 		holder.note.setText(tasks.get(position).Note);
-		holder.create_date.setText(tasks.get(position).CreateDate
-				.toLocaleString());
-		holder.start_date.setText(tasks.get(position).StartDate
-				.toLocaleString());
+		Date startDate = tasks.get(position).StartDate;
+		if (startDate.getTime() > 0) {
+			SimpleDateFormat format = new SimpleDateFormat("MM-DD HH:mm");
+			holder.start_date.setText(format.format(startDate));
+		} else {
+			holder.notification.setVisibility(View.INVISIBLE);
+		}
 		return convertView;
 	}
 
@@ -111,8 +116,8 @@ public class TaskListAdapter extends BaseAdapter {
 
 	public class ViewHolder {
 		public TextView note;
-		public TextView create_date;
 		public TextView start_date;
+		public LinearLayout notification;
 	}
 
 }

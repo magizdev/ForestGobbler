@@ -27,10 +27,14 @@ public class EasyTaskUtil {
 		Cursor cursor = null;
 		try {
 			cursor = cr.query(uri, null, null, null, null);
-			int idxId = cursor.getColumnIndex(EasyTaskMetaData.TaskTableMetaData._ID);
-			int idxNote = cursor.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.TASK_NOTE);
-			int idxCreateDate = cursor.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.CREATE_DATE);
-			int idxStartDate = cursor.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.START_DATE);
+			int idxId = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData._ID);
+			int idxNote = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.TASK_NOTE);
+			int idxCreateDate = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.CREATE_DATE);
+			int idxStartDate = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.START_DATE);
 
 			for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
 					.moveToNext()) {
@@ -49,8 +53,42 @@ public class EasyTaskUtil {
 		return tasks;
 	}
 
-	public void addTask(EasyTaskInfo task){
-		ContentValues cv= new ContentValues();
+	public EasyTaskInfo getTask(int id) {
+		ContentResolver cr = context.getContentResolver();
+		Uri uri = Uri.withAppendedPath(
+				EasyTaskMetaData.TaskTableMetaData.CONTENT_URI,
+				String.valueOf(id));
+		Cursor cursor = null;
+		EasyTaskInfo returnValue = null;
+		try {
+			cursor = cr.query(uri, null, null, null, null);
+			int idxId = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData._ID);
+			int idxNote = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.TASK_NOTE);
+			int idxCreateDate = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.CREATE_DATE);
+			int idxStartDate = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.START_DATE);
+
+			cursor.moveToFirst();
+			if (!cursor.isAfterLast()) {
+				String note = cursor.getString(idxNote);
+				Date createDate = new Date(cursor.getLong(idxCreateDate));
+				Date startDate = new Date(cursor.getLong(idxStartDate));
+				returnValue = new EasyTaskInfo(id, note, createDate, startDate);
+			}
+
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+		}
+		return returnValue;
+	}
+
+	public void addTask(EasyTaskInfo task) {
+		ContentValues cv = new ContentValues();
 		cv.put(TaskTableMetaData.TASK_NOTE, task.Note);
 		cv.put(TaskTableMetaData.CREATE_DATE, task.CreateDate.getTime());
 		cv.put(TaskTableMetaData.START_DATE, task.StartDate.getTime());
@@ -58,10 +96,12 @@ public class EasyTaskUtil {
 		Uri uri = EasyTaskMetaData.TaskTableMetaData.CONTENT_URI;
 		cr.insert(uri, cv);
 	}
-	
-	public void deleteTask(int id){
+
+	public void deleteTask(int id) {
 		ContentResolver cr = context.getContentResolver();
-		Uri uri = Uri.withAppendedPath(EasyTaskMetaData.TaskTableMetaData.CONTENT_URI, String.valueOf(id));
+		Uri uri = Uri.withAppendedPath(
+				EasyTaskMetaData.TaskTableMetaData.CONTENT_URI,
+				String.valueOf(id));
 		cr.delete(uri, null, null);
 	}
 }
