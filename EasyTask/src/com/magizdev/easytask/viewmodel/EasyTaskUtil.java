@@ -53,7 +53,7 @@ public class EasyTaskUtil {
 		return tasks;
 	}
 
-	public EasyTaskInfo getTask(int id) {
+	public EasyTaskInfo getTask(long id) {
 		ContentResolver cr = context.getContentResolver();
 		Uri uri = Uri.withAppendedPath(
 				EasyTaskMetaData.TaskTableMetaData.CONTENT_URI,
@@ -96,8 +96,20 @@ public class EasyTaskUtil {
 		Uri uri = EasyTaskMetaData.TaskTableMetaData.CONTENT_URI;
 		cr.insert(uri, cv);
 	}
+	
+	public void updateTask(long id, EasyTaskInfo task) {
+		ContentValues cv = new ContentValues();
+		cv.put(TaskTableMetaData.TASK_NOTE, task.Note);
+		cv.put(TaskTableMetaData.CREATE_DATE, task.CreateDate.getTime());
+		cv.put(TaskTableMetaData.START_DATE, task.StartDate.getTime());
+		ContentResolver cr = context.getContentResolver();
+		Uri uri = Uri.withAppendedPath(
+				EasyTaskMetaData.TaskTableMetaData.CONTENT_URI,
+				String.valueOf(id));
+		cr.update(uri, cv, null, null);
+	}
 
-	public void deleteTask(int id) {
+	public void deleteTask(long id) {
 		ContentResolver cr = context.getContentResolver();
 		Uri uri = Uri.withAppendedPath(
 				EasyTaskMetaData.TaskTableMetaData.CONTENT_URI,

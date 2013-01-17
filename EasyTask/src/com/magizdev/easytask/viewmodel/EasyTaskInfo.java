@@ -3,12 +3,12 @@ package com.magizdev.easytask.viewmodel;
 import java.util.Date;
 
 public class EasyTaskInfo {
-	public int Id;
+	public long Id;
 	public String Note;
 	public Date CreateDate;
 	public Date StartDate;
 
-	public EasyTaskInfo(int id, String note, Date createDate, Date startDate) {
+	public EasyTaskInfo(long id, String note, Date createDate, Date startDate) {
 		this.Id = id;
 		this.Note = note;
 		this.CreateDate = createDate;

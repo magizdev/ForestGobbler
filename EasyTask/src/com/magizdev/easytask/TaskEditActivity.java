@@ -2,18 +2,21 @@ package com.magizdev.easytask;
 
 import java.util.Date;
 
-import com.magizdev.easytask.viewmodel.EasyTaskInfo;
-import com.magizdev.easytask.viewmodel.EasyTaskUtil;
-
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
-import android.support.v4.app.NavUtils;
+
+import com.magizdev.easytask.viewmodel.EasyTaskInfo;
+import com.magizdev.easytask.viewmodel.EasyTaskUtil;
 
 public class TaskEditActivity extends Activity {
 
@@ -22,11 +25,19 @@ public class TaskEditActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_edit);
         Intent taskIntent = getIntent();
-        int easyTaskId = taskIntent.getIntExtra("easyTaskId", 0);
-        EasyTaskUtil util = new EasyTaskUtil(this);
-        EditText noteEditText = (EditText)findViewById(R.id.editText1);
-        TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker1);
-        DatePicker datePicker = (DatePicker)findViewById(R.id.datePicker1);
+        final long easyTaskId = taskIntent.getLongExtra("easyTaskId", 0L);
+        final EasyTaskUtil util = new EasyTaskUtil(this);
+        final EditText noteEditText = (EditText)findViewById(R.id.editText1);
+        final TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker1);
+        final DatePicker datePicker = (DatePicker)findViewById(R.id.datePicker1);
+        Button doneBtn = (Button)findViewById(R.id.doneBtn);
+        Button cancelBtn = (Button)findViewById(R.id.cancelBtn);
+        cancelBtn.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				finish();
+			}});
         if(easyTaskId != 0){
         	EasyTaskInfo taskInfo = util.getTask(easyTaskId);
         	Date startDate = taskInfo.StartDate;
@@ -34,6 +45,20 @@ public class TaskEditActivity extends Activity {
         	timePicker.setCurrentHour(startDate.getHours());
         	timePicker.setCurrentMinute(startDate.getMinutes());
         	datePicker.updateDate(startDate.getYear(), startDate.getMonth(), startDate.getDay());
+        	doneBtn.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					Date dueDate = new Date();
+					dueDate.setYear(datePicker.getYear());
+					dueDate.setMonth(datePicker.getMonth());
+					dueDate.setDate(datePicker.getDayOfMonth());
+					dueDate.setHours(timePicker.getCurrentHour());
+					dueDate.setMinutes(timePicker.getCurrentMinute());
+					EasyTaskInfo task = new EasyTaskInfo(0, noteEditText.getText().toString(), new Date(), dueDate);
+					util.updateTask(easyTaskId, task);
+					finish();
+				}});
         }
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }

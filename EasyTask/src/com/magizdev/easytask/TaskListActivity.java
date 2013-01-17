@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,6 +54,7 @@ public class TaskListActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
+				Log.d("ddd", String.valueOf(arg2));
 				Intent editTaskIntent = new Intent(TaskListActivity.this, TaskEditActivity.class);
 				editTaskIntent.putExtra("easyTaskId", listView.getAdapter().getItemId(arg2));
 				startActivity(editTaskIntent);
@@ -79,7 +81,7 @@ public class TaskListActivity extends Activity {
 					note.getText().clear();
 					adapter.refresh();
 					adapter.notifyDataSetChanged();
-					inputArea.requestFocus();
+					imm.hideSoftInputFromWindow(TaskListActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 				}
 			}
 
