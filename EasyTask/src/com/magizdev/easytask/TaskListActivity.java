@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +25,7 @@ public class TaskListActivity extends Activity {
 	private ListView listView;
 	private EasyTaskUtil util;
 	private RelativeLayout inputArea;
+	TaskListAdapter adapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class TaskListActivity extends Activity {
 		listView = (ListView) this.findViewById(R.id.taskList);
 		inputArea = (RelativeLayout) this.findViewById(R.id.inputArea);
 		util = new EasyTaskUtil(this);
-		final TaskListAdapter adapter = new TaskListAdapter(this);
+		adapter = new TaskListAdapter(this);
 		listView.setAdapter(adapter);
 		SwipeDismissListViewTouchListener touchListener = new SwipeDismissListViewTouchListener(
 				listView,
@@ -54,10 +54,10 @@ public class TaskListActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				Log.d("ddd", String.valueOf(arg2));
 				Intent editTaskIntent = new Intent(TaskListActivity.this, TaskEditActivity.class);
+				editTaskIntent.putExtra("clickItemPosition", arg2);
 				editTaskIntent.putExtra("easyTaskId", listView.getAdapter().getItemId(arg2));
-				startActivity(editTaskIntent);
+				startActivityForResult(editTaskIntent, 22);
 			}
 		});
 		listView.setOnScrollListener(touchListener.makeScrollListener());
@@ -89,6 +89,15 @@ public class TaskListActivity extends Activity {
 	}
 
 	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent result){
+		if(resultCode == RESULT_OK){
+			//int position = result.getIntExtra("itemPosition", 0);
+			adapter.refresh();
+			adapter.notifyDataSetChanged();
+		}
+	}
+	
+	@Override
 	public void onResume() {
 		super.onResume();
 		inputArea.requestFocus();
@@ -96,7 +105,7 @@ public class TaskListActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_task_list, menu);
+		//getMenuInflater().inflate(R.menu.activity_task_list, menu);
 		return true;
 	}
 

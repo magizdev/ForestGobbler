@@ -32,6 +32,10 @@ public class TaskListAdapter extends BaseAdapter {
 		util.deleteTask(deleteTask.Id);
 		tasks.remove(index);
 	}
+	
+	public void refreshAt(int index) {
+		EasyTaskInfo refreshTask = util.getTask(this.getItemId(index));
+	}
 
 	public void refresh() {
 		tasks = util.getTasks();

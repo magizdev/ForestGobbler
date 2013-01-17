@@ -46,4 +46,8 @@ public class Analyzer {
 		}
 		return dateTime;
 	}
+	
+	public String getFilteredString(){
+		return matcher.replaceFirst("");
+	}
 }

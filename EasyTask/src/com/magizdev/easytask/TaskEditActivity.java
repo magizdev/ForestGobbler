@@ -5,9 +5,7 @@ import java.util.Date;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -26,6 +24,7 @@ public class TaskEditActivity extends Activity {
         setContentView(R.layout.activity_task_edit);
         Intent taskIntent = getIntent();
         final long easyTaskId = taskIntent.getLongExtra("easyTaskId", 0L);
+        final int itemPosition = taskIntent.getIntExtra("clickItemPostion", 0);
         final EasyTaskUtil util = new EasyTaskUtil(this);
         final EditText noteEditText = (EditText)findViewById(R.id.editText1);
         final TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker1);
@@ -36,6 +35,7 @@ public class TaskEditActivity extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
+				TaskEditActivity.this.setResult(RESULT_CANCELED);
 				finish();
 			}});
         if(easyTaskId != 0){
@@ -57,27 +57,18 @@ public class TaskEditActivity extends Activity {
 					dueDate.setMinutes(timePicker.getCurrentMinute());
 					EasyTaskInfo task = new EasyTaskInfo(0, noteEditText.getText().toString(), new Date(), dueDate);
 					util.updateTask(easyTaskId, task);
+					Intent result = new Intent();
+					result.putExtra("itemPostion", itemPosition);
+					TaskEditActivity.this.setResult(RESULT_OK, result);
 					finish();
 				}});
         }
-        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_task_edit, menu);
+        //getMenuInflater().inflate(R.menu.activity_task_edit, menu);
         return true;
-    }
-
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 }

@@ -62,8 +62,6 @@ public class EasyTaskUtil {
 		EasyTaskInfo returnValue = null;
 		try {
 			cursor = cr.query(uri, null, null, null, null);
-			int idxId = cursor
-					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData._ID);
 			int idxNote = cursor
 					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.TASK_NOTE);
 			int idxCreateDate = cursor
