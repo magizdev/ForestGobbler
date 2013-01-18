@@ -85,14 +85,15 @@ public class EasyTaskUtil {
 		return returnValue;
 	}
 
-	public void addTask(EasyTaskInfo task) {
+	public long addTask(EasyTaskInfo task) {
 		ContentValues cv = new ContentValues();
 		cv.put(TaskTableMetaData.TASK_NOTE, task.Note);
 		cv.put(TaskTableMetaData.CREATE_DATE, task.CreateDate.getTime());
 		cv.put(TaskTableMetaData.START_DATE, task.StartDate.getTime());
 		ContentResolver cr = context.getContentResolver();
 		Uri uri = EasyTaskMetaData.TaskTableMetaData.CONTENT_URI;
-		cr.insert(uri, cv);
+		Uri returned = cr.insert(uri, cv);
+		return Long.parseLong(returned.getLastPathSegment());
 	}
 	
 	public void updateTask(long id, EasyTaskInfo task) {

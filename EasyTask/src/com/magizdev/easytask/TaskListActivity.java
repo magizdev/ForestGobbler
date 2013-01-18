@@ -3,6 +3,8 @@ package com.magizdev.easytask;
 import java.util.Date;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ public class TaskListActivity extends Activity {
 	private EasyTaskUtil util;
 	private RelativeLayout inputArea;
 	TaskListAdapter adapter;
+	private AlarmManager alarmManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -75,9 +78,12 @@ public class TaskListActivity extends Activity {
 					if (ana.getHasTime()) {
 						dueDate = ana.getDateTime();
 					}
-					EasyTaskInfo task = new EasyTaskInfo(0, noteString,
+					EasyTaskInfo task = new EasyTaskInfo(0, ana.getFilteredString(),
 							new Date(), dueDate);
-					util.addTask(task);
+					long id = util.addTask(task);
+					if(ana.getHasTime()){
+						sendAlarm(id, dueDate);
+					}
 					note.getText().clear();
 					adapter.refresh();
 					adapter.notifyDataSetChanged();
@@ -107,6 +113,15 @@ public class TaskListActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		//getMenuInflater().inflate(R.menu.activity_task_list, menu);
 		return true;
+	}
+	
+	private void sendAlarm(long id, Date dueDate) {
+		Intent intent = new Intent(this, AlarmReceiver.class);
+		intent.putExtra("easyTaskId", id);
+		PendingIntent pIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		alarmManager
+				.set(AlarmManager.RTC_WAKEUP, dueDate.getTime(), pIntent);
 	}
 
 }
