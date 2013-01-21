@@ -13,7 +13,9 @@ public class Analyzer {
 	private boolean hasDate;
 	private boolean hasTime;
 	private Pattern timePattern;
-	private Matcher matcher;
+	private Pattern datePattern;
+	private Matcher timeMatcher;
+	private Matcher dateMatcher;
 
 	public boolean getHasDate() {
 		return hasDate;
@@ -25,14 +27,26 @@ public class Analyzer {
 
 	public Analyzer(String input) {
 		timePattern = Pattern.compile(TIMEPATTERN);
-		matcher = timePattern.matcher(input);
-		hasTime = matcher.find();
+		datePattern = Pattern.compile(DATEPATTERN);
+		timeMatcher = timePattern.matcher(input);
+		dateMatcher = datePattern.matcher(input);
+		hasTime = timeMatcher.find();
 	}
 
 	public Date getDateTime() {
 		Date dateTime = new Date();
+		if(dateMatcher.find()){
+			SimpleDateFormat format = new SimpleDateFormat("MM/DD");
+			try {
+				Date time = format.parse(dateMatcher.group());
+				dateTime.setDate(time.getDate());
+				dateTime.setMonth(time.getMonth());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
 		if (hasTime) {
-			String timeString = matcher.group();
+			String timeString = timeMatcher.group();
 			SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 			try {
 				Date time = format.parse(timeString);
@@ -49,6 +63,6 @@ public class Analyzer {
 	}
 	
 	public String getFilteredString(){
-		return matcher.replaceFirst("");
+		return timeMatcher.replaceFirst("");
 	}
 }
