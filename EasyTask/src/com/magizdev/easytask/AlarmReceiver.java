@@ -12,22 +12,15 @@ import com.magizdev.easytask.viewmodel.EasyTaskUtil;
 public class AlarmReceiver extends BroadcastReceiver {
 
 	@Override
-	public void onReceive(Context context, Intent intent) {
-//		Intent alarmIntent = new Intent(context, AlarmActivity.class);
-//		alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//		context.startActivity(alarmIntent);
-		
+	public void onReceive(Context context, Intent intent) {		
 		long id = intent.getLongExtra("easyTaskId", 0l);
 		EasyTaskUtil util = new EasyTaskUtil(context);
 		EasyTaskInfo task =util.getTask(id);
 		NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-		Notification notification = new Notification(R.drawable.clock_blue,
-				task.Note, System.currentTimeMillis());
-
-//		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-//				new Intent(context, AlarmActivity.class), 0);
-//		String alarmString="Time is up!";
-//		notification.setLatestEventInfo(context, "Tita", alarmString, contentIntent);
+		Notification notification =new Notification.Builder(context)
+									.setContentTitle(task.Note)
+									.setSmallIcon(R.drawable.clock_blue).getNotification();
+		
 		notificationManager.notify(0, notification);
 	}
 }
