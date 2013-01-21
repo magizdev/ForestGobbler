@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 public class Analyzer {
 	static String TIMEPATTERN = "((0?[1-9]|1[012])(:[0-5]\\d)(\\ ?[aApP][mM]))|([01]\\d|2[0-3])(:[0-5]\\d)";
+	static String DATEPATTERN = "([0]\\d|1[012])/([012]\\d|3[01])";
 
 	private boolean hasDate;
 	private boolean hasTime;
