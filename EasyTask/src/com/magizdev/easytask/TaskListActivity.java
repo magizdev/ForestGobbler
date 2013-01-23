@@ -76,7 +76,7 @@ public class TaskListActivity extends Activity {
 				String noteString = note.getText().toString();
 				if (!noteString.isEmpty()) {
 					Analyzer ana = new Analyzer(noteString);
-					Date dueDate = new Date();
+					Date dueDate = new Date(System.currentTimeMillis());
 					if (ana.getHasTime()) {
 						dueDate = ana.getDateTime();
 					}

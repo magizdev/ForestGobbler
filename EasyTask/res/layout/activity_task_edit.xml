@@ -50,6 +50,6 @@
         android:layout_above="@id/buttonArea"
         android:layout_below="@id/timePicker1"
         android:layout_centerHorizontal="true"
-        android:calendarViewShown="false" />
+        android:spinnersShown="false" />
 
 </RelativeLayout>
