@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true" >
 
     <EditText
         android:id="@+id/editText1"
@@ -14,12 +14,38 @@
         android:inputType="textMultiLine" >
     </EditText>
 
-    <TimePicker
+    <LinearLayout
+        android:id="@+id/displayDateTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerInParent="true" >
+
+        <TextView
+            android:id="@+id/tVDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="click"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/tVTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+    <!-- TimePicker
         android:id="@+id/timePicker1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/editText1"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true" /-->
 
     <LinearLayout
         android:id="@+id/buttonArea"
@@ -43,13 +69,12 @@
             android:text="Done" />
     </LinearLayout>
 
-    <DatePicker
+    <!--DatePicker
         android:id="@+id/datePicker1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/buttonArea"
+        android:layout_height="0dp"
         android:layout_below="@id/timePicker1"
         android:layout_centerHorizontal="true"
-        android:spinnersShown="false" />
+        android:spinnersShown="false" /-->
 
 </RelativeLayout>
