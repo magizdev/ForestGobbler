@@ -51,7 +51,7 @@ public class TaskEditActivity extends Activity {
 				dateTimeArea.animate().y(noteEditText.getTranslationY())
 						.setDuration(mAnimationTime);
 				datePicker.animate().alpha(1).setDuration(mAnimationTime);
-				dateTimeEdit.animate().y(noteEditText.getTranslationY() + tvTime.getTranslationY())
+				dateTimeEdit.animate().y(dateTimeArea.getTranslationY() + 50)
 						.setDuration(mAnimationTime);
 				// datePicker.animate().scaleY(400);
 			}
