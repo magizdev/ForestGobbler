@@ -21,7 +21,7 @@ import com.magizdev.easytask.viewmodel.EasyTaskInfo;
 import com.magizdev.easytask.viewmodel.EasyTaskUtil;
 
 public class TaskEditActivity extends Activity implements OnClickListener {
-	private final static String DATE = "MM/DD";
+	private final static String DATE = "MM/dd";
 	private final static String TIME = "HH:mm";
 
 	EditText txtNote;
@@ -38,6 +38,10 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 	long easyTaskId;
 	int itemPosition;
 	int mAnimationTime;
+
+	// 0, collapsed
+	// 1, expanded
+	int pickerStatus;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -108,7 +112,10 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 	}
 
 	private void toggleTimeEdit() {
-		collapseDateEdit();
+		if(pickerStatus == 0){
+			expandDateEdit();
+		}
+		showPicker(2);
 	}
 
 	private void btnSaveClick() {
@@ -133,18 +140,21 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 	}
 
 	private void toggleDateEdit() {
-		expandDateEdit();
+		if (pickerStatus == 0) {
+			expandDateEdit();
+		}
+		showPicker(1);
 	}
 
 	private float areaTimeOriginalY;
 	private float areaPickerOriginalY;
 	LayoutParams areaPickerOriginalLayoutParams;
+
 	private void expandDateEdit() {
 		areaTimeOriginalY = areaTime.getY();
 		areaTime.animate().y(txtNote.getTranslationY())
 				.setDuration(mAnimationTime);
-		datePicker.animate().alpha(1).setDuration(mAnimationTime);
-		areaPickerOriginalY= areaPicker.getY();
+		areaPickerOriginalY = areaPicker.getY();
 		areaPicker.animate()
 				.y(areaTime.getTranslationY() + btnDate.getMeasuredHeight())
 				.setDuration(mAnimationTime);
@@ -154,12 +164,35 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 						.getMeasuredHeight() - areaTime.getMeasuredHeight())));
 		areaPicker.forceLayout();
 	}
-	
-	private void collapseDateEdit(){
-		datePicker.animate().alpha(0).setDuration(mAnimationTime);
+
+	private void collapseDateEdit() {
+		showPicker(0);
 		areaTime.animate().y(areaTimeOriginalY).setDuration(mAnimationTime);
 		areaPicker.animate().y(areaPickerOriginalY).setDuration(mAnimationTime);
-		areaPicker.setLayoutParams(new RelativeLayout.LayoutParams(areaPickerOriginalLayoutParams));
+		areaPicker.setLayoutParams(new RelativeLayout.LayoutParams(
+				areaPickerOriginalLayoutParams));
+	}
+
+	// /0, hide all.
+	// /1, show date picker.
+	// /2, show time picker.
+	private void showPicker(int option) {
+		switch (option) {
+		case 0:
+			datePicker.animate().alpha(0).setDuration(mAnimationTime);
+			timePicker.animate().alpha(0).setDuration(mAnimationTime);
+			break;
+		case 1:
+			timePicker.animate().alpha(0).setDuration(mAnimationTime);
+			datePicker.animate().alpha(1).setDuration(mAnimationTime);
+			break;
+		case 2:
+			datePicker.animate().alpha(0).setDuration(mAnimationTime);
+			timePicker.animate().alpha(1).setDuration(mAnimationTime);
+			break;
+		default:
+			break;
+		}
 	}
 
 }

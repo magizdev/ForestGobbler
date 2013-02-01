@@ -36,7 +36,7 @@ public class Analyzer {
 	public Date getDateTime() {
 		Date dateTime = new Date(System.currentTimeMillis());
 		if(dateMatcher.find()){
-			SimpleDateFormat format = new SimpleDateFormat("MM/DD");
+			SimpleDateFormat format = new SimpleDateFormat("MM/dd");
 			try {
 				Date time = format.parse(dateMatcher.group());
 				dateTime.setDate(time.getDate());
