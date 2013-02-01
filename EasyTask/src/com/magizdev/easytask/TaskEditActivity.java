@@ -1,97 +1,82 @@
 package com.magizdev.easytask;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.magizdev.easytask.util.DropDownAnim;
 import com.magizdev.easytask.viewmodel.EasyTaskInfo;
 import com.magizdev.easytask.viewmodel.EasyTaskUtil;
 
-public class TaskEditActivity extends Activity {
+public class TaskEditActivity extends Activity implements OnClickListener {
+	private final static String DATE = "MM/DD";
+	private final static String TIME = "HH:mm";
+
+	EditText txtNote;
+	TimePicker timePicker;
+	DatePicker datePicker;
+	RelativeLayout timeEdit;
+	LinearLayout areaTime;
+	Button btnDate;
+	Button btnTime;
+	RelativeLayout areaPicker;
+	Button btnSave;
+	Button btnCancel;
+	EasyTaskUtil util;
+	long easyTaskId;
+	int itemPosition;
+	int mAnimationTime;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_edit);
 		Intent taskIntent = getIntent();
-		final long easyTaskId = taskIntent.getLongExtra("easyTaskId", 0L);
-		final int itemPosition = taskIntent.getIntExtra("clickItemPostion", 0);
-		final EasyTaskUtil util = new EasyTaskUtil(this);
-		final EditText noteEditText = (EditText) findViewById(R.id.editText1);
-		final TimePicker timePicker = (TimePicker) findViewById(R.id.timePicker);
-		final DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
-		final RelativeLayout timeEdit = (RelativeLayout) findViewById(R.id.timeEdit);
-		final RelativeLayout dateTimeEdit = (RelativeLayout) findViewById(R.id.dateTimePicker);
-		final Button tvDate = (Button) findViewById(R.id.tVDate);
-		final Button tvTime = (Button) findViewById(R.id.tVTime);
-		final LinearLayout dateTimeArea = (LinearLayout) findViewById(R.id.displayDateTime);
-		Button doneBtn = (Button) findViewById(R.id.doneBtn);
-		Button cancelBtn = (Button) findViewById(R.id.cancelBtn);
-		tvDate.setOnClickListener(new OnClickListener() {
+		easyTaskId = taskIntent.getLongExtra("easyTaskId", 0L);
+		itemPosition = taskIntent.getIntExtra("clickItemPostion", 0);
+		util = new EasyTaskUtil(this);
+		txtNote = (EditText) findViewById(R.id.txtNote);
+		timePicker = (TimePicker) findViewById(R.id.timePicker);
+		datePicker = (DatePicker) findViewById(R.id.datePicker);
+		timeEdit = (RelativeLayout) findViewById(R.id.timeEdit);
+		areaTime = (LinearLayout) findViewById(R.id.areaTime);
+		btnDate = (Button) findViewById(R.id.btnDate);
+		btnTime = (Button) findViewById(R.id.btnTime);
+		areaPicker = (RelativeLayout) findViewById(R.id.areaPicker);
+		btnSave = (Button) findViewById(R.id.btnSave);
+		btnCancel = (Button) findViewById(R.id.btnCancel);
+		mAnimationTime = btnDate.getContext().getResources()
+				.getInteger(android.R.integer.config_shortAnimTime);
 
-			@Override
-			public void onClick(View arg0) {
-				Log.d("easy task", "on click");
-				int mAnimationTime = tvDate.getContext().getResources()
-						.getInteger(android.R.integer.config_shortAnimTime);
-				dateTimeArea.animate().y(noteEditText.getTranslationY())
-						.setDuration(mAnimationTime);
-				datePicker.animate().alpha(1).setDuration(mAnimationTime);
-				dateTimeEdit.animate().y(dateTimeArea.getTranslationY() + 50)
-						.setDuration(mAnimationTime);
-				// datePicker.animate().scaleY(400);
-			}
-		});
+		btnDate.setOnClickListener(this);
+		btnTime.setOnClickListener(this);
+		btnCancel.setOnClickListener(this);
+		btnSave.setOnClickListener(this);
 
-		cancelBtn.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				TaskEditActivity.this.setResult(RESULT_CANCELED);
-				finish();
-			}
-		});
 		if (easyTaskId != 0) {
 			EasyTaskInfo taskInfo = util.getTask(easyTaskId);
 			Date startDate = taskInfo.StartDate;
-			noteEditText.setText(taskInfo.Note);
-			// timePicker.setCurrentHour(startDate.getHours());
-			// timePicker.setCurrentMinute(startDate.getMinutes());
-			// datePicker.updateDate(startDate.getYear(), startDate.getMonth(),
-			// startDate.getDay());
-			doneBtn.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					Date dueDate = new Date();
-					// dueDate.setYear(datePicker.getYear());
-					// dueDate.setMonth(datePicker.getMonth());
-					// dueDate.setDate(datePicker.getDayOfMonth());
-					// dueDate.setHours(timePicker.getCurrentHour());
-					// dueDate.setMinutes(timePicker.getCurrentMinute());
-					EasyTaskInfo task = new EasyTaskInfo(0, noteEditText
-							.getText().toString(), new Date(), dueDate);
-					util.updateTask(easyTaskId, task);
-					Intent result = new Intent();
-					result.putExtra("itemPostion", itemPosition);
-					TaskEditActivity.this.setResult(RESULT_OK, result);
-					finish();
-				}
-			});
+			txtNote.setText(taskInfo.Note);
+			SimpleDateFormat dateFormat = new SimpleDateFormat(DATE);
+			SimpleDateFormat timeFormat = new SimpleDateFormat(TIME);
+			btnDate.setText(dateFormat.format(startDate));
+			btnTime.setText(timeFormat.format(startDate));
+			timePicker.setCurrentHour(startDate.getHours());
+			timePicker.setCurrentMinute(startDate.getMinutes());
+			datePicker.updateDate(startDate.getYear(), startDate.getMonth(),
+					startDate.getDay());
 		}
 	}
 
@@ -99,6 +84,82 @@ public class TaskEditActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// getMenuInflater().inflate(R.menu.activity_task_edit, menu);
 		return true;
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btnDate:
+			toggleDateEdit();
+			break;
+		case R.id.btnCancel:
+			btnCancelClick();
+			break;
+		case R.id.btnSave:
+			btnSaveClick();
+			break;
+		case R.id.btnTime:
+			toggleTimeEdit();
+			break;
+		default:
+			break;
+		}
+
+	}
+
+	private void toggleTimeEdit() {
+		collapseDateEdit();
+	}
+
+	private void btnSaveClick() {
+		Date dueDate = new Date();
+		// dueDate.setYear(datePicker.getYear());
+		// dueDate.setMonth(datePicker.getMonth());
+		// dueDate.setDate(datePicker.getDayOfMonth());
+		// dueDate.setHours(timePicker.getCurrentHour());
+		// dueDate.setMinutes(timePicker.getCurrentMinute());
+		EasyTaskInfo task = new EasyTaskInfo(0, txtNote.getText().toString(),
+				new Date(), dueDate);
+		util.updateTask(easyTaskId, task);
+		Intent result = new Intent();
+		result.putExtra("itemPostion", itemPosition);
+		TaskEditActivity.this.setResult(RESULT_OK, result);
+		finish();
+	}
+
+	private void btnCancelClick() {
+		TaskEditActivity.this.setResult(RESULT_CANCELED);
+		finish();
+	}
+
+	private void toggleDateEdit() {
+		expandDateEdit();
+	}
+
+	private float areaTimeOriginalY;
+	private float areaPickerOriginalY;
+	LayoutParams areaPickerOriginalLayoutParams;
+	private void expandDateEdit() {
+		areaTimeOriginalY = areaTime.getY();
+		areaTime.animate().y(txtNote.getTranslationY())
+				.setDuration(mAnimationTime);
+		datePicker.animate().alpha(1).setDuration(mAnimationTime);
+		areaPickerOriginalY= areaPicker.getY();
+		areaPicker.animate()
+				.y(areaTime.getTranslationY() + btnDate.getMeasuredHeight())
+				.setDuration(mAnimationTime);
+		areaPickerOriginalLayoutParams = areaPicker.getLayoutParams();
+		areaPicker.setLayoutParams(new RelativeLayout.LayoutParams(
+				new LayoutParams(LayoutParams.MATCH_PARENT, timeEdit
+						.getMeasuredHeight() - areaTime.getMeasuredHeight())));
+		areaPicker.forceLayout();
+	}
+	
+	private void collapseDateEdit(){
+		datePicker.animate().alpha(0).setDuration(mAnimationTime);
+		areaTime.animate().y(areaTimeOriginalY).setDuration(mAnimationTime);
+		areaPicker.animate().y(areaPickerOriginalY).setDuration(mAnimationTime);
+		areaPicker.setLayoutParams(new RelativeLayout.LayoutParams(areaPickerOriginalLayoutParams));
 	}
 
 }

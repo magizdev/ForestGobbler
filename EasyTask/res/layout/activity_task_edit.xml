@@ -6,7 +6,7 @@
     android:focusableInTouchMode="true" >
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/txtNote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -22,18 +22,18 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/cancelBtn"
+            android:id="@+id/btnCancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Cancel" />
 
         <Button
-            android:id="@+id/doneBtn"
+            android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Done" />
+            android:text="Save" />
     </LinearLayout>
 
     <RelativeLayout
@@ -41,17 +41,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/buttonArea"
-        android:layout_below="@id/editText1" >
+        android:layout_below="@id/txtNote" >
 
         <LinearLayout
-            android:id="@+id/displayDateTime"
+            android:id="@+id/areaTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/tVDate"
+                android:id="@+id/btnDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -59,7 +59,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <Button
-                android:id="@+id/tVTime"
+                android:id="@+id/btnTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -68,10 +68,10 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/dateTimePicker"
+            android:id="@+id/areaPicker"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/displayDateTime" >
+            android:layout_below="@id/areaTime" >
 
             <TimePicker
                 android:id="@+id/timePicker"
