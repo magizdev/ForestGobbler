@@ -12,16 +12,18 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TimePicker;
+import android.widget.TimePicker.OnTimeChangedListener;
 
 import com.magizdev.easytask.viewmodel.EasyTaskInfo;
 import com.magizdev.easytask.viewmodel.EasyTaskUtil;
 
 public class TaskEditActivity extends Activity implements OnClickListener {
-	private final static String DATE = "MM/dd";
+	private final static String DATE = "yy/MM/dd";
 	private final static String TIME = "HH:mm";
 
 	EditText txtNote;
@@ -69,6 +71,28 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		btnCancel.setOnClickListener(this);
 		btnSave.setOnClickListener(this);
 
+		Date now = new Date(System.currentTimeMillis());
+		datePicker.init(now.getYear(), now.getMonth(), now.getDay(), new OnDateChangedListener() {
+
+			@Override
+			public void onDateChanged(DatePicker view, int year,
+					int monthOfYear, int dayOfMonth) {
+				btnDate.setText("" + year + "/" + monthOfYear + "/"
+						+ dayOfMonth);
+			}
+		});
+
+		timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
+
+			@Override
+			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+				btnTime.setText("" + hourOfDay + ":" + minute);
+			}
+		});
+		
+		datePicker.setEnabled(false);
+		timePicker.setEnabled(false);
+
 		if (easyTaskId != 0) {
 			EasyTaskInfo taskInfo = util.getTask(easyTaskId);
 			Date startDate = taskInfo.StartDate;
@@ -112,7 +136,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 	}
 
 	private void toggleTimeEdit() {
-		if(pickerStatus == 0){
+		if (pickerStatus == 0) {
 			expandDateEdit();
 		}
 		showPicker(2);
@@ -120,11 +144,11 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 
 	private void btnSaveClick() {
 		Date dueDate = new Date();
-		// dueDate.setYear(datePicker.getYear());
-		// dueDate.setMonth(datePicker.getMonth());
-		// dueDate.setDate(datePicker.getDayOfMonth());
-		// dueDate.setHours(timePicker.getCurrentHour());
-		// dueDate.setMinutes(timePicker.getCurrentMinute());
+		dueDate.setYear(datePicker.getYear());
+		dueDate.setMonth(datePicker.getMonth());
+		dueDate.setDate(datePicker.getDayOfMonth());
+		dueDate.setHours(timePicker.getCurrentHour());
+		dueDate.setMinutes(timePicker.getCurrentMinute());
 		EasyTaskInfo task = new EasyTaskInfo(0, txtNote.getText().toString(),
 				new Date(), dueDate);
 		util.updateTask(easyTaskId, task);
@@ -163,6 +187,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 				new LayoutParams(LayoutParams.MATCH_PARENT, timeEdit
 						.getMeasuredHeight() - areaTime.getMeasuredHeight())));
 		areaPicker.forceLayout();
+		pickerStatus = 1;
 	}
 
 	private void collapseDateEdit() {
@@ -171,6 +196,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		areaPicker.animate().y(areaPickerOriginalY).setDuration(mAnimationTime);
 		areaPicker.setLayoutParams(new RelativeLayout.LayoutParams(
 				areaPickerOriginalLayoutParams));
+		pickerStatus = 0;
 	}
 
 	// /0, hide all.
@@ -180,15 +206,21 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		switch (option) {
 		case 0:
 			datePicker.animate().alpha(0).setDuration(mAnimationTime);
+			datePicker.setEnabled(false);
 			timePicker.animate().alpha(0).setDuration(mAnimationTime);
+			timePicker.setEnabled(false);
 			break;
 		case 1:
 			timePicker.animate().alpha(0).setDuration(mAnimationTime);
+			timePicker.setEnabled(false);
 			datePicker.animate().alpha(1).setDuration(mAnimationTime);
+			datePicker.setEnabled(true);
 			break;
 		case 2:
 			datePicker.animate().alpha(0).setDuration(mAnimationTime);
+			datePicker.setEnabled(false);
 			timePicker.animate().alpha(1).setDuration(mAnimationTime);
+			timePicker.setEnabled(true);
 			break;
 		default:
 			break;
