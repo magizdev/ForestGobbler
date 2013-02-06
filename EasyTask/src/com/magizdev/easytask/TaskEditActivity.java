@@ -2,8 +2,10 @@ package com.magizdev.easytask;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import android.app.Activity;
+import android.app.PendingIntent.CanceledException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,7 +25,7 @@ import com.magizdev.easytask.viewmodel.EasyTaskInfo;
 import com.magizdev.easytask.viewmodel.EasyTaskUtil;
 
 public class TaskEditActivity extends Activity implements OnClickListener {
-	private final static String DATE = "yy/MM/dd";
+	private final static String DATE = "yyyy/MM/dd";
 	private final static String TIME = "HH:mm";
 
 	EditText txtNote;
@@ -38,7 +40,6 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 	Button btnCancel;
 	EasyTaskUtil util;
 	long easyTaskId;
-	int itemPosition;
 	int mAnimationTime;
 
 	// 0, collapsed
@@ -49,9 +50,6 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_edit);
-		Intent taskIntent = getIntent();
-		easyTaskId = taskIntent.getLongExtra("easyTaskId", 0L);
-		itemPosition = taskIntent.getIntExtra("clickItemPostion", 0);
 		util = new EasyTaskUtil(this);
 		txtNote = (EditText) findViewById(R.id.txtNote);
 		timePicker = (TimePicker) findViewById(R.id.timePicker);
@@ -77,7 +75,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 			@Override
 			public void onDateChanged(DatePicker view, int year,
 					int monthOfYear, int dayOfMonth) {
-				btnDate.setText("" + year + "/" + monthOfYear + "/"
+				btnDate.setText("" + year + "/" + (monthOfYear + 1) + "/"
 						+ dayOfMonth);
 			}
 		});
@@ -90,21 +88,33 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 			}
 		});
 		
+
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		Intent taskIntent = getIntent();
+		easyTaskId = taskIntent.getLongExtra("easyTaskId", 0L);
+
 		datePicker.setEnabled(false);
 		timePicker.setEnabled(false);
 
 		if (easyTaskId != 0) {
 			EasyTaskInfo taskInfo = util.getTask(easyTaskId);
 			Date startDate = taskInfo.StartDate;
+			GregorianCalendar startDateCalendar = new GregorianCalendar();
+			startDateCalendar.setTime(startDate);
 			txtNote.setText(taskInfo.Note);
 			SimpleDateFormat dateFormat = new SimpleDateFormat(DATE);
 			SimpleDateFormat timeFormat = new SimpleDateFormat(TIME);
 			btnDate.setText(dateFormat.format(startDate));
 			btnTime.setText(timeFormat.format(startDate));
-			timePicker.setCurrentHour(startDate.getHours());
-			timePicker.setCurrentMinute(startDate.getMinutes());
-			datePicker.updateDate(startDate.getYear(), startDate.getMonth(),
-					startDate.getDay());
+			timePicker.setCurrentHour(startDateCalendar.get(GregorianCalendar.HOUR_OF_DAY));
+			timePicker.setCurrentMinute(startDateCalendar.get(GregorianCalendar.MINUTE));
+			datePicker.updateDate(startDateCalendar.get(GregorianCalendar.YEAR)
+					, startDateCalendar.get(GregorianCalendar.MONTH)
+					, startDateCalendar.get(GregorianCalendar.DAY_OF_MONTH));
 		}
 	}
 
@@ -144,22 +154,22 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 
 	private void btnSaveClick() {
 		Date dueDate = new Date();
-		dueDate.setYear(datePicker.getYear());
-		dueDate.setMonth(datePicker.getMonth());
-		dueDate.setDate(datePicker.getDayOfMonth());
-		dueDate.setHours(timePicker.getCurrentHour());
-		dueDate.setMinutes(timePicker.getCurrentMinute());
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.setTime(dueDate);
+		calendar.set(GregorianCalendar.YEAR, datePicker.getYear());
+		calendar.set(GregorianCalendar.MONTH, datePicker.getMonth());
+		calendar.set(GregorianCalendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+		calendar.set(GregorianCalendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+		calendar.set(GregorianCalendar.MINUTE, timePicker.getCurrentMinute());
 		EasyTaskInfo task = new EasyTaskInfo(0, txtNote.getText().toString(),
-				new Date(), dueDate);
+				new Date(), calendar.getTime());
 		util.updateTask(easyTaskId, task);
-		Intent result = new Intent();
-		result.putExtra("itemPostion", itemPosition);
-		TaskEditActivity.this.setResult(RESULT_OK, result);
+		setResult(RESULT_OK);
 		finish();
 	}
 
 	private void btnCancelClick() {
-		TaskEditActivity.this.setResult(RESULT_CANCELED);
+		setResult(RESULT_CANCELED);
 		finish();
 	}
 
@@ -215,12 +225,14 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 			timePicker.setEnabled(false);
 			datePicker.animate().alpha(1).setDuration(mAnimationTime);
 			datePicker.setEnabled(true);
+			datePicker.bringToFront();
 			break;
 		case 2:
 			datePicker.animate().alpha(0).setDuration(mAnimationTime);
 			datePicker.setEnabled(false);
 			timePicker.animate().alpha(1).setDuration(mAnimationTime);
 			timePicker.setEnabled(true);
+			timePicker.bringToFront();
 			break;
 		default:
 			break;
