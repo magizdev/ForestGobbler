@@ -53,6 +53,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		util = new EasyTaskUtil(this);
 		txtNote = (EditText) findViewById(R.id.txtNote);
 		timePicker = (TimePicker) findViewById(R.id.timePicker);
+		timePicker.setIs24HourView(true);
 		datePicker = (DatePicker) findViewById(R.id.datePicker);
 		timeEdit = (RelativeLayout) findViewById(R.id.timeEdit);
 		areaTime = (LinearLayout) findViewById(R.id.areaTime);
