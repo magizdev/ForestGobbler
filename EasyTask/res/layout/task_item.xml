@@ -8,7 +8,6 @@
         android:id="@+id/note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#CFE9D0"
         android:textColor="#FF000000"
         android:textSize="30dp" />
 

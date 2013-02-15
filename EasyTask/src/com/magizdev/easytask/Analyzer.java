@@ -73,6 +73,8 @@ public class Analyzer {
 	}
 
 	public String getFilteredString() {
-		return timeMatcher.replaceFirst("");
+		String noTime= timeMatcher.replaceFirst("");
+		Matcher tempMatcher = datePattern.matcher(noTime);
+		return tempMatcher.replaceFirst("");
 	}
 }

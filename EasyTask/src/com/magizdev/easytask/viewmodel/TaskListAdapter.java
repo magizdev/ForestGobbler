@@ -87,7 +87,7 @@ public class TaskListAdapter extends BaseAdapter {
 		holder.note.setText(tasks.get(position).Note);
 		Date startDate = tasks.get(position).StartDate;
 		if (startDate.getTime() > 0) {
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 			holder.start_date.setText(format.format(startDate));
 		} else {
 			holder.notification.setVisibility(View.INVISIBLE);
