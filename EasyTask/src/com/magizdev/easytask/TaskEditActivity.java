@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TimePicker;
 import android.widget.TimePicker.OnTimeChangedListener;
 
+import com.magizdev.easytask.util.AlarmUtil;
 import com.magizdev.easytask.viewmodel.EasyTaskInfo;
 import com.magizdev.easytask.viewmodel.EasyTaskUtil;
 
@@ -166,6 +167,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 				new Date(), calendar.getTime());
 		util.updateTask(easyTaskId, task);
 		setResult(RESULT_OK);
+		AlarmUtil.updateAlarm(this);
 		finish();
 	}
 

@@ -3,8 +3,6 @@ package com.magizdev.easytask;
 import java.util.Date;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.magizdev.easytask.util.AlarmUtil;
 import com.magizdev.easytask.viewmodel.EasyTaskInfo;
 import com.magizdev.easytask.viewmodel.EasyTaskUtil;
 import com.magizdev.easytask.viewmodel.TaskListAdapter;
@@ -28,7 +27,6 @@ public class TaskListActivity extends Activity {
 	private EasyTaskUtil util;
 	private RelativeLayout inputArea;
 	TaskListAdapter adapter;
-	private AlarmManager alarmManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,7 +82,7 @@ public class TaskListActivity extends Activity {
 							.getFilteredString(), new Date(), dueDate);
 					long id = util.addTask(task);
 					if (ana.getHasTime()) {
-						sendAlarm();
+						AlarmUtil.updateAlarm(TaskListActivity.this);
 					}
 					note.getText().clear();
 					adapter.refresh();
@@ -117,18 +115,5 @@ public class TaskListActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// getMenuInflater().inflate(R.menu.activity_task_list, menu);
 		return true;
-	}
-
-	private void sendAlarm() {
-		EasyTaskInfo nextEasyTaskInfo = util.getNextTask();
-		if (nextEasyTaskInfo != null) {
-			Intent intent = new Intent(this, AlarmReceiver.class);
-			intent.putExtra("easyTaskId", nextEasyTaskInfo.Id);
-			PendingIntent pIntent = PendingIntent.getBroadcast(this, 0, intent,
-					PendingIntent.FLAG_CANCEL_CURRENT);
-			alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-			alarmManager.set(AlarmManager.RTC_WAKEUP,
-					nextEasyTaskInfo.StartDate.getTime(), pIntent);
-		}
 	}
 }
