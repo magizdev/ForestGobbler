@@ -57,9 +57,11 @@ public class TaskListActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				Intent editTaskIntent = new Intent(TaskListActivity.this, TaskEditActivity.class);
+				Intent editTaskIntent = new Intent(TaskListActivity.this,
+						TaskEditActivity.class);
 				editTaskIntent.putExtra("clickItemPosition", arg2);
-				editTaskIntent.putExtra("easyTaskId", listView.getAdapter().getItemId(arg2));
+				editTaskIntent.putExtra("easyTaskId", listView.getAdapter()
+						.getItemId(arg2));
 				startActivityForResult(editTaskIntent, 22);
 			}
 		});
@@ -78,16 +80,18 @@ public class TaskListActivity extends Activity {
 					if (ana.getHasTime()) {
 						dueDate = ana.getDateTime();
 					}
-					EasyTaskInfo task = new EasyTaskInfo(0, ana.getFilteredString(),
-							new Date(), dueDate);
+					EasyTaskInfo task = new EasyTaskInfo(0, ana
+							.getFilteredString(), new Date(), dueDate);
 					long id = util.addTask(task);
-					if(ana.getHasTime()){
-						sendAlarm(id, dueDate);
+					if (ana.getHasTime()) {
+						sendAlarm();
 					}
 					note.getText().clear();
 					adapter.refresh();
 					adapter.notifyDataSetChanged();
-					imm.hideSoftInputFromWindow(TaskListActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+					imm.hideSoftInputFromWindow(TaskListActivity.this
+							.getCurrentFocus().getWindowToken(),
+							InputMethodManager.HIDE_NOT_ALWAYS);
 				}
 			}
 
@@ -95,14 +99,14 @@ public class TaskListActivity extends Activity {
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent result){
-		if(resultCode == RESULT_OK){
-			//int position = result.getIntExtra("itemPosition", 0);
+	public void onActivityResult(int requestCode, int resultCode, Intent result) {
+		if (resultCode == RESULT_OK) {
+			// int position = result.getIntExtra("itemPosition", 0);
 			adapter.refresh();
 			adapter.notifyDataSetChanged();
 		}
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -111,17 +115,20 @@ public class TaskListActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		//getMenuInflater().inflate(R.menu.activity_task_list, menu);
+		// getMenuInflater().inflate(R.menu.activity_task_list, menu);
 		return true;
 	}
-	
-	private void sendAlarm(long id, Date dueDate) {
-		Intent intent = new Intent(this, AlarmReceiver.class);
-		intent.putExtra("easyTaskId", id);
-		PendingIntent pIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		alarmManager
-				.set(AlarmManager.RTC_WAKEUP, dueDate.getTime(), pIntent);
-	}
 
+	private void sendAlarm() {
+		EasyTaskInfo nextEasyTaskInfo = util.getNextTask();
+		if (nextEasyTaskInfo != null) {
+			Intent intent = new Intent(this, AlarmReceiver.class);
+			intent.putExtra("easyTaskId", nextEasyTaskInfo.Id);
+			PendingIntent pIntent = PendingIntent.getBroadcast(this, 0, intent,
+					PendingIntent.FLAG_CANCEL_CURRENT);
+			alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+			alarmManager.set(AlarmManager.RTC_WAKEUP,
+					nextEasyTaskInfo.StartDate.getTime(), pIntent);
+		}
+	}
 }

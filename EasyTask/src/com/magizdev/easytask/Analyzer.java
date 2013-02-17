@@ -38,6 +38,7 @@ public class Analyzer {
 		Date dateTime = new Date(System.currentTimeMillis());
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(dateTime);
+		calendar.set(GregorianCalendar.SECOND, 0);
 		GregorianCalendar tempCalendar = new GregorianCalendar();
 		if (dateMatcher.find()) {
 			SimpleDateFormat format = new SimpleDateFormat("MM/dd");
@@ -75,6 +76,6 @@ public class Analyzer {
 	public String getFilteredString() {
 		String noTime= timeMatcher.replaceFirst("");
 		Matcher tempMatcher = datePattern.matcher(noTime);
-		return tempMatcher.replaceFirst("");
+		return tempMatcher.replaceFirst("").trim();
 	}
 }

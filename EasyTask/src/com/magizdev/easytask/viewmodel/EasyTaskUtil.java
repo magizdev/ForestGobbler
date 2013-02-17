@@ -85,6 +85,42 @@ public class EasyTaskUtil {
 		return returnValue;
 	}
 
+	public EasyTaskInfo getNextTask() {
+		ContentResolver cr = context.getContentResolver();
+		Uri uri = EasyTaskMetaData.TaskTableMetaData.CONTENT_URI;
+
+		Cursor cursor = null;
+		EasyTaskInfo returnValue = null;
+		try {
+			cursor = cr.query(uri, null,
+					EasyTaskMetaData.TaskTableMetaData.START_DATE + ">?",
+					new String[] { Long.toString(System.currentTimeMillis()) },
+					EasyTaskMetaData.TaskTableMetaData.START_DATE);
+			int idxId = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData._ID);
+			int idxNote = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.TASK_NOTE);
+			int idxCreateDate = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.CREATE_DATE);
+			int idxStartDate = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.START_DATE);
+
+			cursor.moveToFirst();
+			if (!cursor.isAfterLast()) {
+				String note = cursor.getString(idxNote);
+				Date createDate = new Date(cursor.getLong(idxCreateDate));
+				Date startDate = new Date(cursor.getLong(idxStartDate));
+				returnValue = new EasyTaskInfo(cursor.getLong(idxId), note, createDate, startDate);
+			}
+
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+		}
+		return returnValue;
+	}
+
 	public long addTask(EasyTaskInfo task) {
 		ContentValues cv = new ContentValues();
 		cv.put(TaskTableMetaData.TASK_NOTE, task.Note);
@@ -95,7 +131,7 @@ public class EasyTaskUtil {
 		Uri returned = cr.insert(uri, cv);
 		return Long.parseLong(returned.getLastPathSegment());
 	}
-	
+
 	public void updateTask(long id, EasyTaskInfo task) {
 		ContentValues cv = new ContentValues();
 		cv.put(TaskTableMetaData.TASK_NOTE, task.Note);
