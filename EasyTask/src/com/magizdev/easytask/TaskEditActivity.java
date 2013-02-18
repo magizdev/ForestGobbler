@@ -6,12 +6,14 @@ import java.util.GregorianCalendar;
 
 import android.app.Activity;
 import android.app.PendingIntent.CanceledException;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
@@ -72,15 +74,16 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		btnSave.setOnClickListener(this);
 
 		Date now = new Date(System.currentTimeMillis());
-		datePicker.init(now.getYear(), now.getMonth(), now.getDay(), new OnDateChangedListener() {
+		datePicker.init(now.getYear(), now.getMonth(), now.getDay(),
+				new OnDateChangedListener() {
 
-			@Override
-			public void onDateChanged(DatePicker view, int year,
-					int monthOfYear, int dayOfMonth) {
-				btnDate.setText("" + year + "/" + (monthOfYear + 1) + "/"
-						+ dayOfMonth);
-			}
-		});
+					@Override
+					public void onDateChanged(DatePicker view, int year,
+							int monthOfYear, int dayOfMonth) {
+						btnDate.setText("" + year + "/" + (monthOfYear + 1)
+								+ "/" + dayOfMonth);
+					}
+				});
 
 		timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
 
@@ -89,12 +92,11 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 				btnTime.setText("" + hourOfDay + ":" + minute);
 			}
 		});
-		
 
 	}
-	
+
 	@Override
-	public void onResume(){
+	public void onResume() {
 		super.onResume();
 		Intent taskIntent = getIntent();
 		easyTaskId = taskIntent.getLongExtra("easyTaskId", 0L);
@@ -112,11 +114,14 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 			SimpleDateFormat timeFormat = new SimpleDateFormat(TIME);
 			btnDate.setText(dateFormat.format(startDate));
 			btnTime.setText(timeFormat.format(startDate));
-			timePicker.setCurrentHour(startDateCalendar.get(GregorianCalendar.HOUR_OF_DAY));
-			timePicker.setCurrentMinute(startDateCalendar.get(GregorianCalendar.MINUTE));
-			datePicker.updateDate(startDateCalendar.get(GregorianCalendar.YEAR)
-					, startDateCalendar.get(GregorianCalendar.MONTH)
-					, startDateCalendar.get(GregorianCalendar.DAY_OF_MONTH));
+			timePicker.setCurrentHour(startDateCalendar
+					.get(GregorianCalendar.HOUR_OF_DAY));
+			timePicker.setCurrentMinute(startDateCalendar
+					.get(GregorianCalendar.MINUTE));
+			datePicker.updateDate(
+					startDateCalendar.get(GregorianCalendar.YEAR),
+					startDateCalendar.get(GregorianCalendar.MONTH),
+					startDateCalendar.get(GregorianCalendar.DAY_OF_MONTH));
 		}
 	}
 
@@ -148,6 +153,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 	}
 
 	private void toggleTimeEdit() {
+		hideIme();
 		if (pickerStatus == 0) {
 			expandDateEdit();
 		}
@@ -177,6 +183,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 	}
 
 	private void toggleDateEdit() {
+		hideIme();
 		if (pickerStatus == 0) {
 			expandDateEdit();
 		}
@@ -210,6 +217,12 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		areaPicker.setLayoutParams(new RelativeLayout.LayoutParams(
 				areaPickerOriginalLayoutParams));
 		pickerStatus = 0;
+	}
+
+	private void hideIme() {
+		final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
+				InputMethodManager.HIDE_NOT_ALWAYS);
 	}
 
 	// /0, hide all.
