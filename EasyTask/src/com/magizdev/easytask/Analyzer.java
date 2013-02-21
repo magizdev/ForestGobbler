@@ -63,6 +63,7 @@ public class Analyzer {
 						tempCalendar.get(GregorianCalendar.HOUR_OF_DAY));
 				calendar.set(GregorianCalendar.MINUTE,
 						tempCalendar.get(GregorianCalendar.MINUTE));
+				calendar.set(GregorianCalendar.SECOND, 0);
 				if (timeString.toLowerCase().endsWith("pm")) {
 					calendar.add(GregorianCalendar.HOUR_OF_DAY, 12);
 				}
