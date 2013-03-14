@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Analyzer {
-	static String TIMEPATTERN = "((0?[1-9]|1[012])(:[0-5]\\d)(\\ ?[aApP][mM]))|([01]\\d|2[0-3])(:[0-5]\\d)";
+	static String TIMEPATTERN = "((0?|1)\\d|2[0-3])(:([0-5][0-9]))";
 	static String DATEPATTERN = "(0?\\d|1[012])/(([12]|0?)\\d|3[01])";
 
 	private boolean hasDate;
@@ -39,6 +39,8 @@ public class Analyzer {
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(dateTime);
 		calendar.set(GregorianCalendar.SECOND, 0);
+		int hour = calendar.get(GregorianCalendar.HOUR_OF_DAY);
+		int minute = calendar.get(GregorianCalendar.MINUTE);
 		GregorianCalendar tempCalendar = new GregorianCalendar();
 		if (dateMatcher.find()) {
 			SimpleDateFormat format = new SimpleDateFormat("MM/dd");
@@ -64,9 +66,14 @@ public class Analyzer {
 				calendar.set(GregorianCalendar.MINUTE,
 						tempCalendar.get(GregorianCalendar.MINUTE));
 				calendar.set(GregorianCalendar.SECOND, 0);
-				if (timeString.toLowerCase().endsWith("pm")) {
-					calendar.add(GregorianCalendar.HOUR_OF_DAY, 12);
+
+				if ((!dateMatcher.find(0))
+						&& (tempCalendar.get(GregorianCalendar.HOUR_OF_DAY) < hour || (tempCalendar
+								.get(GregorianCalendar.HOUR_OF_DAY) == hour && tempCalendar
+								.get(GregorianCalendar.MINUTE) <= minute))) {
+					calendar.add(GregorianCalendar.DATE, 1);
 				}
+
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -75,7 +82,7 @@ public class Analyzer {
 	}
 
 	public String getFilteredString() {
-		String noTime= timeMatcher.replaceFirst("");
+		String noTime = timeMatcher.replaceFirst("");
 		Matcher tempMatcher = datePattern.matcher(noTime);
 		return tempMatcher.replaceFirst("").trim();
 	}

@@ -14,9 +14,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
 import com.magizdev.easytask.util.AlarmUtil;
 import com.magizdev.easytask.viewmodel.EasyTaskInfo;
 import com.magizdev.easytask.viewmodel.EasyTaskUtil;
@@ -32,6 +36,14 @@ public class TaskListActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_list);
+		
+		LinearLayout adContainer = (LinearLayout) this
+				.findViewById(R.id.adContainer);
+		AdView adView = new AdView(this, AdSize.BANNER, "");
+		adContainer.addView(adView);
+		AdRequest adRequest = new AdRequest();
+		adView.loadAd(adRequest);
+
 		listView = (ListView) this.findViewById(R.id.taskList);
 		inputArea = (RelativeLayout) this.findViewById(R.id.inputArea);
 		util = new EasyTaskUtil(this);

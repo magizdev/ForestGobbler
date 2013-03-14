@@ -4,15 +4,24 @@
     android:layout_height="match_parent"
     android:background="#000000" >
 
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/adContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical" >
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/inputArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:animateLayoutChanges="true"
+        android:background="#FFFFFF"
         android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:background="#FFFFFF" >
+        android:focusableInTouchMode="true" >
 
         <ImageButton
             android:id="@+id/addTask"
@@ -38,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/inputArea"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/adContainer"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="1dp"
         android:background="#FFFFFF" >

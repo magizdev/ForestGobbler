@@ -25,7 +25,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 				.setSound(
 						RingtoneManager
 								.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-				.setVibrate(new long[] { 500 })
+				.setVibrate(new long[] { 500, 800 })
 				.setSmallIcon(R.drawable.clock_blue).getNotification();
 
 		notificationManager.notify(0, notification);
