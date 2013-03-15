@@ -1,8 +1,10 @@
 package com.magizdev.easytask;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import android.app.Activity;
+import android.app.PendingIntent.CanceledException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -89,6 +91,11 @@ public class TaskListActivity extends Activity {
 					Date dueDate = new Date(System.currentTimeMillis());
 					if (ana.getHasTime()) {
 						dueDate = ana.getDateTime();
+					}else {
+						GregorianCalendar calendar = new GregorianCalendar();
+						calendar.setTime(dueDate);
+						calendar.add(GregorianCalendar.YEAR, 1);
+						dueDate = calendar.getTime();
 					}
 					EasyTaskInfo task = new EasyTaskInfo(0, ana
 							.getFilteredString(), new Date(), dueDate);
