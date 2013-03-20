@@ -31,7 +31,7 @@ public class TaskListAdapter extends BaseAdapter {
 		util.deleteTask(deleteTask.Id);
 		tasks.remove(index);
 	}
-	
+
 	public void refreshAt(int index) {
 		EasyTaskInfo refreshTask = util.getTask(this.getItemId(index));
 	}
@@ -91,6 +91,15 @@ public class TaskListAdapter extends BaseAdapter {
 			holder.start_date.setText(format.format(startDate));
 		} else {
 			holder.notification.setVisibility(View.INVISIBLE);
+		}
+		if (startDate.getTime() < System.currentTimeMillis()) {
+			holder.note.setBackgroundColor(0xFFA0A0A0);
+			holder.notification.setBackgroundColor(0xFFA0A0A0);
+			holder.start_date.setBackgroundColor(0xFFA0A0A0);
+		} else {
+			holder.note.setBackgroundColor(0xFFFFFFFF);
+			holder.notification.setBackgroundColor(0xFFFFFFFF);
+			holder.start_date.setBackgroundColor(0xFFFFFFFF);
 		}
 		return convertView;
 	}

@@ -2,9 +2,9 @@ package com.magizdev.easytask;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import android.app.Activity;
-import android.app.PendingIntent.CanceledException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,7 +38,7 @@ public class TaskListActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_list);
-		
+
 		LinearLayout adContainer = (LinearLayout) this
 				.findViewById(R.id.adContainer);
 		AdView adView = new AdView(this, AdSize.BANNER, "");
@@ -82,6 +82,19 @@ public class TaskListActivity extends Activity {
 
 		ImageButton sendButton = (ImageButton) this.findViewById(R.id.addTask);
 		final EditText note = (EditText) this.findViewById(R.id.taskInput);
+
+		List<EasyTaskInfo> tasks = util.getTasks();
+		int index = 0;
+		for (EasyTaskInfo task : tasks) {
+			if (task.StartDate.getTime() > System.currentTimeMillis()) {
+				break;
+			}
+			index++;
+		}
+		if (index > 2) {
+			listView.setSelectionFromTop(index - 2, 0);
+		}
+
 		sendButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View arg0) {
@@ -91,7 +104,7 @@ public class TaskListActivity extends Activity {
 					Date dueDate = new Date(System.currentTimeMillis());
 					if (ana.getHasTime()) {
 						dueDate = ana.getDateTime();
-					}else {
+					} else {
 						GregorianCalendar calendar = new GregorianCalendar();
 						calendar.setTime(dueDate);
 						calendar.add(GregorianCalendar.YEAR, 1);
