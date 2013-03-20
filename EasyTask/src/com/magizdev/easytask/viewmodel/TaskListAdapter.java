@@ -6,11 +6,15 @@ import java.util.List;
 
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.magizdev.easytask.R;
@@ -78,12 +82,14 @@ public class TaskListAdapter extends BaseAdapter {
 					.findViewById(R.id.start_date);
 			holder.notification = (LinearLayout) convertView
 					.findViewById(R.id.notification);
+			holder.deleteBtn = (Button) convertView
+					.findViewById(R.id.deleteBtn);
 			convertView.setTag(holder);
 
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-
+		final long id = tasks.get(position).Id;
 		holder.note.setText(tasks.get(position).Note);
 		Date startDate = tasks.get(position).StartDate;
 		if (startDate.getTime() > 0) {
@@ -92,6 +98,16 @@ public class TaskListAdapter extends BaseAdapter {
 		} else {
 			holder.notification.setVisibility(View.INVISIBLE);
 		}
+		holder.deleteBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				util.deleteTask(id);
+				TaskListAdapter.this.refresh();
+				TaskListAdapter.this.notifyDataSetChanged();
+			}
+		});
+		
 		if (startDate.getTime() < System.currentTimeMillis()) {
 			holder.note.setBackgroundColor(0xFFA0A0A0);
 			holder.notification.setBackgroundColor(0xFFA0A0A0);
@@ -131,6 +147,7 @@ public class TaskListAdapter extends BaseAdapter {
 		public TextView note;
 		public TextView start_date;
 		public LinearLayout notification;
+		public Button deleteBtn;
 	}
 
 }

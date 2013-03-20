@@ -4,16 +4,23 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import android.R.animator;
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -33,12 +40,53 @@ public class TaskListActivity extends Activity {
 	private EasyTaskUtil util;
 	private RelativeLayout inputArea;
 	TaskListAdapter adapter;
+	private long animDuration;
+
+	private Handler uiHandler = new Handler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			View selectedItem = listView.getChildAt(msg.what);
+			final Button deleteButton = (Button) selectedItem
+					.findViewById(R.id.deleteBtn);
+			deleteButton.animate().alpha(0).setDuration(animDuration)
+					.setListener(new AnimatorListener() {
+
+						@Override
+						public void onAnimationStart(Animator animation) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void onAnimationRepeat(Animator animation) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							deleteButton.setVisibility(View.GONE);
+
+						}
+
+						@Override
+						public void onAnimationCancel(Animator animation) {
+							// TODO Auto-generated method stub
+
+						}
+					}).start();
+			uiHandler.removeMessages(msg.what);
+		}
+	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_list);
-
+		animDuration = getResources().getInteger(
+				android.R.integer.config_shortAnimTime);
 		LinearLayout adContainer = (LinearLayout) this
 				.findViewById(R.id.adContainer);
 		AdView adView = new AdView(this, AdSize.BANNER, "");
@@ -51,19 +99,7 @@ public class TaskListActivity extends Activity {
 		util = new EasyTaskUtil(this);
 		adapter = new TaskListAdapter(this);
 		listView.setAdapter(adapter);
-		SwipeDismissListViewTouchListener touchListener = new SwipeDismissListViewTouchListener(
-				listView,
-				new SwipeDismissListViewTouchListener.OnDismissCallback() {
-					@Override
-					public void onDismiss(ListView listView,
-							int[] reverseSortedPositions) {
-						for (int position : reverseSortedPositions) {
-							adapter.removeAt(position);
-						}
-						adapter.notifyDataSetChanged();
-					}
-				});
-		listView.setOnTouchListener(touchListener);
+
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -77,7 +113,24 @@ public class TaskListActivity extends Activity {
 				startActivityForResult(editTaskIntent, 22);
 			}
 		});
-		listView.setOnScrollListener(touchListener.makeScrollListener());
+
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				Button deleteBtn = (Button) arg1.findViewById(R.id.deleteBtn);
+				deleteBtn.setAlpha(0);
+				float origx = deleteBtn.getScaleX();
+				deleteBtn.setScaleX(0);
+				deleteBtn.setVisibility(View.VISIBLE);
+				deleteBtn.animate().alpha(1).scaleX(origx)
+						.setDuration(animDuration).start();
+				uiHandler.sendEmptyMessageDelayed(arg2, 2000);
+				return true;
+			}
+		});
+
 		final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
 		ImageButton sendButton = (ImageButton) this.findViewById(R.id.addTask);
@@ -92,7 +145,7 @@ public class TaskListActivity extends Activity {
 			index++;
 		}
 		if (index > 2) {
-			listView.setSelectionFromTop(index - 2, 0);
+			listView.smoothScrollToPositionFromTop(index - 2, 0);
 		}
 
 		sendButton.setOnClickListener(new OnClickListener() {
