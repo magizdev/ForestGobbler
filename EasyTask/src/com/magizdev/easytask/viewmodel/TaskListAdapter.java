@@ -108,6 +108,7 @@ public class TaskListAdapter extends BaseAdapter {
 		} else {
 			holder.notification.setVisibility(View.INVISIBLE);
 		}
+		holder.deleteBtn.setPivotX(0);
 		holder.deleteBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
