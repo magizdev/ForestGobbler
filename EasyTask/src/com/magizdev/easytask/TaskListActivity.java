@@ -154,7 +154,7 @@ public class TaskListActivity extends Activity {
 					} else {
 						GregorianCalendar calendar = new GregorianCalendar();
 						calendar.setTime(dueDate);
-						calendar.add(GregorianCalendar.YEAR, 1);
+						calendar.add(GregorianCalendar.MONTH, 1);
 						dueDate = calendar.getTime();
 					}
 					EasyTaskInfo task = new EasyTaskInfo(0, ana
