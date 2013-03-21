@@ -99,11 +99,12 @@ public class TaskListActivity extends Activity {
 		listView = (ListView) this.findViewById(R.id.taskList);
 		inputArea = (RelativeLayout) this.findViewById(R.id.inputArea);
 		util = new EasyTaskUtil(this);
-		adapter = new TaskListAdapter(this);
+		adapter = new TaskListAdapter(this, listView, uiHandler);
 		listView.setAdapter(adapter);
-		mDetector = new GestureDetectorCompat(this, new EasyGestureListener(listView, uiHandler, animDuration));
+		mDetector = new GestureDetectorCompat(this, new EasyGestureListener(
+				listView, uiHandler, animDuration));
 		listView.setOnTouchListener(new OnTouchListener() {
-			
+
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				return mDetector.onTouchEvent(event);

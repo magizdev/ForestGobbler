@@ -11,10 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.magizdev.easytask.R;
@@ -23,11 +26,17 @@ public class TaskListAdapter extends BaseAdapter {
 	private List<EasyTaskInfo> tasks;
 	private LayoutInflater mInflater;
 	private EasyTaskUtil util;
+	private ListView listView;
+	private Context context;
+	private Handler uihHandler;
 
-	public TaskListAdapter(Context context) {
+	public TaskListAdapter(Context context, ListView listView, Handler uiHandler) {
+		this.context = context;
 		mInflater = LayoutInflater.from(context);
 		util = new EasyTaskUtil(context);
 		tasks = util.getTasks();
+		this.listView = listView;
+		this.uihHandler = uiHandler;
 	}
 
 	public void removeAt(int index) {
@@ -90,6 +99,7 @@ public class TaskListAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		final long id = tasks.get(position).Id;
+		final int tempPosition = position;
 		holder.note.setText(tasks.get(position).Note);
 		Date startDate = tasks.get(position).StartDate;
 		if (startDate.getTime() > 0) {
@@ -99,15 +109,39 @@ public class TaskListAdapter extends BaseAdapter {
 			holder.notification.setVisibility(View.INVISIBLE);
 		}
 		holder.deleteBtn.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				util.deleteTask(id);
-				TaskListAdapter.this.refresh();
-				TaskListAdapter.this.notifyDataSetChanged();
+				Animation anim = AnimationUtils.loadAnimation(
+						context, android.R.anim.slide_out_right);
+				anim.setDuration(500);
+				anim.setAnimationListener(new AnimationListener() {
+					
+					@Override
+					public void onAnimationStart(Animation animation) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onAnimationRepeat(Animation animation) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onAnimationEnd(Animation animation) {
+						util.deleteTask(id);
+						TaskListAdapter.this.refresh();
+						TaskListAdapter.this.notifyDataSetChanged();
+					}
+				});
+				uihHandler.removeMessages(tempPosition);
+				uihHandler.sendEmptyMessage(tempPosition);
+				listView.getChildAt(tempPosition).startAnimation(anim);
 			}
 		});
-		
+
 		if (startDate.getTime() < System.currentTimeMillis()) {
 			holder.note.setBackgroundColor(0xFFA0A0A0);
 			holder.notification.setBackgroundColor(0xFFA0A0A0);
