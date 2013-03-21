@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import android.R.animator;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.app.Activity;
@@ -13,13 +12,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.GestureDetectorCompat;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -41,6 +42,7 @@ public class TaskListActivity extends Activity {
 	private RelativeLayout inputArea;
 	TaskListAdapter adapter;
 	private long animDuration;
+	private GestureDetectorCompat mDetector;
 
 	private Handler uiHandler = new Handler() {
 
@@ -50,7 +52,7 @@ public class TaskListActivity extends Activity {
 			View selectedItem = listView.getChildAt(msg.what);
 			final Button deleteButton = (Button) selectedItem
 					.findViewById(R.id.deleteBtn);
-			deleteButton.animate().alpha(0).setDuration(animDuration)
+			deleteButton.animate().scaleX(0).setDuration(animDuration)
 					.setListener(new AnimatorListener() {
 
 						@Override
@@ -68,7 +70,7 @@ public class TaskListActivity extends Activity {
 						@Override
 						public void onAnimationEnd(Animator animation) {
 							deleteButton.setVisibility(View.GONE);
-
+							deleteButton.setScaleX(1);
 						}
 
 						@Override
@@ -99,6 +101,14 @@ public class TaskListActivity extends Activity {
 		util = new EasyTaskUtil(this);
 		adapter = new TaskListAdapter(this);
 		listView.setAdapter(adapter);
+		mDetector = new GestureDetectorCompat(this, new EasyGestureListener(listView, uiHandler, animDuration));
+		listView.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return mDetector.onTouchEvent(event);
+			}
+		});
 
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -111,23 +121,6 @@ public class TaskListActivity extends Activity {
 				editTaskIntent.putExtra("easyTaskId", listView.getAdapter()
 						.getItemId(arg2));
 				startActivityForResult(editTaskIntent, 22);
-			}
-		});
-
-		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				Button deleteBtn = (Button) arg1.findViewById(R.id.deleteBtn);
-				deleteBtn.setAlpha(0);
-				float origx = deleteBtn.getScaleX();
-				deleteBtn.setScaleX(0);
-				deleteBtn.setVisibility(View.VISIBLE);
-				deleteBtn.animate().alpha(1).scaleX(origx)
-						.setDuration(animDuration).start();
-				uiHandler.sendEmptyMessageDelayed(arg2, 2000);
-				return true;
 			}
 		});
 
