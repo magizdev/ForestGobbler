@@ -139,7 +139,7 @@ public class TaskListAdapter extends BaseAdapter {
 				});
 				uihHandler.removeMessages(tempPosition);
 				uihHandler.sendEmptyMessage(tempPosition);
-				listView.getChildAt(tempPosition).startAnimation(anim);
+				listView.getChildAt(tempPosition - listView.getFirstVisiblePosition()).startAnimation(anim);
 			}
 		});
 
