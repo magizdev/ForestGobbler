@@ -1,0 +1,26 @@
+var db=require('../lib/db.js');
+
+var UserSchema=new db.Schema({
+  username:{type:String, unique:true}
+  ,password: String
+})
+
+var MyUser=db.mongoose.model('User', UserSchema);
+
+module.exports.addUser = addUser;
+
+function addUser(username, password, callback) {
+  var instance=new MyUser();
+  instance.username=username;
+  instance.password=password;
+  instance.save(function (err) {
+    if(err) {
+      console.log('error');
+      callback(err);
+    }
+    else {
+      console.log('success');
+      callback(null, instance);
+    }
+  });
+}

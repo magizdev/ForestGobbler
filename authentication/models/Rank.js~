@@ -1,0 +1,24 @@
+var db=require('../lib/db.js');
+
+var RankSchema=new db.Schema({
+   username: {type:String}
+  ,score: Number 
+})
+
+var iRank=db.mongoose.model('rank', RankSchema);
+
+module.exports.addScore = addScore;
+
+function addScore(username, score, callback) {
+  var instance=new iRank();
+  iRank.find().exec(function(err, ranks) {
+    if(!err) {
+      if(ranks.count < 10) {
+        instance.username = username;
+        instance.score = score;
+        instance.save(function (err) {});
+      }
+    }
+    callback(null, instance);
+  });
+}
