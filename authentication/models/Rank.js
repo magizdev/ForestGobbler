@@ -19,9 +19,7 @@ function addScore(username, score, mode, callback) {
   instance.mode = mode;
 
   iRank.find({mode:mode}).count(function(err, count) {
-    console.log("1");
     if(!err) {
-      console.log("%d", count);
       if(count < 10) {
         instance.save(function (err) {});
         callback(null, instance);
@@ -35,7 +33,6 @@ function addScore(username, score, mode, callback) {
         });
       }
     }else{
-      console.log("2");
       callback(err);
     }
   });
@@ -43,8 +40,8 @@ function addScore(username, score, mode, callback) {
 
 function listScore(mode, callback) {
   if(mode!=1 && mode!=2 && mode!=3) {callback();}
-  var totalRanks = "[";
-  iRank.find({mode:mode}).exec(function(err, ranks) {
+  var totalRanks = "{ranks:[";
+  iRank.find({mode:mode}).sort("-score").exec(function(err, ranks) {
     for(var i=0;i<ranks.length;i++){
       totalRanks+="{";
       totalRanks+="username:" + ranks[i].username;
@@ -53,7 +50,7 @@ function listScore(mode, callback) {
       totalRanks+="}";
       if(i< ranks.length-1) totalRanks+=",";
     }
-    totalRanks+="]";
+    totalRanks+="]}";
     callback(null, totalRanks);
   });
 }

@@ -45,8 +45,21 @@ app.get('/rank', function(req, res) {
   });
 });
 
-app.get('/rankList', function(req, res) {
+app.get('/ranklist1', function(req, res) {
   Rank.listScore(1, function(error, ranks){
+    res.writeHead(200, {'Content-Type':'text/html'});
+    res.end(ranks, 'utf-8');
+  });
+});
+
+app.get('/ranklist2', function(req, res) {
+  Rank.listScore(2, function(error, ranks){
+    res.writeHead(200, {'Content-Type':'text/html'});
+    res.end(ranks, 'utf-8');
+  });
+});
+app.get('/ranklist3', function(req, res) {
+  Rank.listScore(3, function(error, ranks){
     res.writeHead(200, {'Content-Type':'text/html'});
     res.end(ranks, 'utf-8');
   });
@@ -59,6 +72,17 @@ app.post('/rank', function(req, res) {
   Rank.addScore(username, score, mode, function(err, user) {
     if(err) throw err;
     res.redirect('/rank');
+  });
+});
+
+app.post('/rankadd', function(req, res) {
+  var username=req.head.username;
+  var score=req.head.score;
+  var mode=req.head.mode
+  Rank.addScore(username, score, mode, function(err, user) {
+    if(err) throw err;
+    res.writeHead(200, {'Content-Type':'text/html'});
+    res.end('', 'utf-8');
   });
 });
 
