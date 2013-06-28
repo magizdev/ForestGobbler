@@ -45,6 +45,13 @@ app.get('/rank', function(req, res) {
   });
 });
 
+app.get('/rankList', function(req, res) {
+  Rank.listScore(1, function(error, ranks){
+    res.writeHead(200, {'Content-Type':'text/html'});
+    res.end(ranks, 'utf-8');
+  });
+});
+
 app.post('/rank', function(req, res) {
   var username=req.body.username;
   var score=req.body.score;

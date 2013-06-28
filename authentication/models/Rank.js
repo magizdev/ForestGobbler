@@ -9,6 +9,7 @@ var RankSchema=new db.Schema({
 var iRank=db.mongoose.model('rank', RankSchema);
 
 module.exports.addScore = addScore;
+module.exports.listScore = listScore;
 
 function addScore(username, score, mode, callback) {
   if(mode!=1 && mode!=2 && mode!=3) {callback();}
@@ -37,5 +38,22 @@ function addScore(username, score, mode, callback) {
       console.log("2");
       callback(err);
     }
+  });
+}
+
+function listScore(mode, callback) {
+  if(mode!=1 && mode!=2 && mode!=3) {callback();}
+  var totalRanks = "[";
+  iRank.find({mode:mode}).exec(function(err, ranks) {
+    for(var i=0;i<ranks.length;i++){
+      totalRanks+="{";
+      totalRanks+="username:" + ranks[i].username;
+      totalRanks+=",";
+      totalRanks+="score:" + ranks[i].score;
+      totalRanks+="}";
+      if(i< ranks.length-1) totalRanks+=",";
+    }
+    totalRanks+="]";
+    callback(null, totalRanks);
   });
 }
