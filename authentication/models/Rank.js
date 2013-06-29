@@ -20,7 +20,7 @@ function addScore(username, score, mode, callback) {
 
   iRank.find({mode:mode}).count(function(err, count) {
     if(!err) {
-      if(count < 10) {
+      if(count < 100) {
         instance.save(function (err) {});
         callback(null, instance);
       }else{
