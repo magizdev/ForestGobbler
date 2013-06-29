@@ -16,5 +16,6 @@
     <string name="feature_gravity_left">向左滑动 (250颗星)</string>
     <string name="feature_gravity_right">向右滑动 (150颗星)</string>
     <string name="feature_rotate">图标翻转(50颗星)</string>
+    <string name = "user_name">用户名</string>
 
 </resources>

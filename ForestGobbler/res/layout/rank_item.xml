@@ -9,7 +9,7 @@
         android:id="@+id/rank"
         android:layout_width="20dp"
         android:layout_height="wrap_content"
-        android:textColor="#FF33B5E5"
+        android:textColor="#FF5D0CFF"
         android:gravity="center"
         android:textSize="20dp" />
 
@@ -18,7 +18,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:textColor="#FF33B5E5"
+        android:textColor="#FF5D0CFF"
         android:gravity="center"
         android:textSize="20dp" />
 
@@ -29,7 +29,7 @@
         android:layout_toRightOf="@id/rank"
         android:layout_toLeftOf="@id/score"
         android:gravity="center"
-        android:textColor="#FF33B5E5"
+        android:textColor="#FF5D0CFF"
         android:textSize="20dp" />
 
 </RelativeLayout>
