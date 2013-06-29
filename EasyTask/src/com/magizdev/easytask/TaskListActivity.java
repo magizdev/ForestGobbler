@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import android.R.integer;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.app.Activity;
@@ -49,37 +50,45 @@ public class TaskListActivity extends Activity {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			View selectedItem = listView.getChildAt(msg.what);
-			final Button deleteButton = (Button) selectedItem
-					.findViewById(R.id.deleteBtn);
-			deleteButton.animate().scaleX(0).setDuration(animDuration)
-					.setListener(new AnimatorListener() {
+			int first = listView.getFirstVisiblePosition();
+			int last = listView.getLastVisiblePosition();
+			if (msg.what >= first && msg.what <= last) {
+				View selectedItem = listView.getChildAt(msg.what
+						- listView.getFirstVisiblePosition());
+				final Button deleteButton = (Button) selectedItem
+						.findViewById(R.id.deleteBtn);
+				deleteButton.animate().scaleX(0).setDuration(animDuration)
+						.setListener(new AnimatorListener() {
 
-						@Override
-						public void onAnimationStart(Animator animation) {
-							// TODO Auto-generated method stub
+							@Override
+							public void onAnimationStart(Animator animation) {
+								// TODO Auto-generated method stub
 
-						}
+							}
 
-						@Override
-						public void onAnimationRepeat(Animator animation) {
-							// TODO Auto-generated method stub
+							@Override
+							public void onAnimationRepeat(Animator animation) {
+								// TODO Auto-generated method stub
 
-						}
+							}
 
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							deleteButton.setVisibility(View.GONE);
-							deleteButton.setScaleX(1);
-						}
+							@Override
+							public void onAnimationEnd(Animator animation) {
+								deleteButton.setVisibility(View.GONE);
+								deleteButton.setScaleX(1);
+							}
 
-						@Override
-						public void onAnimationCancel(Animator animation) {
-							// TODO Auto-generated method stub
+							@Override
+							public void onAnimationCancel(Animator animation) {
+								// TODO Auto-generated method stub
 
-						}
-					}).start();
-			uiHandler.removeMessages(msg.what);
+							}
+						}).start();
+				uiHandler.removeMessages(msg.what);
+			}else {
+				uiHandler.removeMessages(msg.what);
+				uiHandler.sendEmptyMessageDelayed(msg.what, 2000);
+			}
 		}
 	};
 

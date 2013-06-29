@@ -43,7 +43,7 @@ public class EasyGestureListener extends
 			deleteBtn.setScaleX(0);
 			deleteBtn.animate().alpha(1).scaleX(origx)
 					.setDuration(animDuration).setListener(null).start();
-			uiHandler.sendEmptyMessageDelayed(visiblePosition, 2000);
+			uiHandler.sendEmptyMessageDelayed(positionDown, 2000);
 		}
 			return true;
 	}
