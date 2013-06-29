@@ -75,10 +75,10 @@ app.post('/rank', function(req, res) {
   });
 });
 
-app.post('/rankadd', function(req, res) {
-  var username=req.head.username;
-  var score=req.head.score;
-  var mode=req.head.mode
+app.get('/rankadd', function(req, res) {
+  var username=req.query.username;
+  var score=req.query.score;
+  var mode=req.query.mode
   Rank.addScore(username, score, mode, function(err, user) {
     if(err) throw err;
     res.writeHead(200, {'Content-Type':'text/html'});
