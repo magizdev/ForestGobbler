@@ -1,14 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/background"
     android:orientation="vertical" >
 
+    <RelativeLayout
+        android:id="@+id/dash_btn_area"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/rank_btn_hard"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:background="#FF33B5E5"
+            android:layout_margin="10dp"
+            android:text="Hard" />
+
+        <Button
+            android:id="@+id/rank_btn_easy"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_toLeftOf="@id/rank_btn_hard"
+            android:layout_centerVertical="true"
+            android:background="#FF33B5E5"
+            android:layout_margin="10dp"
+            android:text="Easy" />
+
+        <Button
+            android:id="@+id/rank_btn_endless"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@id/rank_btn_hard"
+            android:layout_centerVertical="true"
+            android:background="#FF33B5E5"
+            android:layout_margin="10dp"
+            android:text="Endless" />
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/dashboard"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/dash_btn_area"
         android:layout_marginTop="20dp"
         android:orientation="vertical" >
 
@@ -20,6 +58,14 @@
             android:textColor="@color/score_text_color"
             android:textSize="40dp"
             android:typeface="serif" />
+
+        <ListView
+            android:id="@+id/rankList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:animateLayoutChanges="true" >
+        </ListView>
 
         <TextView
             android:id="@+id/highScore1"
@@ -63,4 +109,4 @@
             android:textSize="35dp" />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

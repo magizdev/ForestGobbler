@@ -9,7 +9,7 @@
         android:layout_width="150dp"
         android:layout_height="40dp"
         android:layout_centerInParent="true"
-        android:background="@drawable/btn_background"
+        android:background="#FF33B5E5"
         android:text="Easy" />
 
     <ImageView
@@ -27,7 +27,7 @@
         android:layout_below="@+id/play_btn_easy"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:background="@drawable/btn_background"
+        android:background="#FF33B5E5"
         android:text="Hard" />
 
     <Button
@@ -37,7 +37,7 @@
         android:layout_below="@+id/play_btn_hard"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:background="@drawable/btn_background"
+        android:background="#FF33B5E5"
         android:text="Endless" />
 
     <Button
@@ -47,7 +47,7 @@
         android:layout_below="@+id/play_btn_endless"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:background="@drawable/btn_background"
+        android:background="#FF33B5E5"
         android:text="High Score" />
 
     <Button
@@ -57,7 +57,7 @@
         android:layout_below="@+id/dashboard_btn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:background="@drawable/btn_background"
+        android:background="#FF33B5E5"
         android:text="Settings" />
 
 </RelativeLayout>

@@ -58,6 +58,18 @@
             android:layout_marginRight="20dp"
             android:layout_weight="1" >
         </ListView>
+
+        <EditText
+            android:id="@+id/userName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="Input your name"
+            android:inputType="textPersonName" >
+        </EditText>
     </LinearLayout>
 
 </LinearLayout>

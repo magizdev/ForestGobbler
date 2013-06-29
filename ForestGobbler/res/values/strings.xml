@@ -15,5 +15,6 @@
     <string name = "feature_gravity_left">Move left (250 stars)</string>
     <string name = "feature_gravity_right">Move right (150 stars)</string>
     <string name = "feature_rotate">Rotate (50 stars)</string>
+    <string name = "user_name">Name</string>
     
 </resources>
