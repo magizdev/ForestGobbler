@@ -37,6 +37,17 @@ app.get('/ranklist1', function(req, res) {
   });
 });
 
+app.post('/rankadd', function(req, res) {
+  var username=req.body.username;
+  var score=req.body.score;
+  var mode=req.body.mode
+  Rank.addScore(username, score, mode, function(err, user) {
+    if(err) throw err;
+    res.writeHead(200, {'Content-Type':'text/html'});
+    res.end('', 'utf-8');
+  });
+});
+
 app.get('/ranklist2', function(req, res) {
   Rank.listScore(2, function(error, ranks){
     res.writeHead(200, {'Content-Type':'text/html'});
@@ -45,6 +56,14 @@ app.get('/ranklist2', function(req, res) {
 });
 app.get('/ranklist3', function(req, res) {
   Rank.listScore(3, function(error, ranks){
+    res.writeHead(200, {'Content-Type':'text/html'});
+    res.end(ranks, 'utf-8');
+  });
+});
+
+app.get('/ranklist', function(req, res) {
+  var level=req.query.level;
+  Rank.listScore(level, function(error, ranks){
     res.writeHead(200, {'Content-Type':'text/html'});
     res.end(ranks, 'utf-8');
   });
@@ -61,5 +80,4 @@ app.get('/rankadd', function(req, res) {
   });
 });
 
-app.listen(3000);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+app.listen(80);
