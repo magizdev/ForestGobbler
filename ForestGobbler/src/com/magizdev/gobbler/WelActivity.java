@@ -2,15 +2,22 @@ package com.magizdev.gobbler;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.ColorMatrixColorFilter;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
 public class WelActivity extends Activity implements OnClickListener {
+	public final static float[] BT_SELECTED = new float[] { 2, 0, 0, 0, 2, 0,
+			2, 0, 0, 2, 0, 0, 2, 0, 2, 0, 0, 0, 1, 0 };
+	public final static float[] BT_NOT_SELECTED = new float[] { 1, 0, 0, 0, 0,
+			0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0 };
 
 	private Button btnPlayEasy;
 	private Button btnPlayHard;
@@ -32,10 +39,15 @@ public class WelActivity extends Activity implements OnClickListener {
 		btnSetting = (Button) findViewById(R.id.setting_btn);
 
 		btnPlayEasy.setOnClickListener(this);
+		btnPlayEasy.setOnTouchListener(buttonOnTouchListener);
 		btnPlayHard.setOnClickListener(this);
+		btnPlayHard.setOnTouchListener(buttonOnTouchListener);
 		btnDashboard.setOnClickListener(this);
+		btnDashboard.setOnTouchListener(buttonOnTouchListener);
 		btnPlayEndless.setOnClickListener(this);
+		btnPlayEndless.setOnTouchListener(buttonOnTouchListener);
 		btnSetting.setOnClickListener(this);
+		btnSetting.setOnTouchListener(buttonOnTouchListener);
 
 		// Animation scale = AnimationUtils.loadAnimation(this,
 		// R.anim.scale_anim);
@@ -55,8 +67,9 @@ public class WelActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		Intent gameIntent = new Intent(this, GameActivity.class);
-		
-		Animation flyOut=AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right);
+
+		Animation flyOut = AnimationUtils.loadAnimation(this,
+				android.R.anim.slide_out_right);
 
 		switch (v.getId()) {
 		case R.id.play_btn_hard:
@@ -97,6 +110,23 @@ public class WelActivity extends Activity implements OnClickListener {
 		player.start();
 
 	}
+
+	public final static OnTouchListener buttonOnTouchListener = new OnTouchListener() {
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				v.getBackground().setColorFilter(
+						new ColorMatrixColorFilter(BT_SELECTED));
+				v.setBackgroundDrawable(v.getBackground());
+			} else if (event.getAction() == MotionEvent.ACTION_UP) {
+				v.getBackground().setColorFilter(
+						new ColorMatrixColorFilter(BT_NOT_SELECTED));
+				v.setBackgroundDrawable(v.getBackground());
+			}
+			return false;
+		}
+
+	};
 
 	public void quit() {
 		this.finish();
