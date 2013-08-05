@@ -1,18 +1,20 @@
 package com.magizdev.easytask;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import android.R.integer;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.speech.RecognizerIntent;
 import android.support.v4.view.GestureDetectorCompat;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -28,6 +30,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
@@ -38,12 +41,16 @@ import com.magizdev.easytask.viewmodel.EasyTaskUtil;
 import com.magizdev.easytask.viewmodel.TaskListAdapter;
 
 public class TaskListActivity extends Activity {
+	protected static final int RESULT_SPEECH = 1;
+	protected static final int RESULT_EDIT = 2;
 	private ListView listView;
 	private EasyTaskUtil util;
 	private RelativeLayout inputArea;
 	TaskListAdapter adapter;
 	private long animDuration;
 	private GestureDetectorCompat mDetector;
+	private ImageButton btnSpeak;
+	private EditText note;
 
 	private Handler uiHandler = new Handler() {
 
@@ -85,7 +92,7 @@ public class TaskListActivity extends Activity {
 							}
 						}).start();
 				uiHandler.removeMessages(msg.what);
-			}else {
+			} else {
 				uiHandler.removeMessages(msg.what);
 				uiHandler.sendEmptyMessageDelayed(msg.what, 2000);
 			}
@@ -107,6 +114,7 @@ public class TaskListActivity extends Activity {
 
 		listView = (ListView) this.findViewById(R.id.taskList);
 		inputArea = (RelativeLayout) this.findViewById(R.id.inputArea);
+		btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
 		util = new EasyTaskUtil(this);
 		adapter = new TaskListAdapter(this, listView, uiHandler);
 		listView.setAdapter(adapter);
@@ -130,14 +138,14 @@ public class TaskListActivity extends Activity {
 				editTaskIntent.putExtra("clickItemPosition", arg2);
 				editTaskIntent.putExtra("easyTaskId", listView.getAdapter()
 						.getItemId(arg2));
-				startActivityForResult(editTaskIntent, 22);
+				startActivityForResult(editTaskIntent, RESULT_EDIT);
 			}
 		});
 
 		final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
 		ImageButton sendButton = (ImageButton) this.findViewById(R.id.addTask);
-		final EditText note = (EditText) this.findViewById(R.id.taskInput);
+		note = (EditText) this.findViewById(R.id.taskInput);
 
 		List<EasyTaskInfo> tasks = util.getTasks();
 		int index = 0;
@@ -182,14 +190,51 @@ public class TaskListActivity extends Activity {
 			}
 
 		});
+
+		btnSpeak.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				Intent intent = new Intent(
+						RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+
+				intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+
+				try {
+					startActivityForResult(intent, RESULT_SPEECH);
+					note.getText().clear();
+				} catch (ActivityNotFoundException a) {
+					Toast t = Toast.makeText(getApplicationContext(),
+							"Ops! Your device doesn't support Speech to Text",
+							Toast.LENGTH_SHORT);
+					t.show();
+				}
+			}
+		});
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent result) {
-		if (resultCode == RESULT_OK) {
-			// int position = result.getIntExtra("itemPosition", 0);
-			adapter.refresh();
-			adapter.notifyDataSetChanged();
+		super.onActivityResult(requestCode, resultCode, result);
+
+		switch (requestCode) {
+		case RESULT_SPEECH: 
+			if (resultCode == RESULT_OK && null != result) {
+
+				ArrayList<String> text = result
+						.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+				note.setText(text.get(0));
+			}
+			break;
+		case RESULT_EDIT:
+			if (resultCode == RESULT_OK) {
+				// int position = result.getIntExtra("itemPosition", 0);
+				adapter.refresh();
+				adapter.notifyDataSetChanged();
+			}
+			break;
 		}
 	}
 
