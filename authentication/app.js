@@ -32,8 +32,21 @@ app.configure('production', function(){
 // Routes
 app.get('/ranklist1', function(req, res) {
   Rank.listScore(1, function(error, ranks){
-    res.writeHead(200, {'Content-Type':'text/html'});
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
     res.end(ranks, 'utf-8');
+  });
+});
+
+app.post('/rankadd', function(req, res) {
+  var username=req.body.username;
+  console.log("here");
+  console.log(username);
+  var score=req.body.score;
+  var mode=req.body.mode
+  Rank.addScore(username, score, mode, function(err, user) {
+    if(err) console.log(err);
+    //res.writeHead(200, {'Content-Type':'text/html'});
+    res.end('', 'utf-8');
   });
 });
 
@@ -50,6 +63,14 @@ app.get('/ranklist3', function(req, res) {
   });
 });
 
+app.get('/ranklist', function(req, res) {
+  var level=req.query.level;
+  Rank.listScore(level, function(error, ranks){
+    res.writeHead(200, {'Content-Type':'text/html; charset=UTF-8'});
+    res.end(ranks, 'utf-8');
+  });
+});
+
 app.get('/rankadd', function(req, res) {
   var username=req.query.username;
   var score=req.query.score;
@@ -62,4 +83,3 @@ app.get('/rankadd', function(req, res) {
 });
 
 app.listen(3000);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

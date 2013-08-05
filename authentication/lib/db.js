@@ -10,7 +10,7 @@ var address = '@ds031978.mongolab.com:31978/magizdev_test';
 connect();
 
 function connect() {
-  var url='mongodb://'+username+':'+password+address;
+  var url='mongodb://localhost'//+username+':'+password+address;
   mongoose.connect(url);
 }
 function disconnect() {mongoose.disconnect()}

@@ -45,12 +45,14 @@ function listScore(mode, callback) {
     for(var i=0;i<ranks.length;i++){
       totalRanks+="{";
       totalRanks+="username:" + ranks[i].username;
+      console.log(ranks[i].username);
       totalRanks+=",";
       totalRanks+="score:" + ranks[i].score;
       totalRanks+="}";
       if(i< ranks.length-1) totalRanks+=",";
     }
     totalRanks+="]}";
+    console.log(totalRanks);
     callback(null, totalRanks);
   });
 }
