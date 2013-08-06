@@ -1,21 +1,31 @@
 package com.magizdev.easytask;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.OperationCanceledException;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.support.v4.view.GestureDetectorCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,12 +45,20 @@ import android.widget.Toast;
 import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson.JacksonFactory;
+import com.google.api.services.tasks.Tasks;
+import com.google.api.services.tasks.TasksRequestInitializer;
+import com.google.api.services.tasks.model.Task;
 import com.magizdev.easytask.util.AlarmUtil;
 import com.magizdev.easytask.viewmodel.EasyTaskInfo;
 import com.magizdev.easytask.viewmodel.EasyTaskUtil;
 import com.magizdev.easytask.viewmodel.TaskListAdapter;
 
 public class TaskListActivity extends Activity {
+	private static final int DIALOG_ACCOUNTS = 0;
+	private static final String AUTH_TOKEN_TYPE = "oauth2:https://www.googleapis.com/auth/tasks";
 	protected static final int RESULT_SPEECH = 1;
 	protected static final int RESULT_EDIT = 2;
 	private ListView listView;
@@ -51,6 +69,9 @@ public class TaskListActivity extends Activity {
 	private GestureDetectorCompat mDetector;
 	private ImageButton btnSpeak;
 	private EditText note;
+	private AccountManager accountManager;
+	private Account account;
+	Tasks service;
 
 	private Handler uiHandler = new Handler() {
 
@@ -212,6 +233,7 @@ public class TaskListActivity extends Activity {
 				}
 			}
 		});
+		showDialog(DIALOG_ACCOUNTS);
 	}
 
 	@Override
@@ -219,7 +241,7 @@ public class TaskListActivity extends Activity {
 		super.onActivityResult(requestCode, resultCode, result);
 
 		switch (requestCode) {
-		case RESULT_SPEECH: 
+		case RESULT_SPEECH:
 			if (resultCode == RESULT_OK && null != result) {
 
 				ArrayList<String> text = result
@@ -248,5 +270,89 @@ public class TaskListActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// getMenuInflater().inflate(R.menu.activity_task_list, menu);
 		return true;
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case DIALOG_ACCOUNTS:
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Select a Google account");
+
+			final Account[] accounts = accountManager
+					.getAccountsByType("com.google");
+			final int size = accounts.length;
+			String[] names = new String[size];
+			for (int i = 0; i < size; i++) {
+				names[i] = accounts[i].name;
+			}
+			builder.setItems(names, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					// Stuff to do when the account is selected by the user
+					gotAccount(accounts[which]);
+				}
+			});
+			return builder.create();
+		}
+		return null;
+	}
+
+	Runnable taskThread = new Runnable() {
+
+		@Override
+		public void run() {
+			List<Task> tasks = null;
+			try {
+				com.google.api.services.tasks.Tasks.TasksOperations.List list = service
+						.tasks().list("default");
+				com.google.api.services.tasks.model.Tasks all = list.execute();
+				tasks = all.getItems();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				Log.w("tasks", e.getMessage());
+			}
+			for (Task task : tasks) {
+				Log.w("tasks", task.getNotes());
+			}
+
+		}
+	};
+
+	public void gotAccount(Account account) {
+		this.account = account;
+		accountManager.getAuthToken(account, AUTH_TOKEN_TYPE, null,
+				TaskListActivity.this, new AccountManagerCallback<Bundle>() {
+					public void run(AccountManagerFuture<Bundle> future) {
+						try {
+							// If the user has authorized your application
+							// to
+							// use the tasks API
+							// a token is available.
+							String token = future.getResult().getString(
+									AccountManager.KEY_AUTHTOKEN);
+							// Now you can use the Tasks API...
+							GoogleCredential credential = new GoogleCredential();
+							credential.setAccessToken(token);
+
+							service = new Tasks.Builder(new NetHttpTransport(),
+									new JacksonFactory(), credential)
+									.setApplicationName("EasyTask")
+									.setTasksRequestInitializer(
+											new TasksRequestInitializer(
+													"AIzaSyBszB5_MtTyGtKrN_mukAvHnhE6h6Ndt6w"))
+									.build();
+
+							new Thread(taskThread).start();
+						} catch (OperationCanceledException e) {
+							// TODO: The user has denied you access to the
+							// API,
+							// you should handle that
+						} catch (Exception e) {
+							Log.w("error", e.getMessage());
+						}
+					}
+
+				}, null);
+
 	}
 }
