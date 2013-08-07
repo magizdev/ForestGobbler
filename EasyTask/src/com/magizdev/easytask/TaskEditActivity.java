@@ -30,6 +30,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 	private final static String DATE = "yyyy/MM/dd";
 	private final static String TIME = "HH:mm";
 
+	EditText txtTitle;
 	EditText txtNote;
 	TimePicker timePicker;
 	DatePicker datePicker;
@@ -53,6 +54,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_edit);
 		util = new EasyTaskUtil(this);
+		txtTitle = (EditText) findViewById(R.id.txtTitle);
 		txtNote = (EditText) findViewById(R.id.txtNote);
 		timePicker = (TimePicker) findViewById(R.id.timePicker);
 		timePicker.setIs24HourView(true);
@@ -108,6 +110,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 			Date startDate = taskInfo.StartDate;
 			GregorianCalendar startDateCalendar = new GregorianCalendar();
 			startDateCalendar.setTime(startDate);
+			txtTitle.setText(taskInfo.Title + taskInfo.Source);
 			txtNote.setText(taskInfo.Note);
 			SimpleDateFormat dateFormat = new SimpleDateFormat(DATE);
 			SimpleDateFormat timeFormat = new SimpleDateFormat(TIME);

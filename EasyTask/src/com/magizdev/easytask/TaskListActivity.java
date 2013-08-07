@@ -233,6 +233,7 @@ public class TaskListActivity extends Activity {
 				}
 			}
 		});
+		accountManager = AccountManager.get(this);
 		showDialog(DIALOG_ACCOUNTS);
 	}
 

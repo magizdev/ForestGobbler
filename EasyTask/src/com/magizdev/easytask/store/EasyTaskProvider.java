@@ -29,10 +29,14 @@ public class EasyTaskProvider extends ContentProvider {
 				TaskTableMetaData.TASK_TITLE);
 		sTaskProjectionMap.put(TaskTableMetaData.TASK_NOTE,
 				TaskTableMetaData.TASK_NOTE);
-		sTaskProjectionMap.put(TaskTableMetaData.CREATE_DATE, TaskTableMetaData.CREATE_DATE);
-		sTaskProjectionMap.put(TaskTableMetaData.START_DATE, TaskTableMetaData.START_DATE);
-		sTaskProjectionMap.put(TaskTableMetaData.SOURCE, TaskTableMetaData.SOURCE);
-		sTaskProjectionMap.put(TaskTableMetaData.SOURCE_ID, TaskTableMetaData.SOURCE_ID);
+		sTaskProjectionMap.put(TaskTableMetaData.CREATE_DATE,
+				TaskTableMetaData.CREATE_DATE);
+		sTaskProjectionMap.put(TaskTableMetaData.START_DATE,
+				TaskTableMetaData.START_DATE);
+		sTaskProjectionMap.put(TaskTableMetaData.SOURCE,
+				TaskTableMetaData.SOURCE);
+		sTaskProjectionMap.put(TaskTableMetaData.SOURCE_ID,
+				TaskTableMetaData.SOURCE_ID);
 
 	}
 
@@ -60,19 +64,46 @@ public class EasyTaskProvider extends ContentProvider {
 					+ EasyTaskMetaData.TASK_TABLE_NAME_STRING + "("
 					+ EasyTaskMetaData.TaskTableMetaData._ID
 					+ " INTEGER PRIMARY KEY,"
+					+ EasyTaskMetaData.TaskTableMetaData.TASK_TITLE + " TEXT,"
 					+ EasyTaskMetaData.TaskTableMetaData.TASK_NOTE + " TEXT,"
 					+ EasyTaskMetaData.TaskTableMetaData.CREATE_DATE
 					+ " INTEGER,"
 					+ EasyTaskMetaData.TaskTableMetaData.START_DATE
-					+ " INTEGER);");
+					+ " INTEGER," + EasyTaskMetaData.TaskTableMetaData.SOURCE
+					+ " TEXT," + EasyTaskMetaData.TaskTableMetaData.SOURCE_ID
+					+ " TEXT);");
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			Log.d(TAG, "inner onupgrade called");
-			db.execSQL("DROP TABLE IF EXISTS "
-					+ EasyTaskMetaData.TASK_TABLE_NAME_STRING);
-			onCreate(db);
+			if (oldVersion == 1 && newVersion == 2) {
+				db.execSQL("alter table "
+						+ EasyTaskMetaData.TASK_TABLE_NAME_STRING
+						+ " add column "
+						+ EasyTaskMetaData.TaskTableMetaData.TASK_TITLE
+						+ " TEXT");
+				db.execSQL("alter table "
+						+ EasyTaskMetaData.TASK_TABLE_NAME_STRING
+						+ " add column "
+						+ EasyTaskMetaData.TaskTableMetaData.SOURCE + " TEXT");
+				db.execSQL("alter table "
+						+ EasyTaskMetaData.TASK_TABLE_NAME_STRING
+						+ " add column "
+						+ EasyTaskMetaData.TaskTableMetaData.SOURCE_ID
+						+ " TEXT");
+				db.execSQL("update " + EasyTaskMetaData.TASK_TABLE_NAME_STRING
+						+ " set "
+						+ EasyTaskMetaData.TaskTableMetaData.TASK_TITLE + "="
+						+ EasyTaskMetaData.TaskTableMetaData.TASK_NOTE);
+				db.execSQL("update " + EasyTaskMetaData.TASK_TABLE_NAME_STRING
+						+ " set " + EasyTaskMetaData.TaskTableMetaData.SOURCE
+						+ "='local'");
+			} else {
+				db.execSQL("DROP TABLE IF EXISTS "
+						+ EasyTaskMetaData.TASK_TABLE_NAME_STRING);
+				onCreate(db);
+			}
 		}
 	}
 
@@ -197,7 +228,9 @@ public class EasyTaskProvider extends ContentProvider {
 
 		case INCOMING_SINGLE_TASK_URI_INDICATOR:
 			String rowId = uri.getPathSegments().get(1);
-			count = db.update(TaskTableMetaData.TABLE_NAME, values,
+			count = db.update(
+					TaskTableMetaData.TABLE_NAME,
+					values,
 					TaskTableMetaData._ID
 							+ "="
 							+ rowId

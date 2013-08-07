@@ -20,7 +20,16 @@
         android:animateLayoutChanges="true"
         android:background="#FFFFFF"
         android:focusable="true"
-        android:focusableInTouchMode="true" >
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/btnSpeak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="1dp"
+            android:src="@android:drawable/ic_btn_speak_now" />
 
         <ImageButton
             android:id="@+id/addTask"
@@ -35,20 +44,11 @@
             android:id="@+id/taskInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/btnSpeak"
             android:layout_toLeftOf="@id/addTask"
             android:ems="10"
             android:inputType="textMultiLine" >
         </EditText>
-
-        <ImageButton
-            android:id="@+id/btnSpeak"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:src="@android:drawable/ic_btn_speak_now" 
-            android:layout_toLeftOf="@id/taskInput"/>
     </RelativeLayout>
 
     <ListView
