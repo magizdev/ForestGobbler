@@ -100,7 +100,7 @@ public class TaskListAdapter extends BaseAdapter {
 		}
 		final long id = tasks.get(position).Id;
 		final int tempPosition = position;
-		holder.note.setText(tasks.get(position).Note);
+		holder.note.setText(tasks.get(position).Title);
 		Date startDate = tasks.get(position).StartDate;
 		if (startDate.getTime() > 0) {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");

@@ -25,29 +25,32 @@
 
         <ImageButton
             android:id="@+id/btnSpeak"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_margin="1dp"
+            android:background="#00000000"
             android:src="@android:drawable/ic_btn_speak_now" />
 
         <ImageButton
             android:id="@+id/addTask"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:background="#00000000"
-            android:paddingTop="5dp"
+            android:layout_margin="1dp"
             android:src="@drawable/btn_send" />
 
         <EditText
             android:id="@+id/taskInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_toRightOf="@id/btnSpeak"
             android:layout_toLeftOf="@id/addTask"
             android:ems="10"
-            android:inputType="textMultiLine" >
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:inputType="text" >
         </EditText>
     </RelativeLayout>
 
