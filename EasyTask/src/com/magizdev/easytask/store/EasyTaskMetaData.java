@@ -19,8 +19,11 @@ public class EasyTaskMetaData {
 		public static final String CONTENT_ITEM_TYPE="vnd.android.cursor.item/vnd.androidtask.task";
 		public static final String DEFAULT_SORT_ORDER="create_date DESC";
 		
+		public static final String TASK_TITLE = "title";
 		public static final String TASK_NOTE = "note";
 		public static final String CREATE_DATE = "create_date";
 		public static final String START_DATE = "start_date";
+		public static final String SOURCE = "source";
+		public static final String SOURCE_ID = "source_id";
 	}
 }

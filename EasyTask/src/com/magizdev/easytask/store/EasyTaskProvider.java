@@ -25,10 +25,14 @@ public class EasyTaskProvider extends ContentProvider {
 	static {
 		sTaskProjectionMap = new HashMap<String, String>();
 		sTaskProjectionMap.put(TaskTableMetaData._ID, TaskTableMetaData._ID);
+		sTaskProjectionMap.put(TaskTableMetaData.TASK_TITLE,
+				TaskTableMetaData.TASK_TITLE);
 		sTaskProjectionMap.put(TaskTableMetaData.TASK_NOTE,
 				TaskTableMetaData.TASK_NOTE);
 		sTaskProjectionMap.put(TaskTableMetaData.CREATE_DATE, TaskTableMetaData.CREATE_DATE);
 		sTaskProjectionMap.put(TaskTableMetaData.START_DATE, TaskTableMetaData.START_DATE);
+		sTaskProjectionMap.put(TaskTableMetaData.SOURCE, TaskTableMetaData.SOURCE);
+		sTaskProjectionMap.put(TaskTableMetaData.SOURCE_ID, TaskTableMetaData.SOURCE_ID);
 
 	}
 
