@@ -21,35 +21,12 @@ public class EasyTaskUtil {
 	}
 
 	public List<EasyTaskInfo> getTasks() {
-		List<EasyTaskInfo> tasks = new ArrayList<EasyTaskInfo>();
 		ContentResolver cr = context.getContentResolver();
 		Uri uri = EasyTaskMetaData.TaskTableMetaData.CONTENT_URI;
 		Cursor cursor = null;
-		try {
-			cursor = cr.query(uri, null, null, null, EasyTaskMetaData.TaskTableMetaData.START_DATE);
-			int idxId = cursor
-					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData._ID);
-			int idxNote = cursor
-					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.TASK_NOTE);
-			int idxCreateDate = cursor
-					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.CREATE_DATE);
-			int idxStartDate = cursor
-					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.START_DATE);
-
-			for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
-					.moveToNext()) {
-				int id = cursor.getInt(idxId);
-				String note = cursor.getString(idxNote);
-				Date createDate = new Date(cursor.getLong(idxCreateDate));
-				Date startDate = new Date(cursor.getLong(idxStartDate));
-				tasks.add(new EasyTaskInfo(id, note, createDate, startDate));
-			}
-		} finally {
-			if (cursor != null) {
-				cursor.close();
-			}
-		}
-
+		cursor = cr.query(uri, null, null, null,
+				EasyTaskMetaData.TaskTableMetaData.START_DATE);
+		List<EasyTaskInfo> tasks = CursorToTasks(cursor);
 		return tasks;
 	}
 
@@ -62,20 +39,8 @@ public class EasyTaskUtil {
 		EasyTaskInfo returnValue = null;
 		try {
 			cursor = cr.query(uri, null, null, null, null);
-			int idxNote = cursor
-					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.TASK_NOTE);
-			int idxCreateDate = cursor
-					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.CREATE_DATE);
-			int idxStartDate = cursor
-					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.START_DATE);
-
-			cursor.moveToFirst();
-			if (!cursor.isAfterLast()) {
-				String note = cursor.getString(idxNote);
-				Date createDate = new Date(cursor.getLong(idxCreateDate));
-				Date startDate = new Date(cursor.getLong(idxStartDate));
-				returnValue = new EasyTaskInfo(id, note, createDate, startDate);
-			}
+			List<EasyTaskInfo> tasks = CursorToTasks(cursor);
+			returnValue = tasks.get(0);
 
 		} finally {
 			if (cursor != null) {
@@ -96,22 +61,8 @@ public class EasyTaskUtil {
 					EasyTaskMetaData.TaskTableMetaData.START_DATE + ">?",
 					new String[] { Long.toString(System.currentTimeMillis()) },
 					EasyTaskMetaData.TaskTableMetaData.START_DATE);
-			int idxId = cursor
-					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData._ID);
-			int idxNote = cursor
-					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.TASK_NOTE);
-			int idxCreateDate = cursor
-					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.CREATE_DATE);
-			int idxStartDate = cursor
-					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.START_DATE);
-
-			cursor.moveToFirst();
-			if (!cursor.isAfterLast()) {
-				String note = cursor.getString(idxNote);
-				Date createDate = new Date(cursor.getLong(idxCreateDate));
-				Date startDate = new Date(cursor.getLong(idxStartDate));
-				returnValue = new EasyTaskInfo(cursor.getLong(idxId), note, createDate, startDate);
-			}
+			List<EasyTaskInfo> tasks = CursorToTasks(cursor);
+			returnValue = tasks.get(0);
 
 		} finally {
 			if (cursor != null) {
@@ -122,10 +73,7 @@ public class EasyTaskUtil {
 	}
 
 	public long addTask(EasyTaskInfo task) {
-		ContentValues cv = new ContentValues();
-		cv.put(TaskTableMetaData.TASK_NOTE, task.Note);
-		cv.put(TaskTableMetaData.CREATE_DATE, task.CreateDate.getTime());
-		cv.put(TaskTableMetaData.START_DATE, task.StartDate.getTime());
+		ContentValues cv = TaskToCV(task);
 		ContentResolver cr = context.getContentResolver();
 		Uri uri = EasyTaskMetaData.TaskTableMetaData.CONTENT_URI;
 		Uri returned = cr.insert(uri, cv);
@@ -133,10 +81,7 @@ public class EasyTaskUtil {
 	}
 
 	public void updateTask(long id, EasyTaskInfo task) {
-		ContentValues cv = new ContentValues();
-		cv.put(TaskTableMetaData.TASK_NOTE, task.Note);
-		cv.put(TaskTableMetaData.CREATE_DATE, task.CreateDate.getTime());
-		cv.put(TaskTableMetaData.START_DATE, task.StartDate.getTime());
+		ContentValues cv = TaskToCV(task);
 		ContentResolver cr = context.getContentResolver();
 		Uri uri = Uri.withAppendedPath(
 				EasyTaskMetaData.TaskTableMetaData.CONTENT_URI,
@@ -150,5 +95,55 @@ public class EasyTaskUtil {
 				EasyTaskMetaData.TaskTableMetaData.CONTENT_URI,
 				String.valueOf(id));
 		cr.delete(uri, null, null);
+	}
+
+	private ContentValues TaskToCV(EasyTaskInfo task) {
+		ContentValues cv = new ContentValues();
+		cv.put(TaskTableMetaData.TASK_NOTE, task.Note);
+		cv.put(TaskTableMetaData.TASK_TITLE, task.Title);
+		cv.put(TaskTableMetaData.CREATE_DATE, task.CreateDate.getTime());
+		cv.put(TaskTableMetaData.START_DATE, task.StartDate.getTime());
+		cv.put(TaskTableMetaData.SOURCE, task.Source);
+		cv.put(TaskTableMetaData.SOURCE_ID, task.SourceId);
+		return cv;
+	}
+	
+	private List<EasyTaskInfo> CursorToTasks(Cursor cursor){
+		List<EasyTaskInfo> tasks = new ArrayList<EasyTaskInfo>();
+		try {
+			
+			int idxId = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData._ID);
+			int idxTitle = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.TASK_TITLE);
+			int idxNote = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.TASK_NOTE);
+			int idxCreateDate = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.CREATE_DATE);
+			int idxStartDate = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.START_DATE);
+			int idxSource = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.SOURCE);
+			int idxSourceId = cursor
+					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData.SOURCE_ID);
+
+			for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
+					.moveToNext()) {
+				int id = cursor.getInt(idxId);
+				String title = cursor.getString(idxTitle);
+				String note = cursor.getString(idxNote);
+				String source = cursor.getString(idxSource);
+				String sourceId = cursor.getString(idxSourceId);
+				Date createDate = new Date(cursor.getLong(idxCreateDate));
+				Date startDate = new Date(cursor.getLong(idxStartDate));
+				tasks.add(new EasyTaskInfo(id, title, note, createDate,
+						startDate, source, sourceId));
+			}
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+		}
+		return tasks;
 	}
 }

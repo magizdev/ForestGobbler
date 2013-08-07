@@ -196,7 +196,7 @@ public class TaskListActivity extends Activity {
 						dueDate = calendar.getTime();
 					}
 					EasyTaskInfo task = new EasyTaskInfo(0, ana
-							.getFilteredString(), new Date(), dueDate);
+							.getFilteredString(),null, new Date(), dueDate, "local", null);
 					long id = util.addTask(task);
 					if (ana.getHasTime()) {
 						AlarmUtil.updateAlarm(TaskListActivity.this);

@@ -169,8 +169,8 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		calendar.set(GregorianCalendar.HOUR_OF_DAY, timePicker.getCurrentHour());
 		calendar.set(GregorianCalendar.MINUTE, timePicker.getCurrentMinute());
 		calendar.set(GregorianCalendar.SECOND, 0);
-		EasyTaskInfo task = new EasyTaskInfo(0, txtNote.getText().toString(),
-				new Date(), calendar.getTime());
+		EasyTaskInfo task = new EasyTaskInfo(0, txtNote.getText().toString(), null,
+				new Date(), calendar.getTime(), "local", null);
 		util.updateTask(easyTaskId, task);
 		setResult(RESULT_OK);
 		AlarmUtil.updateAlarm(this);
