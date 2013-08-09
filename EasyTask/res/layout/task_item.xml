@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#FF000000"
+        android:background="#FF2377FF"
         android:textSize="20dp" />
 
     <TextView
@@ -18,6 +19,7 @@
         android:layout_height="wrap_content"
         android:textColor="#FF000000"
         android:textSize="30dp"
+        android:layout_marginLeft="10dp"
         android:layout_below="@id/seperator" />
 
     <LinearLayout
@@ -25,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/note"
+        android:layout_marginLeft="10dp"
         android:orientation="horizontal" >
 
         <ImageView
