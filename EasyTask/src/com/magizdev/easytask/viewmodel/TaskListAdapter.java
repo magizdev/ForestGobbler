@@ -5,10 +5,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import android.R.bool;
 import android.content.Context;
 import android.database.DataSetObserver;
-import android.opengl.Visibility;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,10 +53,6 @@ public class TaskListAdapter extends BaseAdapter {
 		tasks.remove(index);
 	}
 
-	public void refreshAt(int index) {
-		EasyTaskInfo refreshTask = util.getTask(this.getItemId(index));
-	}
-
 	public void refresh() {
 		tasks = util.getTasks();
 		mCellState = new int[tasks.size()];
@@ -88,7 +82,6 @@ public class TaskListAdapter extends BaseAdapter {
 
 	@Override
 	public boolean hasStableIds() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -200,13 +193,11 @@ public class TaskListAdapter extends BaseAdapter {
 
 					@Override
 					public void onAnimationStart(Animation animation) {
-						// TODO Auto-generated method stub
 
 					}
 
 					@Override
 					public void onAnimationRepeat(Animation animation) {
-						// TODO Auto-generated method stub
 
 					}
 
@@ -225,21 +216,20 @@ public class TaskListAdapter extends BaseAdapter {
 			}
 		});
 
-		if (startDate.getTime() < System.currentTimeMillis()) {
-			holder.note.setBackgroundColor(0xFFA0A0A0);
-			holder.notification.setBackgroundColor(0xFFA0A0A0);
-			holder.start_date.setBackgroundColor(0xFFA0A0A0);
-		} else {
-			holder.note.setBackgroundColor(0xFFFFFFFF);
-			holder.notification.setBackgroundColor(0xFFFFFFFF);
-			holder.start_date.setBackgroundColor(0xFFFFFFFF);
-		}
+//		if (startDate.getTime() < System.currentTimeMillis()) {
+//			holder.note.setBackgroundColor(0xFFA0A0A0);
+//			holder.notification.setBackgroundColor(0xFFA0A0A0);
+//			holder.start_date.setBackgroundColor(0xFFA0A0A0);
+//		} else {
+//			holder.note.setBackgroundColor(0xFFFFFFFF);
+//			holder.notification.setBackgroundColor(0xFFFFFFFF);
+//			holder.start_date.setBackgroundColor(0xFFFFFFFF);
+//		}
 		return convertView;
 	}
 
 	@Override
 	public int getItemViewType(int position) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -250,13 +240,11 @@ public class TaskListAdapter extends BaseAdapter {
 
 	@Override
 	public boolean areAllItemsEnabled() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isEnabled(int position) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
