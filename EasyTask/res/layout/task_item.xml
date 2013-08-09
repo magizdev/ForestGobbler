@@ -5,11 +5,20 @@
     android:layout_margin="5dp" >
 
     <TextView
+        android:id="@+id/seperator"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#FF000000"
+        android:textSize="20dp" />
+
+    <TextView
         android:id="@+id/note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#FF000000"
-        android:textSize="30dp" />
+        android:textSize="30dp"
+        android:layout_below="@id/seperator" />
 
     <LinearLayout
         android:id="@+id/notification"
@@ -35,13 +44,14 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
-        android:background="@drawable/delete_btn"
         android:layout_centerVertical="true"
         android:layout_marginRight="20dp"
-        android:visibility="gone"
+        android:background="@drawable/delete_btn"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:text="Delete" />>
+        android:text="Delete"
+        android:visibility="gone" />
+>
 
 </RelativeLayout>
