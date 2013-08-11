@@ -163,7 +163,7 @@ public class TaskListActivity extends Activity {
 			}
 		});
 		View listEmptyView = getLayoutInflater().inflate(R.layout.task_list_empty, null);
-		listView.setEmptyView(listEmptyView);
+//		listView.setEmptyView(listEmptyView);
 
 		final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -229,14 +229,14 @@ public class TaskListActivity extends Activity {
 					note.getText().clear();
 				} catch (ActivityNotFoundException a) {
 					Toast t = Toast.makeText(getApplicationContext(),
-							"Ops! Your device doesn't support Speech to Text",
+							"Your device doesn't support Speech to Text",
 							Toast.LENGTH_SHORT);
 					t.show();
 				}
 			}
 		});
 		accountManager = AccountManager.get(this);
-		showDialog(DIALOG_ACCOUNTS);
+		//showDialog(DIALOG_ACCOUNTS);
 	}
 
 	@Override
