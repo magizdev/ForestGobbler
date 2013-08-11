@@ -29,7 +29,7 @@
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_margin="1dp"
-            android:background="#00000000"
+            android:background="@drawable/list_selector"
             android:src="@android:drawable/ic_btn_speak_now" />
 
         <ImageButton
@@ -37,7 +37,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
-            android:background="#00000000"
+            android:background="@drawable/list_selector"
             android:layout_margin="1dp"
             android:src="@drawable/btn_send" />
 

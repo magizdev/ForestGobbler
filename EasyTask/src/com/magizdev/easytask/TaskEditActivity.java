@@ -1,13 +1,17 @@
 package com.magizdev.easytask;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,9 +21,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TimePicker;
+import android.widget.Toast;
 import android.widget.TimePicker.OnTimeChangedListener;
 
 import com.magizdev.easytask.util.AlarmUtil;
@@ -29,6 +35,8 @@ import com.magizdev.easytask.viewmodel.EasyTaskUtil;
 public class TaskEditActivity extends Activity implements OnClickListener {
 	private final static String DATE = "yyyy/MM/dd";
 	private final static String TIME = "HH:mm";
+	protected static final int RESULT_SPEECH_TITLE = 0;
+	protected static final int RESULT_SPEECH_NOTE = 1;
 
 	EditText txtTitle;
 	EditText txtNote;
@@ -38,6 +46,8 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 	LinearLayout areaTime;
 	Button btnDate;
 	Button btnTime;
+	ImageButton btnSpeakTitle;
+	ImageButton btnSpeakNote;
 	RelativeLayout areaPicker;
 	Button btnSave;
 	Button btnCancel;
@@ -63,6 +73,8 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		areaTime = (LinearLayout) findViewById(R.id.areaTime);
 		btnDate = (Button) findViewById(R.id.btnDate);
 		btnTime = (Button) findViewById(R.id.btnTime);
+		btnSpeakNote = (ImageButton) findViewById(R.id.btnSpeakNote);
+		btnSpeakTitle = (ImageButton) findViewById(R.id.btnSpeakTitle);
 		areaPicker = (RelativeLayout) findViewById(R.id.areaPicker);
 		btnSave = (Button) findViewById(R.id.btnSave);
 		btnCancel = (Button) findViewById(R.id.btnCancel);
@@ -94,11 +106,47 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 			}
 		});
 
-	}
+		btnSpeakNote.setOnClickListener(new OnClickListener() {
 
-	@Override
-	public void onResume() {
-		super.onResume();
+			@Override
+			public void onClick(View arg0) {
+				Intent intent = new Intent(
+						RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+
+				intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+
+				try {
+					startActivityForResult(intent, RESULT_SPEECH_NOTE);
+				} catch (ActivityNotFoundException a) {
+					Toast t = Toast.makeText(getApplicationContext(),
+							"Your device doesn't support Speech to Text",
+							Toast.LENGTH_SHORT);
+					t.show();
+				}
+
+			}
+		});
+
+		btnSpeakTitle.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(
+						RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+
+				intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+
+				try {
+					startActivityForResult(intent, RESULT_SPEECH_TITLE);
+				} catch (ActivityNotFoundException a) {
+					Toast t = Toast.makeText(getApplicationContext(),
+							"Your device doesn't support Speech to Text",
+							Toast.LENGTH_SHORT);
+					t.show();
+				}
+
+			}
+		});
 		Intent taskIntent = getIntent();
 		easyTaskId = taskIntent.getLongExtra("easyTaskId", 0L);
 
@@ -125,6 +173,42 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 					startDateCalendar.get(GregorianCalendar.MONTH),
 					startDateCalendar.get(GregorianCalendar.DAY_OF_MONTH));
 		}
+
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent result) {
+		super.onActivityResult(requestCode, resultCode, result);
+
+		Log.w("easytask", "on activity result");
+		switch (requestCode) {
+		case RESULT_SPEECH_TITLE:
+			if (resultCode == RESULT_OK && null != result) {
+				txtTitle.getText().clear();
+
+				ArrayList<String> text = result
+						.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+				Log.w("easytask", text.get(0));
+				txtTitle.setText(text.get(0));
+			}
+			break;
+		case RESULT_SPEECH_NOTE:
+			if (resultCode == RESULT_OK && null != result) {
+				txtNote.getText().clear();
+
+				ArrayList<String> text = result
+						.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+				txtNote.setText(text.get(0));
+			}
+			break;
+		}
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
 	}
 
 	@Override
@@ -158,8 +242,12 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		hideIme();
 		if (pickerStatus == 0) {
 			expandDateEdit();
+			showPicker(2);
+		} else if (pickerStatus == 2) {
+			collapseDateEdit();
+		} else if (pickerStatus == 1) {
+			showPicker(2);
 		}
-		showPicker(2);
 	}
 
 	private void btnSaveClick() {
@@ -172,8 +260,9 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		calendar.set(GregorianCalendar.HOUR_OF_DAY, timePicker.getCurrentHour());
 		calendar.set(GregorianCalendar.MINUTE, timePicker.getCurrentMinute());
 		calendar.set(GregorianCalendar.SECOND, 0);
-		EasyTaskInfo task = new EasyTaskInfo(0,txtTitle.getText().toString(), txtNote.getText().toString(),
-				new Date(), calendar.getTime(), "local", null);
+		EasyTaskInfo task = new EasyTaskInfo(0, txtTitle.getText().toString(),
+				txtNote.getText().toString(), new Date(), calendar.getTime(),
+				"local", null);
 		util.updateTask(easyTaskId, task);
 		setResult(RESULT_OK);
 		AlarmUtil.updateAlarm(this);
@@ -189,8 +278,12 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		hideIme();
 		if (pickerStatus == 0) {
 			expandDateEdit();
+			showPicker(1);
+		} else if (pickerStatus == 1) {
+			collapseDateEdit();
+		} else if (pickerStatus == 2) {
+			showPicker(1);
 		}
-		showPicker(1);
 	}
 
 	private float areaTimeOriginalY;
@@ -199,7 +292,9 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 
 	private void expandDateEdit() {
 		areaTimeOriginalY = areaTime.getY();
-		areaTime.animate().y(txtNote.getTranslationY())
+		txtNote.setVisibility(View.GONE);
+		btnSpeakNote.setVisibility(View.GONE);
+		areaTime.animate().y(txtTitle.getTranslationY())
 				.setDuration(mAnimationTime);
 		areaPickerOriginalY = areaPicker.getY();
 		areaPicker.animate()
@@ -208,13 +303,17 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		areaPickerOriginalLayoutParams = areaPicker.getLayoutParams();
 		areaPicker.setLayoutParams(new RelativeLayout.LayoutParams(
 				new LayoutParams(LayoutParams.MATCH_PARENT, timeEdit
-						.getMeasuredHeight() - areaTime.getMeasuredHeight())));
+						.getMeasuredHeight()
+						- areaTime.getMeasuredHeight()
+						+ txtNote.getMeasuredHeight())));
 		areaPicker.forceLayout();
 		pickerStatus = 1;
 	}
 
 	private void collapseDateEdit() {
 		showPicker(0);
+		txtNote.setVisibility(View.VISIBLE);
+		btnSpeakNote.setVisibility(View.VISIBLE);
 		areaTime.animate().y(areaTimeOriginalY).setDuration(mAnimationTime);
 		areaPicker.animate().y(areaPickerOriginalY).setDuration(mAnimationTime);
 		areaPicker.setLayoutParams(new RelativeLayout.LayoutParams(
@@ -232,6 +331,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 	// /1, show date picker.
 	// /2, show time picker.
 	private void showPicker(int option) {
+		pickerStatus = option;
 		switch (option) {
 		case 0:
 			datePicker.animate().alpha(0).setDuration(mAnimationTime);

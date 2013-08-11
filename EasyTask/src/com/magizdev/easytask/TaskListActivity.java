@@ -226,7 +226,6 @@ public class TaskListActivity extends Activity {
 
 				try {
 					startActivityForResult(intent, RESULT_SPEECH);
-					note.getText().clear();
 				} catch (ActivityNotFoundException a) {
 					Toast t = Toast.makeText(getApplicationContext(),
 							"Your device doesn't support Speech to Text",
@@ -246,6 +245,7 @@ public class TaskListActivity extends Activity {
 		switch (requestCode) {
 		case RESULT_SPEECH:
 			if (resultCode == RESULT_OK && null != result) {
+				note.getText().clear();
 
 				ArrayList<String> text = result
 						.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
