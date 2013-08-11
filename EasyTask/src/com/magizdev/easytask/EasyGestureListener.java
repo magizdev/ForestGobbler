@@ -41,6 +41,7 @@ public class EasyGestureListener extends
 			deleteBtn.setVisibility(View.VISIBLE);
 			float origx = deleteBtn.getScaleX();
 			deleteBtn.setScaleX(0);
+			deleteBtn.setPivotX(origx);
 			deleteBtn.animate().alpha(1).scaleX(origx)
 					.setDuration(animDuration).setListener(null).start();
 			uiHandler.sendEmptyMessageDelayed(positionDown, 2000);

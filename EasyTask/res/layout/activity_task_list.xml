@@ -37,24 +37,25 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
-            android:background="@drawable/list_selector"
             android:layout_margin="1dp"
+            android:background="@drawable/list_selector"
             android:src="@drawable/btn_send" />
 
         <EditText
             android:id="@+id/taskInput"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_toRightOf="@id/btnSpeak"
             android:layout_toLeftOf="@id/addTask"
-            android:ems="10"
-            android:singleLine="true"
+            android:layout_toRightOf="@id/btnSpeak"
             android:ellipsize="end"
-            android:inputType="text" >
+            android:ems="10"
+            android:inputType="text"
+            android:singleLine="true" >
         </EditText>
     </RelativeLayout>
 
-    <ListView
+    <!--
+    ListView
         android:id="@+id/taskList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -66,5 +67,19 @@
         android:listSelector="@drawable/list_selector"
         android:background="#FFFFFF" >
     </ListView>
+    -->
+
+    <com.magizdev.easytask.util.HeaderListView
+        android:id="@+id/taskList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/inputArea"
+        android:layout_below="@id/adContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="1dp"
+        android:animateLayoutChanges="true"
+        android:background="#FFFFFF"
+        android:listSelector="@drawable/list_selector" >
+    </com.magizdev.easytask.util.HeaderListView>
 
 </RelativeLayout>

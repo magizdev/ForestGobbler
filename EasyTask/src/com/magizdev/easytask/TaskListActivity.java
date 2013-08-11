@@ -52,19 +52,21 @@ import com.google.api.services.tasks.Tasks;
 import com.google.api.services.tasks.TasksRequestInitializer;
 import com.google.api.services.tasks.model.Task;
 import com.magizdev.easytask.util.AlarmUtil;
+import com.magizdev.easytask.util.HeaderListView;
 import com.magizdev.easytask.viewmodel.EasyTaskInfo;
 import com.magizdev.easytask.viewmodel.EasyTaskUtil;
 import com.magizdev.easytask.viewmodel.TaskListAdapter;
+import com.magizdev.easytask.viewmodel.TaskListHeaderAdapter;
 
 public class TaskListActivity extends Activity {
 	private static final int DIALOG_ACCOUNTS = 0;
 	private static final String AUTH_TOKEN_TYPE = "oauth2:https://www.googleapis.com/auth/tasks";
 	protected static final int RESULT_SPEECH = 1;
-	protected static final int RESULT_EDIT = 2;
-	private ListView listView;
+	public static final int RESULT_EDIT = 2;
+	private HeaderListView listView;
 	private EasyTaskUtil util;
 	private RelativeLayout inputArea;
-	TaskListAdapter adapter;
+	TaskListHeaderAdapter adapter;
 	private long animDuration;
 	private GestureDetectorCompat mDetector;
 	private ImageButton btnSpeak;
@@ -78,11 +80,11 @@ public class TaskListActivity extends Activity {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			int first = listView.getFirstVisiblePosition();
-			int last = listView.getLastVisiblePosition();
+			int first = listView.getListView().getFirstVisiblePosition();
+			int last = listView.getListView().getLastVisiblePosition();
 			if (msg.what >= first && msg.what <= last) {
 				View selectedItem = listView.getChildAt(msg.what
-						- listView.getFirstVisiblePosition());
+						- listView.getListView().getFirstVisiblePosition());
 				final Button deleteButton = (Button) selectedItem
 						.findViewById(R.id.deleteBtn);
 				deleteButton.animate().scaleX(0).setDuration(animDuration)
@@ -133,14 +135,14 @@ public class TaskListActivity extends Activity {
 		AdRequest adRequest = new AdRequest();
 		adView.loadAd(adRequest);
 
-		listView = (ListView) this.findViewById(R.id.taskList);
+		listView = (HeaderListView) this.findViewById(R.id.taskList);
 		inputArea = (RelativeLayout) this.findViewById(R.id.inputArea);
 		btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
 		util = new EasyTaskUtil(this);
-		adapter = new TaskListAdapter(this, listView, uiHandler);
+		adapter = new TaskListHeaderAdapter(this, listView, uiHandler);
 		listView.setAdapter(adapter);
 		mDetector = new GestureDetectorCompat(this, new EasyGestureListener(
-				listView, uiHandler, animDuration));
+				listView.getListView(), uiHandler, animDuration));
 		listView.setOnTouchListener(new OnTouchListener() {
 
 			@Override
@@ -149,19 +151,19 @@ public class TaskListActivity extends Activity {
 			}
 		});
 
-		listView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				Intent editTaskIntent = new Intent(TaskListActivity.this,
-						TaskEditActivity.class);
-				editTaskIntent.putExtra("clickItemPosition", arg2);
-				editTaskIntent.putExtra("easyTaskId", listView.getAdapter()
-						.getItemId(arg2));
-				startActivityForResult(editTaskIntent, RESULT_EDIT);
-			}
-		});
+//		listView.getListView().setOnItemClickListener(new OnItemClickListener() {
+//
+//			@Override
+//			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+//					long arg3) {
+//				Intent editTaskIntent = new Intent(TaskListActivity.this,
+//						TaskEditActivity.class);
+//				editTaskIntent.putExtra("clickItemPosition", arg2);
+//				editTaskIntent.putExtra("easyTaskId", listView.getAdapter()
+//						.getItemId(arg2));
+//				startActivityForResult(editTaskIntent, RESULT_EDIT);
+//			}
+//		});
 		View listEmptyView = getLayoutInflater().inflate(R.layout.task_list_empty, null);
 //		listView.setEmptyView(listEmptyView);
 
@@ -178,9 +180,9 @@ public class TaskListActivity extends Activity {
 			}
 			index++;
 		}
-		if (index > 2) {
-			listView.smoothScrollToPositionFromTop(index - 2, 0);
-		}
+//		if (index > 2) {
+//			listView.smoothScrollToPositionFromTop(index - 2, 0);
+//		}
 
 		sendButton.setOnClickListener(new OnClickListener() {
 
