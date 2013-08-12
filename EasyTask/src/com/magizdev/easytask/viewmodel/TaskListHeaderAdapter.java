@@ -21,7 +21,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.magizdev.easytask.R;
@@ -121,6 +120,17 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 		public Button deleteBtn;
 	}
 
+	public long getItemId(int position) {
+		int section = getSection(position);
+		int row = getRowInSection(position);
+		if (row >= 0) {
+			EasyTaskInfo taskInfo = (EasyTaskInfo) getRowItem(section, row);
+			return taskInfo.Id;
+		} else {
+			return super.getItemId(position);
+		}
+	}
+
 	@Override
 	public int numberOfSections() {
 		return 3;
@@ -201,10 +211,11 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 				});
 				uihHandler.removeMessages(tempPosition);
 				uihHandler.sendEmptyMessage(tempPosition);
-				listView.getChildAt(
-						tempPosition
-								- listView.getListView()
-										.getFirstVisiblePosition())
+				listView.getListView()
+						.getChildAt(
+								tempPosition
+										- listView.getListView()
+												.getFirstVisiblePosition())
 						.startAnimation(anim);
 			}
 		});
@@ -267,31 +278,27 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 							android.R.layout.simple_list_item_1), null);
 		}
 
-		if (getSectionHeaderItemViewType(section) == 0) {
-			((TextView) convertView).setText("Header for section " + section);
-		} else {
-			((TextView) convertView.findViewById(android.R.id.text1))
-					.setText("Header for section " + section);
-			((TextView) convertView.findViewById(android.R.id.text2))
-					.setText("Has a detail text field");
-		}
-
 		switch (section) {
 		case 0:
-			((TextView)convertView).setText("Past");
+			((TextView) convertView).setText("Past");
 			break;
 		case 1:
-			((TextView)convertView).setText("Incoming");
+			((TextView) convertView).setText("Incoming");
 			break;
 		case 2:
-			((TextView)convertView).setText("Future");
+			((TextView) convertView).setText("Future");
 			break;
 		case 3:
-//			convertView.setBackgroundColor(getResources().getColor(
-//					R.color.holo_blue_light));
 			break;
 		}
+		convertView.setBackgroundColor(this.context.getResources().getColor(
+				android.R.color.holo_blue_light));
 		return convertView;
+	}
+
+	@Override
+	public int getSectionHeaderViewTypeCount() {
+		return 3;
 	}
 
 }

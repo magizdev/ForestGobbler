@@ -83,7 +83,7 @@ public class TaskListActivity extends Activity {
 			int first = listView.getListView().getFirstVisiblePosition();
 			int last = listView.getListView().getLastVisiblePosition();
 			if (msg.what >= first && msg.what <= last) {
-				View selectedItem = listView.getChildAt(msg.what
+				View selectedItem = listView.getListView().getChildAt(msg.what
 						- listView.getListView().getFirstVisiblePosition());
 				final Button deleteButton = (Button) selectedItem
 						.findViewById(R.id.deleteBtn);
@@ -143,7 +143,7 @@ public class TaskListActivity extends Activity {
 		listView.setAdapter(adapter);
 		mDetector = new GestureDetectorCompat(this, new EasyGestureListener(
 				listView.getListView(), uiHandler, animDuration));
-		listView.setOnTouchListener(new OnTouchListener() {
+		listView.getListView().setOnTouchListener(new OnTouchListener() {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -151,19 +151,19 @@ public class TaskListActivity extends Activity {
 			}
 		});
 
-//		listView.getListView().setOnItemClickListener(new OnItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-//					long arg3) {
-//				Intent editTaskIntent = new Intent(TaskListActivity.this,
-//						TaskEditActivity.class);
-//				editTaskIntent.putExtra("clickItemPosition", arg2);
-//				editTaskIntent.putExtra("easyTaskId", listView.getAdapter()
-//						.getItemId(arg2));
-//				startActivityForResult(editTaskIntent, RESULT_EDIT);
-//			}
-//		});
+		listView.getListView().setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				Intent editTaskIntent = new Intent(TaskListActivity.this,
+						TaskEditActivity.class);
+				editTaskIntent.putExtra("clickItemPosition", arg2);
+				editTaskIntent.putExtra("easyTaskId", listView.getListView().getAdapter()
+						.getItemId(arg2));
+				startActivityForResult(editTaskIntent, RESULT_EDIT);
+			}
+		});
 		View listEmptyView = getLayoutInflater().inflate(R.layout.task_list_empty, null);
 //		listView.setEmptyView(listEmptyView);
 
@@ -237,7 +237,7 @@ public class TaskListActivity extends Activity {
 			}
 		});
 		accountManager = AccountManager.get(this);
-		//showDialog(DIALOG_ACCOUNTS);
+		showDialog(DIALOG_ACCOUNTS);
 	}
 
 	@Override

@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:background="#FF2377FF"
         android:textColor="#FF000000"
+        android:visibility="gone"
         android:textSize="20dp" />
 
     <RelativeLayout
@@ -22,7 +23,6 @@
             android:id="@+id/note"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/seperator"
             android:layout_marginLeft="10dp"
             android:singleLine="true"
             android:ellipsize="end"
