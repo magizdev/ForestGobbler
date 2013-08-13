@@ -157,13 +157,17 @@ public class TaskListActivity extends Activity {
 					@Override
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
-						Intent editTaskIntent = new Intent(
-								TaskListActivity.this, TaskEditActivity.class);
-						editTaskIntent.putExtra("clickItemPosition", arg2);
-						editTaskIntent.putExtra("easyTaskId",
-								((TaskListHeaderAdapter) listView.getListView()
-										.getAdapter()).getTaskId(arg2));
-						startActivityForResult(editTaskIntent, RESULT_EDIT);
+						long taskId = ((TaskListHeaderAdapter) listView
+								.getListView().getAdapter()).getTaskId(arg2);
+						if (taskId > -1) {
+							Intent editTaskIntent = new Intent(
+									TaskListActivity.this,
+									TaskEditActivity.class);
+							editTaskIntent.putExtra("clickItemPosition", arg2);
+							editTaskIntent.putExtra("easyTaskId", taskId);
+
+							startActivityForResult(editTaskIntent, RESULT_EDIT);
+						}
 					}
 				});
 		View listEmptyView = getLayoutInflater().inflate(
@@ -238,7 +242,7 @@ public class TaskListActivity extends Activity {
 			}
 		});
 		accountManager = AccountManager.get(this);
-		//showDialog(DIALOG_ACCOUNTS);
+		// showDialog(DIALOG_ACCOUNTS);
 	}
 
 	@Override

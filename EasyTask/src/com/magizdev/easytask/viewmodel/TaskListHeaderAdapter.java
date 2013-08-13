@@ -283,9 +283,7 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 		case 3:
 			break;
 		}
-		
-		convertView.setAlpha(0.7f);
-		((TextView)convertView).setTextSize(20);
+		convertView.setClickable(false);
 		return convertView;
 	}
 
