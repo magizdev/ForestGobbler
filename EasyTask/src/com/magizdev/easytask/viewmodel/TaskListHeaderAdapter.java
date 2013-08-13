@@ -158,7 +158,6 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 		}
 
 		ViewHolder holder = new ViewHolder();
-		holder.separator = (TextView) convertView.findViewById(R.id.seperator);
 		holder.note = (TextView) convertView.findViewById(R.id.note);
 		holder.start_date = (TextView) convertView
 				.findViewById(R.id.start_date);
@@ -260,7 +259,6 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 			ViewGroup parent) {
 
 		if (convertView == null) {
-
 			convertView = (TextView) mInflater.inflate(
 					this.context.getResources().getLayout(
 							android.R.layout.simple_list_item_1), null);
@@ -269,18 +267,25 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 		switch (section) {
 		case 0:
 			((TextView) convertView).setText("Past");
+			convertView.setBackgroundColor(this.context.getResources().getColor(
+					android.R.color.holo_orange_light));
 			break;
 		case 1:
 			((TextView) convertView).setText("Incoming");
+			convertView.setBackgroundColor(this.context.getResources().getColor(
+					android.R.color.holo_blue_light));
 			break;
 		case 2:
 			((TextView) convertView).setText("Future");
+			convertView.setBackgroundColor(this.context.getResources().getColor(
+					android.R.color.holo_green_light));
 			break;
 		case 3:
 			break;
 		}
-		convertView.setBackgroundColor(this.context.getResources().getColor(
-				android.R.color.holo_blue_light));
+		
+		convertView.setAlpha(0.7f);
+		((TextView)convertView).setTextSize(20);
 		return convertView;
 	}
 

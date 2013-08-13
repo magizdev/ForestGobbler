@@ -5,63 +5,48 @@
     android:layout_margin="5dp" >
 
     <TextView
-        android:id="@+id/seperator"
-        style="?android:attr/listSeparatorTextViewStyle"
+        android:id="@+id/note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FF2377FF"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:textColor="#FF000000"
-        android:visibility="gone"
-        android:textSize="20dp" />
+        android:textSize="30dp" />
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/seperator" >
+        android:layout_below="@id/note"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/clock_blue" />
 
         <TextView
-            android:id="@+id/note"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:textColor="#FF000000"
-            android:textSize="30dp" />
-
-        <LinearLayout
-            android:id="@+id/notification"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/note"
-            android:layout_marginLeft="10dp"
-            android:orientation="horizontal" >
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/clock_blue" />
-
-            <TextView
-                android:id="@+id/start_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-            </TextView>
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/deleteBtn"
+            android:id="@+id/start_date"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/delete_btn_selector"
-            android:clickable="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:text="Delete"
-            android:visibility="gone" />
-    </RelativeLayout>
+            android:layout_height="wrap_content" >
+        </TextView>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/deleteBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/delete_btn_selector"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text="Delete"
+        android:visibility="gone" />
 
 </RelativeLayout>

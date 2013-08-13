@@ -97,8 +97,6 @@ public class TaskListAdapter extends BaseAdapter {
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = mInflater.inflate(R.layout.task_item, null);
-			holder.separator = (TextView) convertView
-					.findViewById(R.id.seperator);
 			holder.note = (TextView) convertView.findViewById(R.id.note);
 			holder.start_date = (TextView) convertView
 					.findViewById(R.id.start_date);
@@ -163,24 +161,6 @@ public class TaskListAdapter extends BaseAdapter {
 			break;
 		}
 		
-		if(needSeparator){
-			holder.separator.setVisibility(View.VISIBLE);
-			switch (mCellState[position]) {
-			case STATE_SECTIONED_CELL_PAST:
-				holder.separator.setText("Past");
-				break;
-			case STATE_SECTIONED_CELL_INCOMING:
-				holder.separator.setText("Incoming");
-				break;
-			case STATE_SECTIONED_CELL_FUTURE:
-				holder.separator.setText("Future");
-				break;
-			default:
-				break;
-			}
-		}else {
-			holder.separator.setVisibility(View.GONE);
-		}
 		holder.deleteBtn.setPivotX(0);
 		holder.deleteBtn.setOnClickListener(new OnClickListener() {
 
@@ -216,15 +196,6 @@ public class TaskListAdapter extends BaseAdapter {
 			}
 		});
 
-//		if (startDate.getTime() < System.currentTimeMillis()) {
-//			holder.note.setBackgroundColor(0xFFA0A0A0);
-//			holder.notification.setBackgroundColor(0xFFA0A0A0);
-//			holder.start_date.setBackgroundColor(0xFFA0A0A0);
-//		} else {
-//			holder.note.setBackgroundColor(0xFFFFFFFF);
-//			holder.notification.setBackgroundColor(0xFFFFFFFF);
-//			holder.start_date.setBackgroundColor(0xFFFFFFFF);
-//		}
 		return convertView;
 	}
 
@@ -249,7 +220,6 @@ public class TaskListAdapter extends BaseAdapter {
 	}
 
 	public class ViewHolder {
-		public TextView separator;
 		public TextView note;
 		public TextView start_date;
 		public LinearLayout notification;

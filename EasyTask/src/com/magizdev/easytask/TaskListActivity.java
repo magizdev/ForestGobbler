@@ -38,7 +38,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -55,7 +54,6 @@ import com.magizdev.easytask.util.AlarmUtil;
 import com.magizdev.easytask.util.HeaderListView;
 import com.magizdev.easytask.viewmodel.EasyTaskInfo;
 import com.magizdev.easytask.viewmodel.EasyTaskUtil;
-import com.magizdev.easytask.viewmodel.TaskListAdapter;
 import com.magizdev.easytask.viewmodel.TaskListHeaderAdapter;
 
 public class TaskListActivity extends Activity {
@@ -170,7 +168,7 @@ public class TaskListActivity extends Activity {
 				});
 		View listEmptyView = getLayoutInflater().inflate(
 				R.layout.task_list_empty, null);
-		// listView.setEmptyView(listEmptyView);
+		listView.getListView().setEmptyView(listEmptyView);
 
 		final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -185,9 +183,6 @@ public class TaskListActivity extends Activity {
 			}
 			index++;
 		}
-		// if (index > 2) {
-		// listView.smoothScrollToPositionFromTop(index - 2, 0);
-		// }
 
 		sendButton.setOnClickListener(new OnClickListener() {
 
