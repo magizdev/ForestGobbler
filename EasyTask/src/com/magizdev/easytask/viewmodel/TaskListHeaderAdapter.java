@@ -6,9 +6,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -18,14 +16,11 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.magizdev.easytask.R;
-import com.magizdev.easytask.TaskEditActivity;
-import com.magizdev.easytask.TaskListActivity;
 import com.magizdev.easytask.util.HeaderListView;
 import com.magizdev.easytask.util.SectionAdapter;
 
@@ -119,15 +114,15 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 		public LinearLayout notification;
 		public Button deleteBtn;
 	}
-
-	public long getItemId(int position) {
+	
+	public long getTaskId(int position) {
 		int section = getSection(position);
 		int row = getRowInSection(position);
 		if (row >= 0) {
 			EasyTaskInfo taskInfo = (EasyTaskInfo) getRowItem(section, row);
 			return taskInfo.Id;
 		} else {
-			return super.getItemId(position);
+			return -1;
 		}
 	}
 
@@ -223,16 +218,6 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 		return convertView;
 	}
 
-	@Override
-	public void onRowItemClick(AdapterView<?> parent, View view, int section,
-			int row, long id) {
-		Intent editTaskIntent = new Intent(this.context, TaskEditActivity.class);
-		editTaskIntent.putExtra("easyTaskId",
-				((EasyTaskInfo) getRowItem(section, row)).Id);
-		((Activity) this.context).startActivityForResult(editTaskIntent,
-				TaskListActivity.RESULT_EDIT);
-	}
-
 	private int getPosition(int secion, int row) {
 		int position = 0;
 		for (int i = 0; i < secion; i++) {
@@ -264,6 +249,9 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 
 	@Override
 	public boolean hasSectionHeaderView(int section) {
+		if(section < 0 || section >= numberOfSections()){
+			return false;
+		}
 		return true;
 	}
 
@@ -298,7 +286,7 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 
 	@Override
 	public int getSectionHeaderViewTypeCount() {
-		return 3;
+		return 1;
 	}
 
 }

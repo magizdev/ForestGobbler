@@ -83,8 +83,10 @@ public class TaskListActivity extends Activity {
 			int first = listView.getListView().getFirstVisiblePosition();
 			int last = listView.getListView().getLastVisiblePosition();
 			if (msg.what >= first && msg.what <= last) {
-				View selectedItem = listView.getListView().getChildAt(msg.what
-						- listView.getListView().getFirstVisiblePosition());
+				View selectedItem = listView.getListView().getChildAt(
+						msg.what
+								- listView.getListView()
+										.getFirstVisiblePosition());
 				final Button deleteButton = (Button) selectedItem
 						.findViewById(R.id.deleteBtn);
 				deleteButton.animate().scaleX(0).setDuration(animDuration)
@@ -151,21 +153,24 @@ public class TaskListActivity extends Activity {
 			}
 		});
 
-		listView.getListView().setOnItemClickListener(new OnItemClickListener() {
+		listView.getListView().setOnItemClickListener(
+				new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				Intent editTaskIntent = new Intent(TaskListActivity.this,
-						TaskEditActivity.class);
-				editTaskIntent.putExtra("clickItemPosition", arg2);
-				editTaskIntent.putExtra("easyTaskId", listView.getListView().getAdapter()
-						.getItemId(arg2));
-				startActivityForResult(editTaskIntent, RESULT_EDIT);
-			}
-		});
-		View listEmptyView = getLayoutInflater().inflate(R.layout.task_list_empty, null);
-//		listView.setEmptyView(listEmptyView);
+					@Override
+					public void onItemClick(AdapterView<?> arg0, View arg1,
+							int arg2, long arg3) {
+						Intent editTaskIntent = new Intent(
+								TaskListActivity.this, TaskEditActivity.class);
+						editTaskIntent.putExtra("clickItemPosition", arg2);
+						editTaskIntent.putExtra("easyTaskId",
+								((TaskListHeaderAdapter) listView.getListView()
+										.getAdapter()).getTaskId(arg2));
+						startActivityForResult(editTaskIntent, RESULT_EDIT);
+					}
+				});
+		View listEmptyView = getLayoutInflater().inflate(
+				R.layout.task_list_empty, null);
+		// listView.setEmptyView(listEmptyView);
 
 		final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -180,9 +185,9 @@ public class TaskListActivity extends Activity {
 			}
 			index++;
 		}
-//		if (index > 2) {
-//			listView.smoothScrollToPositionFromTop(index - 2, 0);
-//		}
+		// if (index > 2) {
+		// listView.smoothScrollToPositionFromTop(index - 2, 0);
+		// }
 
 		sendButton.setOnClickListener(new OnClickListener() {
 
@@ -200,7 +205,8 @@ public class TaskListActivity extends Activity {
 						dueDate = calendar.getTime();
 					}
 					EasyTaskInfo task = new EasyTaskInfo(0, ana
-							.getFilteredString(),null, new Date(), dueDate, "local", null);
+							.getFilteredString(), null, new Date(), dueDate,
+							"local", null);
 					long id = util.addTask(task);
 					if (ana.getHasTime()) {
 						AlarmUtil.updateAlarm(TaskListActivity.this);
@@ -237,7 +243,7 @@ public class TaskListActivity extends Activity {
 			}
 		});
 		accountManager = AccountManager.get(this);
-		showDialog(DIALOG_ACCOUNTS);
+		//showDialog(DIALOG_ACCOUNTS);
 	}
 
 	@Override
