@@ -33,7 +33,7 @@
         </activity>
         <activity
             android:name=".TaskEditActivity"
-            android:label="" >
+            android:label="@string/task_edit_label" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="TaskEditActivity" />

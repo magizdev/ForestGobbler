@@ -22,7 +22,9 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_toLeftOf="@id/btnSpeakTitle"
+        android:background="@android:drawable/edit_text"
         android:ems="10"
+        android:layout_margin="4dp"
         android:inputType="text" >
     </EditText>
 
@@ -42,10 +44,11 @@
         android:layout_height="100dp"
         android:gravity="top"
         android:layout_below="@id/txtTitle"
+        android:background="@android:drawable/edit_text"
         android:layout_centerHorizontal="true"
         android:layout_toLeftOf="@id/btnSpeakNote"
         android:ems="10"
-        android:layout_margin="2dp"
+        android:layout_margin="4dp"
         android:inputType="textMultiLine" >
     </EditText>
 

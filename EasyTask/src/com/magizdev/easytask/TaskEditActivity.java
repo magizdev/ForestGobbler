@@ -25,8 +25,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TimePicker;
-import android.widget.Toast;
 import android.widget.TimePicker.OnTimeChangedListener;
+import android.widget.Toast;
 
 import com.magizdev.easytask.util.AlarmUtil;
 import com.magizdev.easytask.viewmodel.EasyTaskInfo;
@@ -291,29 +291,35 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 	LayoutParams areaPickerOriginalLayoutParams;
 
 	private void expandDateEdit() {
+		areaPickerOriginalLayoutParams = areaPicker.getLayoutParams();
 		areaTimeOriginalY = areaTime.getY();
+		areaPickerOriginalY = areaPicker.getY();
 		txtNote.setVisibility(View.GONE);
+
 		btnSpeakNote.setVisibility(View.GONE);
 		areaTime.animate().y(txtTitle.getTranslationY())
 				.setDuration(mAnimationTime);
-		areaPickerOriginalY = areaPicker.getY();
+
 		areaPicker.animate()
-				.y(areaTime.getTranslationY() + btnDate.getMeasuredHeight())
+				.y(txtTitle.getTranslationY() + btnDate.getMeasuredHeight())
 				.setDuration(mAnimationTime);
-		areaPickerOriginalLayoutParams = areaPicker.getLayoutParams();
+
 		areaPicker.setLayoutParams(new RelativeLayout.LayoutParams(
 				new LayoutParams(LayoutParams.MATCH_PARENT, timeEdit
 						.getMeasuredHeight()
 						- areaTime.getMeasuredHeight()
 						+ txtNote.getMeasuredHeight())));
 		areaPicker.forceLayout();
+
 		pickerStatus = 1;
 	}
 
 	private void collapseDateEdit() {
 		showPicker(0);
 		txtNote.setVisibility(View.VISIBLE);
+		// txtNote.animate().scaleY(1).setDuration(mAnimationTime).start();
 		btnSpeakNote.setVisibility(View.VISIBLE);
+		// btnSpeakNote.animate().scaleY(1).setDuration(mAnimationTime).start();
 		areaTime.animate().y(areaTimeOriginalY).setDuration(mAnimationTime);
 		areaPicker.animate().y(areaPickerOriginalY).setDuration(mAnimationTime);
 		areaPicker.setLayoutParams(new RelativeLayout.LayoutParams(
@@ -338,6 +344,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 			datePicker.setEnabled(false);
 			timePicker.animate().alpha(0).setDuration(mAnimationTime);
 			timePicker.setEnabled(false);
+			areaTime.bringToFront();
 			break;
 		case 1:
 			timePicker.animate().alpha(0).setDuration(mAnimationTime);
