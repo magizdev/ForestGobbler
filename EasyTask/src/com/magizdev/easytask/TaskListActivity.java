@@ -66,7 +66,6 @@ public class TaskListActivity extends Activity {
 	private HeaderListView listView;
 	private EasyTaskUtil util;
 	private RelativeLayout inputArea;
-	private ProgressBar progressBar;
 	TaskListHeaderAdapter adapter;
 	private long animDuration;
 	private GestureDetectorCompat mDetector;
@@ -146,7 +145,6 @@ public class TaskListActivity extends Activity {
 		listView.setAdapter(adapter);
 		mDetector = new GestureDetectorCompat(this, new EasyGestureListener(
 				listView.getListView(), uiHandler, animDuration));
-		progressBar = (ProgressBar)findViewById(R.id.progressBar1);
 		listView.getListView().setOnTouchListener(new OnTouchListener() {
 
 			@Override
@@ -224,19 +222,7 @@ public class TaskListActivity extends Activity {
 			}
 
 		});
-		
-		sendButton.setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View arg0, MotionEvent arg1) {
-				if(arg1.getAction() == MotionEvent.ACTION_DOWN){
-					progressBar.setVisibility(View.VISIBLE);
-				}else if (arg1.getAction()==MotionEvent.ACTION_UP){
-					progressBar.setVisibility(View.GONE);
-				}
-				return false;
-			}
-		});
+
 
 		btnSpeak.setOnClickListener(new View.OnClickListener() {
 

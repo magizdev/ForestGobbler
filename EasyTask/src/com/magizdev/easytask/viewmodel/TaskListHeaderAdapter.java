@@ -267,18 +267,15 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 		switch (section) {
 		case 0:
 			((TextView) convertView).setText("Past");
-			convertView.setBackgroundColor(this.context.getResources().getColor(
-					android.R.color.holo_orange_light));
+			convertView.setBackgroundColor(0xFFFFC9F9);
 			break;
 		case 1:
 			((TextView) convertView).setText("Incoming");
-			convertView.setBackgroundColor(this.context.getResources().getColor(
-					android.R.color.holo_blue_light));
+			convertView.setBackgroundColor(0xFFB2EDFF);
 			break;
 		case 2:
 			((TextView) convertView).setText("Future");
-			convertView.setBackgroundColor(this.context.getResources().getColor(
-					android.R.color.holo_green_light));
+			convertView.setBackgroundColor(0xFFDBFFBF);
 			break;
 		case 3:
 			break;

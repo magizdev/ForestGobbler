@@ -84,11 +84,14 @@
         android:listSelector="@drawable/list_selector" >
     </com.magizdev.easytask.util.HeaderListView>
 
-    <ProgressBar
-        android:id="@+id/progressBar1"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/inputArea" />
+    <ImageButton
+        android:id="@+id/btnExpandTime"
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_above="@id/inputArea"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="1dp"
+        android:background="@drawable/list_selector"
+        android:src="@drawable/expander_close_holo_light" />
 
 </RelativeLayout>
