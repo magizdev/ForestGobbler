@@ -45,11 +45,11 @@
             android:id="@+id/taskInput"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_margin="4dp"
             android:layout_toLeftOf="@id/addTask"
             android:layout_toRightOf="@id/btnSpeak"
-            android:ellipsize="end"
-            android:layout_margin="4dp"
             android:background="@android:drawable/edit_text"
+            android:ellipsize="end"
             android:ems="10"
             android:inputType="text"
             android:singleLine="true" >
@@ -83,5 +83,12 @@
         android:background="#FFFFFF"
         android:listSelector="@drawable/list_selector" >
     </com.magizdev.easytask.util.HeaderListView>
+
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/inputArea" />
 
 </RelativeLayout>

@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.ContactsContract.CommonDataKinds.Event;
 import android.speech.RecognizerIntent;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.Log;
@@ -38,6 +39,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -64,6 +66,7 @@ public class TaskListActivity extends Activity {
 	private HeaderListView listView;
 	private EasyTaskUtil util;
 	private RelativeLayout inputArea;
+	private ProgressBar progressBar;
 	TaskListHeaderAdapter adapter;
 	private long animDuration;
 	private GestureDetectorCompat mDetector;
@@ -143,6 +146,7 @@ public class TaskListActivity extends Activity {
 		listView.setAdapter(adapter);
 		mDetector = new GestureDetectorCompat(this, new EasyGestureListener(
 				listView.getListView(), uiHandler, animDuration));
+		progressBar = (ProgressBar)findViewById(R.id.progressBar1);
 		listView.getListView().setOnTouchListener(new OnTouchListener() {
 
 			@Override
@@ -219,6 +223,19 @@ public class TaskListActivity extends Activity {
 				}
 			}
 
+		});
+		
+		sendButton.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+				if(arg1.getAction() == MotionEvent.ACTION_DOWN){
+					progressBar.setVisibility(View.VISIBLE);
+				}else if (arg1.getAction()==MotionEvent.ACTION_UP){
+					progressBar.setVisibility(View.GONE);
+				}
+				return false;
+			}
 		});
 
 		btnSpeak.setOnClickListener(new View.OnClickListener() {
