@@ -61,6 +61,7 @@ public class DashboardActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dashboard);
 		rankListView = (ListView) findViewById(R.id.rankList);
+		rankListView.setCacheColorHint(android.R.color.transparent);
 		String stringUrl = "http://magizdev.ap01.aws.af.cm/ranklist1";
 		ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
