@@ -43,9 +43,23 @@ app.post('/rankadd', function(req, res) {
   });
 });
 
+app.get('/rankadd', function(req, res) {
+  var username=req.query.username;
+  var score=req.query.score;
+  var mode=req.query.mode;
+  var imei=req.query.imei;
+  var game=req.query.game;
+  Rank.addScore(username, score, mode, imei, game, function(err, user) {
+    if(err) console.log(err);
+    //res.writeHead(200, {'Content-Type':'text/html'});
+    res.end('', 'utf-8');
+  });
+});
+
 app.get('/ranklist', function(req, res) {
   var mode=req.query.mode;
-  Rank.listScore(mode, function(error, ranks){
+  var game=req.query.game;
+  Rank.listScore(mode,game, function(error, ranks){
     res.writeHead(200, {'Content-Type':'text/html; charset=UTF-8'});
     res.end(ranks, 'utf-8');
   });
