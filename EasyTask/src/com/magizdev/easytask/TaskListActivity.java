@@ -172,9 +172,6 @@ public class TaskListActivity extends Activity {
 						}
 					}
 				});
-		View listEmptyView = getLayoutInflater().inflate(
-				R.layout.task_list_empty, null);
-		listView.getListView().setEmptyView(listEmptyView);
 
 		final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
