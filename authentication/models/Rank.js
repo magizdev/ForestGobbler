@@ -4,6 +4,8 @@ var RankSchema=new db.Schema({
    username: {type:String}
   ,score: Number 
   ,mode: Number
+  ,imei: {type:String}
+  ,game: {type:String}
 })
 
 var iRank=db.mongoose.model('rank', RankSchema);
@@ -11,41 +13,53 @@ var iRank=db.mongoose.model('rank', RankSchema);
 module.exports.addScore = addScore;
 module.exports.listScore = listScore;
 
-function addScore(username, score, mode, callback) {
+function addScore(username, score, mode, imei, game, callback) {
   if(mode!=1 && mode!=2 && mode!=3) {callback();}
+  if(game!="forestgobbler") {callback();}
   var instance=new iRank();
   instance.username = username;
   instance.score = score;
   instance.mode = mode;
+  instance.imei = imei;
+  instance.game = game;
 
-  iRank.find({mode:mode}).count(function(err, count) {
+  iRank.findOne({mode:mode, game:game, imei:imei}, function(err, doc) {
     if(!err) {
-      if(count < 100) {
-        instance.save(function (err) {});
-        callback(null, instance);
-      }else{
-        iRank.find({mode:mode}).where('score').lt(score).count(function(err, count){
-          if(!err && count>0){
-            instance.save(function (err) {});
-            iRank.findOneAndRemove({mode:mode},{sort:'score'},function(err){});
-          }
-          callback(null, instance);
-        });
-      }
+        if(doc){
+        if(doc.score < score){
+            doc.score = score;
+            doc.save(callback);
+        }
+        callback(null, doc);
+        }else{
+        instance.save(function(err,doc){
+        if(!err){
+            iRank.count({mode:mode, game:game}, function(err, count){
+            if(count > 100) {
+                iRank.findOneAndRemove({mode:mode, game:game},{sort:'score'},function(err){});
+            }else{
+                callback(null, instance);
+            }});
+
+        }else{
+            callback(err);
+        }});
+        }
     }else{
       callback(err);
     }
   });
 }
 
-function listScore(mode, callback) {
+function listScore(mode, game, callback) {
   if(mode!=1 && mode!=2 && mode!=3) {callback();}
   var totalRanks = "{ranks:[";
-  iRank.find({mode:mode}).sort("-score").exec(function(err, ranks) {
+  iRank.find({mode:mode, game:game}).sort("-score").exec(function(err, ranks) {
     for(var i=0;i<ranks.length;i++){
       totalRanks+="{";
       totalRanks+="username:" + ranks[i].username;
-      console.log(ranks[i].username);
+      totalRanks+=",";
+      totalRanks+="imei:" + ranks[i].imei;
       totalRanks+=",";
       totalRanks+="score:" + ranks[i].score;
       totalRanks+="}";
