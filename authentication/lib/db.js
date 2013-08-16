@@ -6,11 +6,11 @@ module.exports.Schema=Schema;
 
 var username="magizdev_user";
 var password="qwerasdf";
-var address = '@ds031978.mongolab.com:31978/magizdev_test';
+var address = '@ds041198.mongolab.com:41198/game_rank';
 connect();
 
 function connect() {
-  var url='mongodb://localhost'//+username+':'+password+address;
+  var url='mongodb://'+username+':'+password+address;
   mongoose.connect(url);
 }
 function disconnect() {mongoose.disconnect()}
