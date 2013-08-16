@@ -31,11 +31,13 @@ app.configure('production', function(){
 
 // Routes
 app.post('/rankadd', function(req, res) {
+  console.log("add");
   var username=req.body.username;
   var score=req.body.score;
   var mode=req.body.mode;
   var imei=req.body.imei;
   var game=req.body.game;
+  console.log(imei);
   Rank.addScore(username, score, mode, function(err, user) {
     if(err) console.log(err);
     //res.writeHead(200, {'Content-Type':'text/html'});
