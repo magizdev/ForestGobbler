@@ -135,7 +135,7 @@ public class MyDialog extends Dialog implements OnClickListener {
 					.getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 			if (networkInfo != null && networkInfo.isConnected()) {
-				new DownloadWebpageTask().execute(stringUrl, userName,
+				new UploadScoreTask().execute(stringUrl, userName,
 						Integer.toString(mode), Integer.toString(intScore),
 						imeiString);
 			}
@@ -173,14 +173,14 @@ public class MyDialog extends Dialog implements OnClickListener {
 		}
 	}
 
-	private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
+	private class UploadScoreTask extends AsyncTask<String, Void, String> {
 		@Override
 		protected String doInBackground(String... urls) {
 
 			// params comes from the execute() call: params[0] is the url.
 			try {
 				Log.w("a", "test");
-				downloadUrl(urls[0], urls[1], urls[2], urls[3], urls[4]);
+				uploadScore(urls[0], urls[1], urls[2], urls[3], urls[4]);
 				return "1";
 			} catch (IOException e) {
 				return "Unable to retrieve web page. URL may be invalid.";
@@ -213,7 +213,7 @@ public class MyDialog extends Dialog implements OnClickListener {
 		return result.toString();
 	}
 
-	private void downloadUrl(String myurl, String username, String mode,
+	private void uploadScore(String myurl, String username, String mode,
 			String score, String imei) throws IOException {
 		InputStream is = null;
 		// Only display the first 500 characters of the retrieved
@@ -227,6 +227,7 @@ public class MyDialog extends Dialog implements OnClickListener {
 			conn.setConnectTimeout(15000 /* milliseconds */);
 			conn.setRequestMethod("POST");
 			conn.setDoInput(true);
+			conn.setDoOutput(true);
 
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair("username", username));
