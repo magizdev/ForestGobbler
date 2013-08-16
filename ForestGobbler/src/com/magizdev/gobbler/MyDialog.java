@@ -1,11 +1,22 @@
 package com.magizdev.gobbler;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +30,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -114,13 +126,14 @@ public class MyDialog extends Dialog implements OnClickListener {
 				mode = 2;
 			if (gameview.getMode() == GameView.ENDLESS_MODE)
 				mode = 3;
-			String stringUrl = "http://magizdev.ap01.aws.af.cm/rankadd?mode="
-					+ mode + "&username=" + userName + "&score=" + intScore;
+			String stringUrl = "http://zhali17-ubuntu:3000/rankadd";
+			TelephonyManager tmManager =(TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+			String imeiString = tmManager.getDeviceId();
 			ConnectivityManager connMgr = (ConnectivityManager) this.context
 					.getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 			if (networkInfo != null && networkInfo.isConnected()) {
-				new DownloadWebpageTask().execute(stringUrl);
+				new DownloadWebpageTask().execute(stringUrl, userName, Integer.toString(mode), Integer.toString(intScore), imeiString);
 			}
 		case R.id.replay_imgbtn:
 			this.dismiss();
@@ -162,7 +175,7 @@ public class MyDialog extends Dialog implements OnClickListener {
 
 			// params comes from the execute() call: params[0] is the url.
 			try {
-				downloadUrl(urls[0]);
+				downloadUrl(urls[0], urls[1], urls[2], urls[3], urls[4]);
 				return "1";
 			} catch (IOException e) {
 				return "Unable to retrieve web page. URL may be invalid.";
@@ -175,8 +188,28 @@ public class MyDialog extends Dialog implements OnClickListener {
 
 		}
 	}
+	
+	private String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException
+	{
+	    StringBuilder result = new StringBuilder();
+	    boolean first = true;
 
-	private void downloadUrl(String myurl) throws IOException {
+	    for (NameValuePair pair : params)
+	    {
+	        if (first)
+	            first = false;
+	        else
+	            result.append("&");
+
+	        result.append(URLEncoder.encode(pair.getName(), "UTF-8"));
+	        result.append("=");
+	        result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
+	    }
+
+	    return result.toString();
+	}
+
+	private void downloadUrl(String myurl, String username, String mode, String score, String imei) throws IOException {
 		InputStream is = null;
 		// Only display the first 500 characters of the retrieved
 		// web page content.
@@ -187,8 +220,22 @@ public class MyDialog extends Dialog implements OnClickListener {
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setReadTimeout(10000 /* milliseconds */);
 			conn.setConnectTimeout(15000 /* milliseconds */);
-			conn.setRequestMethod("GET");
+			conn.setRequestMethod("POST");
 			conn.setDoInput(true);
+			
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			params.add(new BasicNameValuePair("username", username ));
+			params.add(new BasicNameValuePair("mode", mode));
+			params.add(new BasicNameValuePair("score", score));
+			params.add(new BasicNameValuePair("imei", score));
+			params.add(new BasicNameValuePair("game", "forestgobbler"));
+
+			OutputStream os = conn.getOutputStream();
+			BufferedWriter writer = new BufferedWriter(
+			        new OutputStreamWriter(os, "UTF-8"));
+			writer.write(getQuery(params));
+			writer.close();
+			os.close();
 			// Starts the query
 			conn.connect();
 			int response = conn.getResponseCode();
