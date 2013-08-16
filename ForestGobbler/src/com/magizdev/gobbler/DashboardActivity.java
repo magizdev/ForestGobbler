@@ -175,7 +175,6 @@ public class DashboardActivity extends Activity implements OnClickListener {
 		int len = 5000;
 
 		try {
-			Log.w("a", myurl);
 			URL url = new URL(myurl);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setReadTimeout(10000 /* milliseconds */);
@@ -185,12 +184,10 @@ public class DashboardActivity extends Activity implements OnClickListener {
 			// Starts the query
 			conn.connect();
 			int response = conn.getResponseCode();
-			Log.d("forestgobbler", "The response is: " + response);
 			is = conn.getInputStream();
 
 			// Convert the InputStream into a string
 			String contentAsString = readIt(is, len);
-			Log.w("a", contentAsString);
 			return contentAsString;
 
 			// Makes sure that the InputStream is closed after the app is

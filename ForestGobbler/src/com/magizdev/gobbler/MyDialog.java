@@ -246,12 +246,6 @@ public class MyDialog extends Dialog implements OnClickListener {
 			conn.connect();
 			int response = conn.getResponseCode();
 			is = conn.getInputStream();
-			Log.w("a", "finishe");
-
-			// Convert the InputStream into a string
-
-			// Makes sure that the InputStream is closed after the app is
-			// finished using it.
 
 		} catch (Exception e) {
 			Log.w("a", e.getMessage());
