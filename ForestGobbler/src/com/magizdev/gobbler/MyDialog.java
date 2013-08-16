@@ -31,6 +31,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -85,7 +86,7 @@ public class MyDialog extends Dialog implements OnClickListener {
 		btn_next.setOnClickListener(this);
 		btn_replay.setOnClickListener(this);
 		btn_upload.setOnClickListener(this);
-		
+
 		this.setCancelable(false);
 	}
 
@@ -126,14 +127,17 @@ public class MyDialog extends Dialog implements OnClickListener {
 				mode = 2;
 			if (gameview.getMode() == GameView.ENDLESS_MODE)
 				mode = 3;
-			String stringUrl = "http://zhali17-ubuntu:3000/rankadd";
-			TelephonyManager tmManager =(TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+			String stringUrl = "http://gamerank.ap01.aws.af.cm/rankAdd";
+			TelephonyManager tmManager = (TelephonyManager) context
+					.getSystemService(Context.TELEPHONY_SERVICE);
 			String imeiString = tmManager.getDeviceId();
 			ConnectivityManager connMgr = (ConnectivityManager) this.context
 					.getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 			if (networkInfo != null && networkInfo.isConnected()) {
-				new DownloadWebpageTask().execute(stringUrl, userName, Integer.toString(mode), Integer.toString(intScore), imeiString);
+				new UploadScoreTask().execute(stringUrl, userName,
+						Integer.toString(mode), Integer.toString(intScore),
+						imeiString);
 			}
 		case R.id.replay_imgbtn:
 			this.dismiss();
@@ -169,13 +173,14 @@ public class MyDialog extends Dialog implements OnClickListener {
 		}
 	}
 
-	private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
+	private class UploadScoreTask extends AsyncTask<String, Void, String> {
 		@Override
 		protected String doInBackground(String... urls) {
 
 			// params comes from the execute() call: params[0] is the url.
 			try {
-				downloadUrl(urls[0], urls[1], urls[2], urls[3], urls[4]);
+				Log.w("a", "test");
+				uploadScore(urls[0], urls[1], urls[2], urls[3], urls[4]);
 				return "1";
 			} catch (IOException e) {
 				return "Unable to retrieve web page. URL may be invalid.";
@@ -188,28 +193,28 @@ public class MyDialog extends Dialog implements OnClickListener {
 
 		}
 	}
-	
-	private String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException
-	{
-	    StringBuilder result = new StringBuilder();
-	    boolean first = true;
 
-	    for (NameValuePair pair : params)
-	    {
-	        if (first)
-	            first = false;
-	        else
-	            result.append("&");
+	private String getQuery(List<NameValuePair> params)
+			throws UnsupportedEncodingException {
+		StringBuilder result = new StringBuilder();
+		boolean first = true;
 
-	        result.append(URLEncoder.encode(pair.getName(), "UTF-8"));
-	        result.append("=");
-	        result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
-	    }
+		for (NameValuePair pair : params) {
+			if (first)
+				first = false;
+			else
+				result.append("&");
 
-	    return result.toString();
+			result.append(URLEncoder.encode(pair.getName(), "UTF-8"));
+			result.append("=");
+			result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
+		}
+
+		return result.toString();
 	}
 
-	private void downloadUrl(String myurl, String username, String mode, String score, String imei) throws IOException {
+	private void uploadScore(String myurl, String username, String mode,
+			String score, String imei) throws IOException {
 		InputStream is = null;
 		// Only display the first 500 characters of the retrieved
 		// web page content.
@@ -222,17 +227,18 @@ public class MyDialog extends Dialog implements OnClickListener {
 			conn.setConnectTimeout(15000 /* milliseconds */);
 			conn.setRequestMethod("POST");
 			conn.setDoInput(true);
-			
+			conn.setDoOutput(true);
+
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			params.add(new BasicNameValuePair("username", username ));
+			params.add(new BasicNameValuePair("username", username));
 			params.add(new BasicNameValuePair("mode", mode));
 			params.add(new BasicNameValuePair("score", score));
 			params.add(new BasicNameValuePair("imei", score));
 			params.add(new BasicNameValuePair("game", "forestgobbler"));
 
 			OutputStream os = conn.getOutputStream();
-			BufferedWriter writer = new BufferedWriter(
-			        new OutputStreamWriter(os, "UTF-8"));
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+					os, "UTF-8"));
 			writer.write(getQuery(params));
 			writer.close();
 			os.close();
@@ -240,11 +246,15 @@ public class MyDialog extends Dialog implements OnClickListener {
 			conn.connect();
 			int response = conn.getResponseCode();
 			is = conn.getInputStream();
+			Log.w("a", "finishe");
 
 			// Convert the InputStream into a string
 
 			// Makes sure that the InputStream is closed after the app is
 			// finished using it.
+
+		} catch (Exception e) {
+			Log.w("a", e.getMessage());
 		} finally {
 			if (is != null) {
 				is.close();
