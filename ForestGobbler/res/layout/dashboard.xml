@@ -78,46 +78,12 @@
             android:animateLayoutChanges="true" >
         </ListView>
 
-        <TextView
-            android:id="@+id/highScore1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/score_text_color"
-            android:textSize="35dp"
-            android:typeface="serif" />
+        <ProgressBar
+            android:id="@+id/networkProgress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/highScore2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/score_text_color"
-            android:textSize="35dp" />
-
-        <TextView
-            android:id="@+id/highScore3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/score_text_color"
-            android:textSize="35dp" />
-
-        <TextView
-            android:id="@+id/highScore4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/score_text_color"
-            android:textSize="35dp" />
-
-        <TextView
-            android:id="@+id/highScore5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/score_text_color"
-            android:textSize="35dp" />
     </LinearLayout>
 
 </RelativeLayout>
