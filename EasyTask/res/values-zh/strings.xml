@@ -1,0 +1,15 @@
+<resources>
+
+    <string name="app_name">待办提醒</string>
+    <string name="menu_settings">设置</string>
+    <string name="title_activity_task_list">TaskListActivity</string>
+    <string name="title_activity_task_edit">TaskEditActivity</string>
+    <string name="task_list_label">待办</string>
+    <string name="task_edit_label">编辑</string>
+    <string name="task_group_past">已过时</string>
+    <string name="task_group_incoming">近期</string>
+    <string name="task_group_future">将来</string>
+    <string name="cancel">取消</string>
+    <string name="save">保存</string>
+
+</resources>
