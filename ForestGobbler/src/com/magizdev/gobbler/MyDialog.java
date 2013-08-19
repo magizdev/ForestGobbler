@@ -240,6 +240,7 @@ public class MyDialog extends Dialog implements OnClickListener {
 			OutputStream os = conn.getOutputStream();
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
 					os, "UTF-8"));
+			String body = getQuery(params);
 			writer.write(getQuery(params));
 			writer.close();
 			os.close();
