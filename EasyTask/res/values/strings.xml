@@ -6,5 +6,10 @@
     <string name="title_activity_task_edit">TaskEditActivity</string>
     <string name="task_list_label">View Tasks</string>
     <string name="task_edit_label">Edit Task</string>
+    <string name="task_group_past">Past</string>
+    <string name="task_group_incoming">Incoming</string>
+    <string name="task_group_future">Future</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 
 </resources>

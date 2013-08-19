@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,7 +46,7 @@ public class DashboardActivity extends Activity implements OnClickListener {
 	public static final String STAR_ACHIEVEMENT = "STAR_ACHIEVEMENT";
 
 	private SharedPreferences prefs;
-	private TextView highScore;
+	private TextView myRank;	
 	private ListView rankListView;
 	private ProgressBar networkProgress;
 	private Handler uiHandler = new Handler() {
@@ -72,6 +73,7 @@ public class DashboardActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dashboard);
 		rankListView = (ListView) findViewById(R.id.rankList);
+		myRank = (TextView)findViewById(R.id.myRank);
 		rankListView.setCacheColorHint(android.R.color.transparent);
 		networkProgress = (ProgressBar) findViewById(R.id.networkProgress);
 		String stringUrl = SCORE_SERVER + "rankList?game=forestgobbler&mode=1";
@@ -146,6 +148,8 @@ public class DashboardActivity extends Activity implements OnClickListener {
 		protected void onPostExecute(String result) {
 			JSONObject jsonRanks;
 			try {
+				String imei = ((TelephonyManager)DashboardActivity.this.getSystemService(TELEPHONY_SERVICE)).getDeviceId();
+				int myRank = -1;
 				jsonRanks = (JSONObject) new JSONTokener(result).nextValue();
 				JSONArray ranksArray = jsonRanks.getJSONArray("ranks");
 				List<RankInfo> ranks = new ArrayList<RankInfo>();
@@ -155,7 +159,17 @@ public class DashboardActivity extends Activity implements OnClickListener {
 					rank.UserName = ranksArray.getJSONObject(i).getString(
 							"username");
 					rank.Score = ranksArray.getJSONObject(i).getInt("score");
+					String theImei = ranksArray.getJSONObject(i).getString("imei");
+					if(imei.equals(theImei)){
+						myRank = i;
+					}
 					ranks.add(rank);
+				}
+				
+				if(myRank == -1){
+					DashboardActivity.this.myRank.setText("No rank");
+				}else {
+					DashboardActivity.this.myRank.setText("My Rank:"+myRank);
 				}
 				RankListAdapter adapter = new RankListAdapter(
 						DashboardActivity.this, ranks);
@@ -175,7 +189,6 @@ public class DashboardActivity extends Activity implements OnClickListener {
 		int len = 5000;
 
 		try {
-			Log.w("a", myurl);
 			URL url = new URL(myurl);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setReadTimeout(10000 /* milliseconds */);
@@ -185,12 +198,10 @@ public class DashboardActivity extends Activity implements OnClickListener {
 			// Starts the query
 			conn.connect();
 			int response = conn.getResponseCode();
-			Log.d("forestgobbler", "The response is: " + response);
 			is = conn.getInputStream();
 
 			// Convert the InputStream into a string
 			String contentAsString = readIt(is, len);
-			Log.w("a", contentAsString);
 			return contentAsString;
 
 			// Makes sure that the InputStream is closed after the app is
@@ -231,6 +242,7 @@ public class DashboardActivity extends Activity implements OnClickListener {
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 		if (networkInfo != null && networkInfo.isConnected()) {
 			new DownloadWebpageTask().execute(stringUrl);
+			uiHandler.sendEmptyMessage(0);
 		}
 	}
 }

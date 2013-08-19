@@ -132,7 +132,7 @@ public class TaskListActivity extends Activity {
 				android.R.integer.config_shortAnimTime);
 		LinearLayout adContainer = (LinearLayout) this
 				.findViewById(R.id.adContainer);
-		AdView adView = new AdView(this, AdSize.BANNER, "");
+		AdView adView = new AdView(this, AdSize.BANNER, "a1520fa1c2a3c8f");
 		adContainer.addView(adView);
 		AdRequest adRequest = new AdRequest();
 		adView.loadAd(adRequest);
