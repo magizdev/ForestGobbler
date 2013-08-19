@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/view_dialog"
     android:layout_width="match_parent"
+    android:background="#FF"
     android:layout_height="match_parent" >
 
     <TextView
@@ -49,28 +50,13 @@
         android:orientation="horizontal"
         android:padding="10dip" >
 
-        <ImageButton
-            android:id="@+id/replay_imgbtn"
+        <Button
+            android:id="@+id/replay_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:src="@drawable/restart" />
-
-        <ImageButton
-            android:id="@+id/next_imgbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dip"
-            android:background="@android:color/transparent"
-            android:src="@drawable/share" />
-
-        <ImageButton
-            android:id="@+id/upload_imgbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dip"
-            android:background="@android:color/transparent"
-            android:src="@drawable/uploadworld" />
+            android:padding="10dp"
+            android:background="@drawable/button_bg_selector"
+            android:text="Play Again!"/>
     </LinearLayout>
 
 </RelativeLayout>
