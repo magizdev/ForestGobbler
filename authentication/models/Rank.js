@@ -28,6 +28,7 @@ function addScore(username, score, mode, imei, game, callback) {
         if(doc){
         if(doc.score < score){
             doc.score = score;
+            doc.username = username;
             doc.save(callback);
         }
         callback(null, doc);
