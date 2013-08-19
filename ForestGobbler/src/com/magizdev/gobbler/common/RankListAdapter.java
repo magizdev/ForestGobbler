@@ -72,8 +72,15 @@ public class RankListAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
+		
+		String userName=ranks.get(position).UserName;
 		holder.rank.setText(String.valueOf(ranks.get(position).Rank));
-		holder.username.setText(ranks.get(position).UserName);
+		if(userName.isEmpty()){
+			holder.username.setVisibility(View.GONE);
+		}else {
+			holder.username.setText(ranks.get(position).UserName);
+		}
+		
 		holder.score.setText(String.valueOf(ranks.get(position).Score));
 		
 		return convertView;

@@ -183,6 +183,7 @@ public class MyDialog extends Dialog implements OnClickListener {
 				uploadScore(urls[0], urls[1], urls[2], urls[3], urls[4]);
 				return "1";
 			} catch (IOException e) {
+				Log.w("exception", e.getMessage());
 				return "Unable to retrieve web page. URL may be invalid.";
 			}
 		}
@@ -233,7 +234,7 @@ public class MyDialog extends Dialog implements OnClickListener {
 			params.add(new BasicNameValuePair("username", username));
 			params.add(new BasicNameValuePair("mode", mode));
 			params.add(new BasicNameValuePair("score", score));
-			params.add(new BasicNameValuePair("imei", score));
+			params.add(new BasicNameValuePair("imei", imei));
 			params.add(new BasicNameValuePair("game", "forestgobbler"));
 
 			OutputStream os = conn.getOutputStream();
