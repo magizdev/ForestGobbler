@@ -22,7 +22,6 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="horizontal" >
-context.getString(R.string.task_group_past)context.getString(R.string.task_group_past)
 
         <ImageButton
             android:id="@+id/btnSpeak"
@@ -84,5 +83,13 @@ context.getString(R.string.task_group_past)context.getString(R.string.task_group
         android:background="#FFFFFF"
         android:listSelector="@drawable/list_selector" >
     </com.magizdev.easytask.util.HeaderListView>
+
+    <ImageButton
+        android:id="@+id/btnTimer"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/inputArea"
+        android:src="@drawable/clock_blue" />
 
 </RelativeLayout>

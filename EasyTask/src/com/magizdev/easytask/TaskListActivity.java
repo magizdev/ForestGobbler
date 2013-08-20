@@ -1,7 +1,9 @@
 package com.magizdev.easytask;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -23,10 +25,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.ContactsContract.CommonDataKinds.Event;
 import android.speech.RecognizerIntent;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,7 +41,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -52,6 +53,9 @@ import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.tasks.Tasks;
 import com.google.api.services.tasks.TasksRequestInitializer;
 import com.google.api.services.tasks.model.Task;
+import com.magizdev.common.view.ArrayWheelAdapter;
+import com.magizdev.common.view.NumericWheelAdapter;
+import com.magizdev.common.view.WheelView;
 import com.magizdev.easytask.util.AlarmUtil;
 import com.magizdev.easytask.util.HeaderListView;
 import com.magizdev.easytask.viewmodel.EasyTaskInfo;
@@ -70,6 +74,7 @@ public class TaskListActivity extends Activity {
 	private long animDuration;
 	private GestureDetectorCompat mDetector;
 	private ImageButton btnSpeak;
+	private ImageButton btnTimer;
 	private EditText note;
 	private AccountManager accountManager;
 	private Account account;
@@ -140,6 +145,7 @@ public class TaskListActivity extends Activity {
 		listView = (HeaderListView) this.findViewById(R.id.taskList);
 		inputArea = (RelativeLayout) this.findViewById(R.id.inputArea);
 		btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
+		btnTimer=(ImageButton)findViewById(R.id.btnTimer);
 		util = new EasyTaskUtil(this);
 		adapter = new TaskListHeaderAdapter(this, listView, uiHandler);
 		listView.setAdapter(adapter);
@@ -241,6 +247,14 @@ public class TaskListActivity extends Activity {
 				}
 			}
 		});
+		
+		btnTimer.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				showDateTimePicker();
+			}
+		});
 		accountManager = AccountManager.get(this);
 		// showDialog(DIALOG_ACCOUNTS);
 	}
@@ -304,6 +318,85 @@ public class TaskListActivity extends Activity {
 			return builder.create();
 		}
 		return null;
+	}
+	
+	private void showDateTimePicker() {
+		Calendar calendar = Calendar.getInstance();
+		int year = calendar.get(Calendar.YEAR);
+		int month = calendar.get(Calendar.MONTH);
+		int day = calendar.get(Calendar.DATE);
+		int hour = calendar.get(Calendar.HOUR_OF_DAY);
+		int minute = calendar.get(Calendar.MINUTE);
+		
+		List<String> incomingDays = new ArrayList<String>();
+		incomingDays.add("Today");
+		for(int i=1;i<7;i++){
+			calendar.add(Calendar.DAY_OF_YEAR, 1);
+			incomingDays.add(calendar.getTime().toLocaleString());
+		}
+		
+		String[] arrStrings = new String[incomingDays.size()];
+		incomingDays.toArray(arrStrings);
+
+		ArrayWheelAdapter<String> dateAdapter = new ArrayWheelAdapter<String>(arrStrings, incomingDays.size());
+		final Dialog dialog = new Dialog(this);
+		dialog.setTitle("Time picker");
+		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+		View view = inflater.inflate(com.magizdev.common.lib.R.layout.time_layout, null);
+
+		final WheelView wv_date = (WheelView) view.findViewById(com.magizdev.common.lib.R.id.date);
+		wv_date.setAdapter(dateAdapter);
+		wv_date.setCyclic(false);
+		wv_date.setCurrentItem(0);
+
+		final WheelView wv_hours = (WheelView) view.findViewById(com.magizdev.common.lib.R.id.hour);
+		wv_hours.setAdapter(new NumericWheelAdapter(0, 23));
+		wv_hours.setCyclic(true);
+		wv_hours.setCurrentItem(hour);
+
+	
+		final WheelView wv_mins = (WheelView) view.findViewById(com.magizdev.common.lib.R.id.mins);
+		wv_mins.setAdapter(new NumericWheelAdapter(0, 59, "%02d"));
+		wv_mins.setCyclic(true);
+		wv_mins.setCurrentItem(minute);
+
+		int textSize = 0;
+
+		textSize = 12;
+
+		wv_date.TEXT_SIZE = textSize;
+		wv_hours.TEXT_SIZE = textSize;
+		wv_mins.TEXT_SIZE = textSize;
+
+		Button btn_sure = (Button) view.findViewById(com.magizdev.common.lib.R.id.btn_datetime_sure);
+		Button btn_cancel = (Button) view
+				.findViewById(com.magizdev.common.lib.R.id.btn_datetime_cancel);
+		btn_sure.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+
+				String parten = "00";
+				DecimalFormat decimal = new DecimalFormat(parten);
+				// tv_time.setText((wv_year.getCurrentItem() + START_YEAR) + "-"
+				// + decimal.format((wv_month.getCurrentItem() + 1)) + "-"
+				// + decimal.format((wv_day.getCurrentItem() + 1)) + " "
+				// + decimal.format(wv_hours.getCurrentItem()) + ":"
+				// + decimal.format(wv_mins.getCurrentItem()));
+
+				dialog.dismiss();
+			}
+		});
+		btn_cancel.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+			}
+		});
+		dialog.setContentView(view);
+		dialog.show();
 	}
 
 	Runnable taskThread = new Runnable() {
