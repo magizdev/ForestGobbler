@@ -1,34 +1,23 @@
 package com.magizdev.easytask;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
-import android.accounts.OperationCanceledException;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ActionBar.LayoutParams;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.support.v4.view.GestureDetectorCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -48,12 +37,6 @@ import android.widget.Toast;
 import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson.JacksonFactory;
-import com.google.api.services.tasks.Tasks;
-import com.google.api.services.tasks.TasksRequestInitializer;
-import com.google.api.services.tasks.model.Task;
 import com.magizdev.common.view.ArrayWheelAdapter;
 import com.magizdev.common.view.NumericWheelAdapter;
 import com.magizdev.common.view.WheelView;
@@ -64,8 +47,6 @@ import com.magizdev.easytask.viewmodel.EasyTaskUtil;
 import com.magizdev.easytask.viewmodel.TaskListHeaderAdapter;
 
 public class TaskListActivity extends Activity {
-	private static final int DIALOG_ACCOUNTS = 0;
-	private static final String AUTH_TOKEN_TYPE = "oauth2:https://www.googleapis.com/auth/tasks";
 	protected static final int RESULT_SPEECH = 1;
 	public static final int RESULT_EDIT = 2;
 	private HeaderListView listView;
@@ -75,14 +56,8 @@ public class TaskListActivity extends Activity {
 	private long animDuration;
 	private GestureDetectorCompat mDetector;
 	private ImageButton btnSpeak;
-	private ImageButton btnTimer;
 	private EditText note;
-	private AccountManager accountManager;
-	private LinearLayout timePickerContainer;
-	private boolean timePickerShown;
-	private float timePickerHeight;
-	private Account account;
-	Tasks service;
+	private View timePicker;
 
 	private Handler uiHandler = new Handler() {
 
@@ -103,14 +78,10 @@ public class TaskListActivity extends Activity {
 
 							@Override
 							public void onAnimationStart(Animator animation) {
-								// TODO Auto-generated method stub
-
 							}
 
 							@Override
 							public void onAnimationRepeat(Animator animation) {
-								// TODO Auto-generated method stub
-
 							}
 
 							@Override
@@ -121,8 +92,6 @@ public class TaskListActivity extends Activity {
 
 							@Override
 							public void onAnimationCancel(Animator animation) {
-								// TODO Auto-generated method stub
-
 							}
 						}).start();
 				uiHandler.removeMessages(msg.what);
@@ -149,7 +118,6 @@ public class TaskListActivity extends Activity {
 		listView = (HeaderListView) this.findViewById(R.id.taskList);
 		inputArea = (RelativeLayout) this.findViewById(R.id.inputArea);
 		btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
-		btnTimer = (ImageButton) findViewById(R.id.btnTimer);
 		util = new EasyTaskUtil(this);
 		adapter = new TaskListHeaderAdapter(this, listView, uiHandler);
 		listView.setAdapter(adapter);
@@ -172,13 +140,16 @@ public class TaskListActivity extends Activity {
 						long taskId = ((TaskListHeaderAdapter) listView
 								.getListView().getAdapter()).getTaskId(arg2);
 						if (taskId > -1) {
-							Intent editTaskIntent = new Intent(
-									TaskListActivity.this,
-									TaskEditActivity.class);
-							editTaskIntent.putExtra("clickItemPosition", arg2);
-							editTaskIntent.putExtra("easyTaskId", taskId);
-
-							startActivityForResult(editTaskIntent, RESULT_EDIT);
+							Dialog dialog=new Dialog(TaskListActivity.this);
+							dialog.setContentView(timePicker);
+							dialog.show();
+//							Intent editTaskIntent = new Intent(
+//									TaskListActivity.this,
+//									TaskEditActivity.class);
+//							editTaskIntent.putExtra("clickItemPosition", arg2);
+//							editTaskIntent.putExtra("easyTaskId", taskId);
+//
+//							startActivityForResult(editTaskIntent, RESULT_EDIT);
 						}
 					}
 				});
@@ -187,15 +158,6 @@ public class TaskListActivity extends Activity {
 
 		ImageButton sendButton = (ImageButton) this.findViewById(R.id.addTask);
 		note = (EditText) this.findViewById(R.id.taskInput);
-
-		List<EasyTaskInfo> tasks = util.getTasks();
-		int index = 0;
-		for (EasyTaskInfo task : tasks) {
-			if (task.StartDate.getTime() > System.currentTimeMillis()) {
-				break;
-			}
-			index++;
-		}
 
 		sendButton.setOnClickListener(new OnClickListener() {
 
@@ -215,7 +177,7 @@ public class TaskListActivity extends Activity {
 					EasyTaskInfo task = new EasyTaskInfo(0, ana
 							.getFilteredString(), null, new Date(), dueDate,
 							"local", null);
-					long id = util.addTask(task);
+					util.addTask(task);
 					if (ana.getHasTime()) {
 						AlarmUtil.updateAlarm(TaskListActivity.this);
 					}
@@ -251,17 +213,7 @@ public class TaskListActivity extends Activity {
 			}
 		});
 
-		btnTimer.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				showDateTimePicker();
-			}
-		});
-		
-		iniDateTimePicker();
-		accountManager = AccountManager.get(this);
-		// showDialog(DIALOG_ACCOUNTS);
+		timePicker = iniDateTimePicker();
 	}
 
 	@Override
@@ -281,7 +233,6 @@ public class TaskListActivity extends Activity {
 			break;
 		case RESULT_EDIT:
 			if (resultCode == RESULT_OK) {
-				// int position = result.getIntExtra("itemPosition", 0);
 				adapter.refresh();
 				adapter.notifyDataSetChanged();
 			}
@@ -301,42 +252,10 @@ public class TaskListActivity extends Activity {
 		return true;
 	}
 
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		switch (id) {
-		case DIALOG_ACCOUNTS:
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("Select a Google account");
-
-			final Account[] accounts = accountManager
-					.getAccountsByType("com.google");
-			final int size = accounts.length;
-			String[] names = new String[size];
-			for (int i = 0; i < size; i++) {
-				names[i] = accounts[i].name;
-			}
-			builder.setItems(names, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					gotAccount(accounts[which]);
-				}
-			});
-			return builder.create();
-		}
-		return null;
-	}
-	
-	private void showDateTimePicker(){
-		if(timePickerShown){
-//			timePickerContainer.animate().scaleY(0).start();
-			inputArea.animate().yBy(timePickerHeight).start();
-		}else {
-//			timePickerContainer.animate().scaleY(1).start();
-			inputArea.animate().yBy(0-timePickerHeight).start();
-		}
-		timePickerShown = !timePickerShown;
+	private void showDateTimePicker() {
 	}
 
-	private void iniDateTimePicker() {
+	private View iniDateTimePicker() {
 		Calendar calendar = Calendar.getInstance();
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		int minute = calendar.get(Calendar.MINUTE);
@@ -345,7 +264,9 @@ public class TaskListActivity extends Activity {
 		incomingDays.add("Today");
 		for (int i = 1; i < 7; i++) {
 			calendar.add(Calendar.DAY_OF_YEAR, 1);
-			incomingDays.add(calendar.getTime().toLocaleString());
+			incomingDays.add(calendar.get(Calendar.YEAR) + "/"
+					+ calendar.get(Calendar.MONTH) + "/"
+					+ calendar.get(Calendar.DAY_OF_MONTH));
 		}
 
 		String[] arrStrings = new String[incomingDays.size()];
@@ -380,77 +301,19 @@ public class TaskListActivity extends Activity {
 		wv_date.TEXT_SIZE = textSize;
 		wv_hours.TEXT_SIZE = textSize;
 		wv_mins.TEXT_SIZE = textSize;
-
-		timePickerContainer = (LinearLayout) findViewById(R.id.timePickerContainer);
-		timePickerContainer.addView(view);
 		
-//		timePickerContainer.setScaleY(0);
-//		timePickerContainer.setPivotY(1);
-//		timePickerContainer.setVisibility(View.GONE);
-		timePickerContainer.requestLayout();
-		timePickerContainer.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		timePickerHeight = timePickerContainer.getMeasuredHeight();
-		inputArea.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		float origY = inputArea.getY();
-		inputArea.setY(origY + timePickerHeight);
-		timePickerShown = false;
-	}
-
-	Runnable taskThread = new Runnable() {
-
-		@Override
-		public void run() {
-			List<Task> tasks = null;
-			try {
-				com.google.api.services.tasks.Tasks.TasksOperations.List list = service
-						.tasks().list("default");
-				com.google.api.services.tasks.model.Tasks all = list.execute();
-				tasks = all.getItems();
-			} catch (IOException e) {
-				Log.w("tasks", e.getMessage());
+		Button btn_sure = (Button) view.findViewById(R.id.btn_datetime_sure);
+		Button btn_cancel = (Button) view
+				.findViewById(R.id.btn_datetime_cancel);
+		
+		btn_sure.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				note.setText(wv_date.getCurrentItem()+"a");
 			}
-			for (Task task : tasks) {
-				Log.w("tasks", task.getNotes());
-			}
-
-		}
-	};
-
-	public void gotAccount(Account account) {
-		this.account = account;
-		accountManager.getAuthToken(account, AUTH_TOKEN_TYPE, null,
-				TaskListActivity.this, new AccountManagerCallback<Bundle>() {
-					public void run(AccountManagerFuture<Bundle> future) {
-						try {
-							// If the user has authorized your application
-							// to
-							// use the tasks API
-							// a token is available.
-							String token = future.getResult().getString(
-									AccountManager.KEY_AUTHTOKEN);
-							// Now you can use the Tasks API...
-							GoogleCredential credential = new GoogleCredential();
-							credential.setAccessToken(token);
-
-							service = new Tasks.Builder(new NetHttpTransport(),
-									new JacksonFactory(), credential)
-									.setApplicationName("EasyTask")
-									.setTasksRequestInitializer(
-											new TasksRequestInitializer(
-													"AIzaSyBszB5_MtTyGtKrN_mukAvHnhE6h6Ndt6w"))
-									.build();
-
-							new Thread(taskThread).start();
-						} catch (OperationCanceledException e) {
-							// TODO: The user has denied you access to the
-							// API,
-							// you should handle that
-						} catch (Exception e) {
-							Log.w("error", e.getMessage());
-						}
-					}
-
-				}, null);
-
+		});
+		
+		return view;
 	}
 }

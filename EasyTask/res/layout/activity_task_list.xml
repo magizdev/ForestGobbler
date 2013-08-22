@@ -54,14 +54,6 @@
             android:inputType="text"
             android:singleLine="true" >
         </EditText>
-
-        <LinearLayout
-            android:id="@+id/timePickerContainer"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/taskInput"
-            android:orientation="vertical" >
-        </LinearLayout>
     </RelativeLayout>
 
     <!--
@@ -91,13 +83,5 @@
         android:background="#FFFFFF"
         android:listSelector="@drawable/list_selector" >
     </com.magizdev.easytask.util.HeaderListView>
-
-    <ImageButton
-        android:id="@+id/btnTimer"
-        android:layout_width="40dp"
-        android:layout_height="20dp"
-        android:layout_above="@id/inputArea"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/clock_blue" />
 
 </RelativeLayout>
