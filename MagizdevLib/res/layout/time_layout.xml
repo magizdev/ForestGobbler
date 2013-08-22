@@ -9,9 +9,9 @@
         android:layout_width="400dip"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingTop="10dp" >
+        android:paddingLeft="1dp"
+        android:paddingRight="1dp"
+        android:paddingTop="1dp" >
 
         <com.magizdev.common.view.WheelView
             android:id="@+id/date"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <LinearLayout
+    <!-- LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/timePicker"
@@ -52,6 +52,6 @@
             android:layout_weight="1"
             android:text="@string/cancel" >
         </Button>
-    </LinearLayout>
+    </LinearLayout -->
 
 </RelativeLayout>

@@ -18,6 +18,7 @@ import android.animation.Animator.AnimatorListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ActionBar.LayoutParams;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -77,6 +78,9 @@ public class TaskListActivity extends Activity {
 	private ImageButton btnTimer;
 	private EditText note;
 	private AccountManager accountManager;
+	private LinearLayout timePickerContainer;
+	private boolean timePickerShown;
+	private float timePickerHeight;
 	private Account account;
 	Tasks service;
 
@@ -145,7 +149,7 @@ public class TaskListActivity extends Activity {
 		listView = (HeaderListView) this.findViewById(R.id.taskList);
 		inputArea = (RelativeLayout) this.findViewById(R.id.inputArea);
 		btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
-		btnTimer=(ImageButton)findViewById(R.id.btnTimer);
+		btnTimer = (ImageButton) findViewById(R.id.btnTimer);
 		util = new EasyTaskUtil(this);
 		adapter = new TaskListHeaderAdapter(this, listView, uiHandler);
 		listView.setAdapter(adapter);
@@ -226,7 +230,6 @@ public class TaskListActivity extends Activity {
 
 		});
 
-
 		btnSpeak.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -247,14 +250,16 @@ public class TaskListActivity extends Activity {
 				}
 			}
 		});
-		
+
 		btnTimer.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				showDateTimePicker();
 			}
 		});
+		
+		iniDateTimePicker();
 		accountManager = AccountManager.get(this);
 		// showDialog(DIALOG_ACCOUNTS);
 	}
@@ -320,83 +325,75 @@ public class TaskListActivity extends Activity {
 		return null;
 	}
 	
-	private void showDateTimePicker() {
+	private void showDateTimePicker(){
+		if(timePickerShown){
+//			timePickerContainer.animate().scaleY(0).start();
+			inputArea.animate().yBy(timePickerHeight).start();
+		}else {
+//			timePickerContainer.animate().scaleY(1).start();
+			inputArea.animate().yBy(0-timePickerHeight).start();
+		}
+		timePickerShown = !timePickerShown;
+	}
+
+	private void iniDateTimePicker() {
 		Calendar calendar = Calendar.getInstance();
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
-		int day = calendar.get(Calendar.DATE);
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		int minute = calendar.get(Calendar.MINUTE);
-		
+
 		List<String> incomingDays = new ArrayList<String>();
 		incomingDays.add("Today");
-		for(int i=1;i<7;i++){
+		for (int i = 1; i < 7; i++) {
 			calendar.add(Calendar.DAY_OF_YEAR, 1);
 			incomingDays.add(calendar.getTime().toLocaleString());
 		}
-		
+
 		String[] arrStrings = new String[incomingDays.size()];
 		incomingDays.toArray(arrStrings);
 
-		ArrayWheelAdapter<String> dateAdapter = new ArrayWheelAdapter<String>(arrStrings, incomingDays.size());
-		final Dialog dialog = new Dialog(this);
-		dialog.setTitle("Time picker");
+		ArrayWheelAdapter<String> dateAdapter = new ArrayWheelAdapter<String>(
+				arrStrings, incomingDays.size());
 		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-		View view = inflater.inflate(com.magizdev.common.lib.R.layout.time_layout, null);
+		View view = inflater.inflate(
+				com.magizdev.common.lib.R.layout.time_layout, null);
 
-		final WheelView wv_date = (WheelView) view.findViewById(com.magizdev.common.lib.R.id.date);
+		final WheelView wv_date = (WheelView) view
+				.findViewById(com.magizdev.common.lib.R.id.date);
 		wv_date.setAdapter(dateAdapter);
 		wv_date.setCyclic(false);
 		wv_date.setCurrentItem(0);
 
-		final WheelView wv_hours = (WheelView) view.findViewById(com.magizdev.common.lib.R.id.hour);
+		final WheelView wv_hours = (WheelView) view
+				.findViewById(com.magizdev.common.lib.R.id.hour);
 		wv_hours.setAdapter(new NumericWheelAdapter(0, 23));
 		wv_hours.setCyclic(true);
 		wv_hours.setCurrentItem(hour);
 
-	
-		final WheelView wv_mins = (WheelView) view.findViewById(com.magizdev.common.lib.R.id.mins);
+		final WheelView wv_mins = (WheelView) view
+				.findViewById(com.magizdev.common.lib.R.id.mins);
 		wv_mins.setAdapter(new NumericWheelAdapter(0, 59, "%02d"));
 		wv_mins.setCyclic(true);
 		wv_mins.setCurrentItem(minute);
 
-		int textSize = 0;
-
-		textSize = 12;
+		int textSize = 12;
 
 		wv_date.TEXT_SIZE = textSize;
 		wv_hours.TEXT_SIZE = textSize;
 		wv_mins.TEXT_SIZE = textSize;
 
-		Button btn_sure = (Button) view.findViewById(com.magizdev.common.lib.R.id.btn_datetime_sure);
-		Button btn_cancel = (Button) view
-				.findViewById(com.magizdev.common.lib.R.id.btn_datetime_cancel);
-		btn_sure.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-
-				String parten = "00";
-				DecimalFormat decimal = new DecimalFormat(parten);
-				// tv_time.setText((wv_year.getCurrentItem() + START_YEAR) + "-"
-				// + decimal.format((wv_month.getCurrentItem() + 1)) + "-"
-				// + decimal.format((wv_day.getCurrentItem() + 1)) + " "
-				// + decimal.format(wv_hours.getCurrentItem()) + ":"
-				// + decimal.format(wv_mins.getCurrentItem()));
-
-				dialog.dismiss();
-			}
-		});
-		btn_cancel.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				dialog.dismiss();
-			}
-		});
-		dialog.setContentView(view);
-		dialog.show();
+		timePickerContainer = (LinearLayout) findViewById(R.id.timePickerContainer);
+		timePickerContainer.addView(view);
+		
+//		timePickerContainer.setScaleY(0);
+//		timePickerContainer.setPivotY(1);
+//		timePickerContainer.setVisibility(View.GONE);
+		timePickerContainer.requestLayout();
+		timePickerContainer.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		timePickerHeight = timePickerContainer.getMeasuredHeight();
+		inputArea.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		float origY = inputArea.getY();
+		inputArea.setY(origY + timePickerHeight);
+		timePickerShown = false;
 	}
 
 	Runnable taskThread = new Runnable() {

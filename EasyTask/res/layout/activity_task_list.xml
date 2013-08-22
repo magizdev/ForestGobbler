@@ -54,6 +54,14 @@
             android:inputType="text"
             android:singleLine="true" >
         </EditText>
+
+        <LinearLayout
+            android:id="@+id/timePickerContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/taskInput"
+            android:orientation="vertical" >
+        </LinearLayout>
     </RelativeLayout>
 
     <!--
@@ -74,7 +82,7 @@
     <com.magizdev.easytask.util.HeaderListView
         android:id="@+id/taskList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@id/inputArea"
         android:layout_below="@id/adContainer"
         android:layout_centerHorizontal="true"
@@ -88,8 +96,8 @@
         android:id="@+id/btnTimer"
         android:layout_width="40dp"
         android:layout_height="20dp"
-        android:layout_centerHorizontal="true"
         android:layout_above="@id/inputArea"
+        android:layout_centerHorizontal="true"
         android:src="@drawable/clock_blue" />
 
 </RelativeLayout>
