@@ -17,6 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -117,6 +118,7 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 		public TextView start_date;
 		public LinearLayout notification;
 		public Button deleteBtn;
+		public ImageButton notificationSetter;
 	}
 	
 	public long getTaskId(int position) {
@@ -167,18 +169,20 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 				.findViewById(R.id.start_date);
 		holder.notification = (LinearLayout) convertView
 				.findViewById(R.id.notification);
+		holder.notificationSetter = (ImageButton)convertView.findViewById(R.id.notificationSetter);
 		holder.deleteBtn = (Button) convertView.findViewById(R.id.deleteBtn);
 
 		EasyTaskInfo task = (EasyTaskInfo) getRowItem(section, row);
 
 		holder.note.setText(task.Title);
 		Date startDate = task.StartDate;
-		if (startDate.getTime() > 0) {
+		if (task.getEnableNotification()) {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 			holder.start_date.setText(format.format(startDate));
 		} else {
-			holder.notification.setVisibility(View.INVISIBLE);
+			holder.start_date.setText("");
 		}
+		holder.notificationSetter.setOnClickListener(l)
 		final long id = task.Id;
 		final int tempPosition = getPosition(section, row);
 		holder.deleteBtn.setOnClickListener(new OnClickListener() {

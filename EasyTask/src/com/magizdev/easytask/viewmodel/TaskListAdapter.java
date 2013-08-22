@@ -17,6 +17,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -224,6 +225,7 @@ public class TaskListAdapter extends BaseAdapter {
 		public TextView start_date;
 		public LinearLayout notification;
 		public Button deleteBtn;
+		public ImageButton notificationSetter;
 	}
 
 }
