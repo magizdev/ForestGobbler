@@ -52,12 +52,12 @@ public class TaskListActivity extends Activity {
 	private HeaderListView listView;
 	private EasyTaskUtil util;
 	private RelativeLayout inputArea;
-	TaskListHeaderAdapter adapter;
+	private TaskListHeaderAdapter adapter;
 	private long animDuration;
 	private GestureDetectorCompat mDetector;
 	private ImageButton btnSpeak;
 	private EditText note;
-	private View timePicker;
+	private Dialog timePicker;
 
 	private Handler uiHandler = new Handler() {
 
@@ -140,9 +140,9 @@ public class TaskListActivity extends Activity {
 						long taskId = ((TaskListHeaderAdapter) listView
 								.getListView().getAdapter()).getTaskId(arg2);
 						if (taskId > -1) {
-							Dialog dialog=new Dialog(TaskListActivity.this);
-							dialog.setContentView(timePicker);
-							dialog.show();
+							EasyTaskInfo taskInfo = util.getTask(taskId);
+							timePicker.setTitle(taskInfo.Title);
+							timePicker.show();
 //							Intent editTaskIntent = new Intent(
 //									TaskListActivity.this,
 //									TaskEditActivity.class);
@@ -252,10 +252,8 @@ public class TaskListActivity extends Activity {
 		return true;
 	}
 
-	private void showDateTimePicker() {
-	}
-
-	private View iniDateTimePicker() {
+	private Dialog iniDateTimePicker() {
+		Dialog dialog = new Dialog(this);
 		Calendar calendar = Calendar.getInstance();
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		int minute = calendar.get(Calendar.MINUTE);
@@ -296,7 +294,7 @@ public class TaskListActivity extends Activity {
 		wv_mins.setCyclic(true);
 		wv_mins.setCurrentItem(minute);
 
-		int textSize = 12;
+		int textSize = 15;
 
 		wv_date.TEXT_SIZE = textSize;
 		wv_hours.TEXT_SIZE = textSize;
@@ -310,10 +308,20 @@ public class TaskListActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				note.setText(wv_date.getCurrentItem()+"a");
+				note.setText(wv_date.getCurrentItem());
+				TaskListActivity.this.timePicker.dismiss();
 			}
 		});
 		
-		return view;
+		btn_cancel.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				TaskListActivity.this.timePicker.dismiss();
+			}
+		});
+		
+		dialog.setContentView(view);
+		return dialog;
 	}
 }
