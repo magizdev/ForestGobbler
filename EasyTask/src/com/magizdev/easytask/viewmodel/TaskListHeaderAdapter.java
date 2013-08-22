@@ -61,7 +61,11 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 
 		for (EasyTaskInfo task : tasks) {
 			if (task.StartDate.before(now)) {
-				tasksBefore.add(task);
+				if(task.getEnableNotification()){
+					tasksFuture.add(task);
+				}else {
+					tasksBefore.add(task);
+				}
 			} else if (task.StartDate.before(weekAfter)) {
 				tasksIncoming.add(task);
 			} else {

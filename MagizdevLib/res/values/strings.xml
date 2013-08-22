@@ -3,5 +3,6 @@
     <string name="score">Score:</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="enable_alarm">Enable notification</string>
     <color name="score_text_color">#2A0AFF</color>
 </resources>

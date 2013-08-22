@@ -28,6 +28,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -58,6 +61,8 @@ public class TaskListActivity extends Activity {
 	private ImageButton btnSpeak;
 	private EditText note;
 	private Dialog timePicker;
+	private CheckBox enableNotification;
+	private long currentTaskId = -1;
 
 	private Handler uiHandler = new Handler() {
 
@@ -140,16 +145,21 @@ public class TaskListActivity extends Activity {
 						long taskId = ((TaskListHeaderAdapter) listView
 								.getListView().getAdapter()).getTaskId(arg2);
 						if (taskId > -1) {
+							currentTaskId = taskId;
 							EasyTaskInfo taskInfo = util.getTask(taskId);
 							timePicker.setTitle(taskInfo.Title);
+							enableNotification.setChecked(taskInfo
+									.getEnableNotification());
 							timePicker.show();
-//							Intent editTaskIntent = new Intent(
-//									TaskListActivity.this,
-//									TaskEditActivity.class);
-//							editTaskIntent.putExtra("clickItemPosition", arg2);
-//							editTaskIntent.putExtra("easyTaskId", taskId);
-//
-//							startActivityForResult(editTaskIntent, RESULT_EDIT);
+							// Intent editTaskIntent = new Intent(
+							// TaskListActivity.this,
+							// TaskEditActivity.class);
+							// editTaskIntent.putExtra("clickItemPosition",
+							// arg2);
+							// editTaskIntent.putExtra("easyTaskId", taskId);
+							//
+							// startActivityForResult(editTaskIntent,
+							// RESULT_EDIT);
 						}
 					}
 				});
@@ -171,7 +181,7 @@ public class TaskListActivity extends Activity {
 					} else {
 						GregorianCalendar calendar = new GregorianCalendar();
 						calendar.setTime(dueDate);
-						calendar.add(GregorianCalendar.MONTH, 1);
+						calendar.set(Calendar.YEAR, 1999);
 						dueDate = calendar.getTime();
 					}
 					EasyTaskInfo task = new EasyTaskInfo(0, ana
@@ -299,28 +309,59 @@ public class TaskListActivity extends Activity {
 		wv_date.TEXT_SIZE = textSize;
 		wv_hours.TEXT_SIZE = textSize;
 		wv_mins.TEXT_SIZE = textSize;
-		
+
 		Button btn_sure = (Button) view.findViewById(R.id.btn_datetime_sure);
 		Button btn_cancel = (Button) view
 				.findViewById(R.id.btn_datetime_cancel);
-		
+		enableNotification = (CheckBox) view
+				.findViewById(com.magizdev.common.lib.R.id.checkNotification);
+		enableNotification
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						wv_date.setEnabled(isChecked);
+						wv_hours.setEnabled(isChecked);
+						wv_mins.setEnabled(isChecked);
+
+					}
+				});
+
 		btn_sure.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				note.setText(wv_date.getCurrentItem());
+				int daysAfterToday = wv_date.getCurrentItem();
+				int hour = wv_hours.getCurrentItem();
+				int minutes = wv_mins.getCurrentItem();
+				EasyTaskInfo taskInfo = util.getTask(currentTaskId);
+				if (enableNotification.isChecked() == false) {
+					taskInfo.disableNotification();
+				} else {
+					Calendar newDate = Calendar.getInstance();
+					newDate.setTime(new Date());
+					newDate.add(Calendar.DAY_OF_YEAR, daysAfterToday);
+					newDate.set(Calendar.HOUR_OF_DAY, hour);
+					newDate.set(Calendar.MINUTE, minutes);
+					taskInfo.StartDate = newDate.getTime();
+				}
+				util.updateTask(currentTaskId, taskInfo);
+				AlarmUtil.updateAlarm(TaskListActivity.this);
+				TaskListActivity.this.adapter.refresh();
+				TaskListActivity.this.adapter.notifyDataSetChanged();
 				TaskListActivity.this.timePicker.dismiss();
 			}
 		});
-		
+
 		btn_cancel.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				TaskListActivity.this.timePicker.dismiss();
 			}
 		});
-		
+
 		dialog.setContentView(view);
 		return dialog;
 	}

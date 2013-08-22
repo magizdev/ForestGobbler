@@ -62,7 +62,11 @@ public class EasyTaskUtil {
 					new String[] { Long.toString(System.currentTimeMillis()) },
 					EasyTaskMetaData.TaskTableMetaData.START_DATE);
 			List<EasyTaskInfo> tasks = CursorToTasks(cursor);
-			returnValue = tasks.get(0);
+			if (tasks.size() > 0) {
+				returnValue = tasks.get(0);
+			} else {
+				return null;
+			}
 
 		} finally {
 			if (cursor != null) {
@@ -107,11 +111,11 @@ public class EasyTaskUtil {
 		cv.put(TaskTableMetaData.SOURCE_ID, task.SourceId);
 		return cv;
 	}
-	
-	private List<EasyTaskInfo> CursorToTasks(Cursor cursor){
+
+	private List<EasyTaskInfo> CursorToTasks(Cursor cursor) {
 		List<EasyTaskInfo> tasks = new ArrayList<EasyTaskInfo>();
 		try {
-			
+
 			int idxId = cursor
 					.getColumnIndex(EasyTaskMetaData.TaskTableMetaData._ID);
 			int idxTitle = cursor
