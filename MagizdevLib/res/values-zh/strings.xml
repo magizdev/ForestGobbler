@@ -1,4 +1,9 @@
 <resources>
+
     <string name="app_name">MagizdevLib</string>
     <string name="score">得分:</string>
+    <string name="ok">OK</string>
+    <string name="cancel">取消</string>
+    <string name="enable_alarm">设置提醒</string>
+
 </resources>

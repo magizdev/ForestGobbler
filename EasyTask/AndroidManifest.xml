@@ -36,8 +36,8 @@
         <activity
             android:name=".TaskEditActivity"
             android:label="@string/task_edit_label"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            android:screenOrientation="portrait" >
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="TaskEditActivity" />

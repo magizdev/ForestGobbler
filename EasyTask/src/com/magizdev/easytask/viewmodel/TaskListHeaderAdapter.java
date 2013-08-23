@@ -280,22 +280,21 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 			ViewGroup parent) {
 
 		if (convertView == null) {
-			convertView = (TextView) mInflater.inflate(
-					this.context.getResources().getLayout(
-							android.R.layout.simple_list_item_1), null);
+			convertView =  mInflater.inflate(R.layout.head_item, null);
 		}
+		TextView headText=(TextView)convertView.findViewById(R.id.headText);
 
 		switch (section) {
 		case 0:
-			((TextView) convertView).setText(context.getString(R.string.task_group_past));
+			headText.setText(context.getString(R.string.task_group_past));
 			convertView.setBackgroundColor(0xFFFFC9F9);
 			break;
 		case 1:
-			((TextView) convertView).setText(context.getString(R.string.task_group_incoming));
+			headText.setText(context.getString(R.string.task_group_incoming));
 			convertView.setBackgroundColor(0xFFB2EDFF);
 			break;
 		case 2:
-			((TextView) convertView).setText(context.getString(R.string.task_group_future));
+			headText.setText(context.getString(R.string.task_group_future));
 			convertView.setBackgroundColor(0xFFDBFFBF);
 			break;
 		case 3:
