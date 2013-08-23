@@ -131,7 +131,7 @@ public class TaskListActivity extends Activity implements ITaskClick {
 				.findViewById(R.id.adContainer);
 		
         AdViewTargeting.setUpdateMode(UpdateMode.EVERYTIME); 
-        AdViewTargeting.setRunMode(RunMode.TEST);        
+//        AdViewTargeting.setRunMode(RunMode.TEST);        
 
         AdViewLayout adViewLayout = new AdViewLayout(this, "SDK20131021100857mzpjjz6gpf1m2lb");
         adContainer.addView(adViewLayout);
