@@ -41,6 +41,10 @@ import android.widget.Toast;
 import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
+import com.kyview.AdViewLayout;
+import com.kyview.AdViewTargeting;
+import com.kyview.AdViewTargeting.RunMode;
+import com.kyview.AdViewTargeting.UpdateMode;
 import com.magizdev.common.view.ArrayWheelAdapter;
 import com.magizdev.common.view.NumericWheelAdapter;
 import com.magizdev.common.view.OnWheelChangedListener;
@@ -125,10 +129,18 @@ public class TaskListActivity extends Activity implements ITaskClick {
 				android.R.integer.config_shortAnimTime);
 		LinearLayout adContainer = (LinearLayout) this
 				.findViewById(R.id.adContainer);
-		AdView adView = new AdView(this, AdSize.BANNER, "a1520fa1c2a3c8f");
-		adContainer.addView(adView);
-		AdRequest adRequest = new AdRequest();
-		adView.loadAd(adRequest);
+		
+        AdViewTargeting.setUpdateMode(UpdateMode.EVERYTIME); 
+        AdViewTargeting.setRunMode(RunMode.TEST);        
+
+        AdViewLayout adViewLayout = new AdViewLayout(this, "SDK20131021100857mzpjjz6gpf1m2lb");
+        adContainer.addView(adViewLayout);
+        adContainer.invalidate();
+		
+//		AdView adView = new AdView(this, AdSize.BANNER, "a1520fa1c2a3c8f");
+//		adContainer.addView(adView);
+//		AdRequest adRequest = new AdRequest();
+//		adView.loadAd(adRequest);
 
 		listView = (HeaderListView) this.findViewById(R.id.taskList);
 		inputArea = (RelativeLayout) this.findViewById(R.id.inputArea);
