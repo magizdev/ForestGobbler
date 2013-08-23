@@ -8,7 +8,7 @@
         android:id="@+id/note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="55dp"
         android:layout_marginRight="10dp"
         android:ellipsize="end"
         android:singleLine="true"
@@ -23,14 +23,9 @@
         android:layout_marginLeft="10dp"
         android:orientation="horizontal" >
 
-        <ImageButton
-            android:id="@+id/notificationSetter"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/clock_blue" />
-
         <TextView
             android:id="@+id/start_date"
+            android:layout_marginLeft="45dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
         </TextView>
@@ -49,5 +44,16 @@
         android:focusableInTouchMode="false"
         android:text="Delete"
         android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/notificationSetter"
+        android:layout_width="40dp"
+        android:focusable="false"
+        android:clickable="false"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/clock_blue" />
 
 </RelativeLayout>

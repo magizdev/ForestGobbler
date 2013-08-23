@@ -47,9 +47,10 @@ import com.magizdev.easytask.util.AlarmUtil;
 import com.magizdev.easytask.util.HeaderListView;
 import com.magizdev.easytask.viewmodel.EasyTaskInfo;
 import com.magizdev.easytask.viewmodel.EasyTaskUtil;
+import com.magizdev.easytask.viewmodel.ITaskClick;
 import com.magizdev.easytask.viewmodel.TaskListHeaderAdapter;
 
-public class TaskListActivity extends Activity {
+public class TaskListActivity extends Activity implements ITaskClick{
 	protected static final int RESULT_SPEECH = 1;
 	public static final int RESULT_EDIT = 2;
 	private HeaderListView listView;
@@ -145,21 +146,15 @@ public class TaskListActivity extends Activity {
 						long taskId = ((TaskListHeaderAdapter) listView
 								.getListView().getAdapter()).getTaskId(arg2);
 						if (taskId > -1) {
-							currentTaskId = taskId;
-							EasyTaskInfo taskInfo = util.getTask(taskId);
-							timePicker.setTitle(taskInfo.Title);
-							enableNotification.setChecked(taskInfo
-									.getEnableNotification());
-							timePicker.show();
-							// Intent editTaskIntent = new Intent(
-							// TaskListActivity.this,
-							// TaskEditActivity.class);
-							// editTaskIntent.putExtra("clickItemPosition",
-							// arg2);
-							// editTaskIntent.putExtra("easyTaskId", taskId);
-							//
-							// startActivityForResult(editTaskIntent,
-							// RESULT_EDIT);
+							 Intent editTaskIntent = new Intent(
+							 TaskListActivity.this,
+							 TaskEditActivity.class);
+							 editTaskIntent.putExtra("clickItemPosition",
+							 arg2);
+							 editTaskIntent.putExtra("easyTaskId", taskId);
+							
+							 startActivityForResult(editTaskIntent,
+							 RESULT_EDIT);
 						}
 					}
 				});
@@ -254,6 +249,16 @@ public class TaskListActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		inputArea.requestFocus();
+	}
+	
+	@Override
+	public void OnClick(long taskId){
+		currentTaskId = taskId;
+		EasyTaskInfo taskInfo = util.getTask(taskId);
+		timePicker.setTitle(taskInfo.Title);
+		enableNotification.setChecked(taskInfo
+				.getEnableNotification());
+		timePicker.show();
 	}
 
 	@Override

@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.magizdev.easytask.R;
+import com.magizdev.easytask.TaskListActivity;
 import com.magizdev.easytask.util.HeaderListView;
 import com.magizdev.easytask.util.SectionAdapter;
 
@@ -34,10 +35,12 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 	private HeaderListView listView;
 	private Context context;
 	private Handler uihHandler;
+	private ITaskClick taskClickCallback;
 
 	public TaskListHeaderAdapter(Context context, HeaderListView listView,
 			Handler uiHandler) {
 		this.context = context;
+		taskClickCallback = (TaskListActivity)context;
 		mInflater = LayoutInflater.from(context);
 		util = new EasyTaskUtil(context);
 		this.tasksBefore = new ArrayList<EasyTaskInfo>();
@@ -62,7 +65,7 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 
 		for (EasyTaskInfo task : tasks) {
 			if (task.StartDate.before(now)) {
-				if(task.getEnableNotification()){
+				if(!task.getEnableNotification()){
 					tasksFuture.add(task);
 				}else {
 					tasksBefore.add(task);
@@ -172,7 +175,7 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 		holder.notificationSetter = (ImageButton)convertView.findViewById(R.id.notificationSetter);
 		holder.deleteBtn = (Button) convertView.findViewById(R.id.deleteBtn);
 
-		EasyTaskInfo task = (EasyTaskInfo) getRowItem(section, row);
+		final EasyTaskInfo task = (EasyTaskInfo) getRowItem(section, row);
 
 		holder.note.setText(task.Title);
 		Date startDate = task.StartDate;
@@ -182,7 +185,15 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 		} else {
 			holder.start_date.setText("");
 		}
-		holder.notificationSetter.setOnClickListener(l)
+		holder.notificationSetter.setFocusable(false);
+		holder.notificationSetter.setClickable(false);
+		holder.notificationSetter.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				taskClickCallback.OnClick(task.Id);
+			}
+		});
 		final long id = task.Id;
 		final int tempPosition = getPosition(section, row);
 		holder.deleteBtn.setOnClickListener(new OnClickListener() {
