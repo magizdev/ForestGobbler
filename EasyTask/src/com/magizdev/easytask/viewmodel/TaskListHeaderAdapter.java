@@ -182,8 +182,10 @@ public class TaskListHeaderAdapter extends SectionAdapter {
 		if (task.getEnableNotification()) {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 			holder.start_date.setText(format.format(startDate));
+			holder.notificationSetter.setImageResource(R.drawable.clock_blue);
 		} else {
 			holder.start_date.setText("");
+			holder.notificationSetter.setImageResource(R.drawable.clock_gray);
 		}
 		holder.notificationSetter.setFocusable(false);
 		holder.notificationSetter.setClickable(false);

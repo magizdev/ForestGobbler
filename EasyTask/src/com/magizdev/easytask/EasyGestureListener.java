@@ -14,7 +14,8 @@ public class EasyGestureListener extends
 	private Handler uiHandler;
 	private long animDuration;
 
-	public EasyGestureListener(ListView listView, Handler uiHandler, long animDuration) {
+	public EasyGestureListener(ListView listView, Handler uiHandler,
+			long animDuration) {
 		this.listView = listView;
 		this.uiHandler = uiHandler;
 		this.animDuration = animDuration;
@@ -34,18 +35,22 @@ public class EasyGestureListener extends
 		int positionUp = listView.pointToPosition((int) event2.getX(),
 				(int) event2.getY());
 		if (positionDown == positionUp
-				&& positionDown != ListView.INVALID_POSITION){
-			int visiblePosition = positionDown - listView.getFirstVisiblePosition();
-			Button deleteBtn = (Button) listView.getChildAt(visiblePosition).findViewById(R.id.deleteBtn);
-			deleteBtn.setAlpha(0);
-			deleteBtn.setVisibility(View.VISIBLE);
-			float origx = deleteBtn.getScaleX();
-			deleteBtn.setScaleX(0);
-			deleteBtn.setPivotX(1);
-			deleteBtn.animate().alpha(1).scaleX(origx)
-					.setDuration(animDuration).setListener(null).start();
-			uiHandler.sendEmptyMessageDelayed(positionDown, 2000);
+				&& positionDown != ListView.INVALID_POSITION) {
+			int visiblePosition = positionDown
+					- listView.getFirstVisiblePosition();
+			Button deleteBtn = (Button) listView.getChildAt(visiblePosition)
+					.findViewById(R.id.deleteBtn);
+			if (deleteBtn != null) {
+				deleteBtn.setAlpha(0);
+				deleteBtn.setVisibility(View.VISIBLE);
+				float origx = deleteBtn.getScaleX();
+				deleteBtn.setScaleX(0);
+				deleteBtn.setPivotX(1);
+				deleteBtn.animate().alpha(1).scaleX(origx)
+						.setDuration(animDuration).setListener(null).start();
+				uiHandler.sendEmptyMessageDelayed(positionDown, 2000);
+			}
 		}
-			return true;
+		return true;
 	}
 }
