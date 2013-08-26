@@ -12,7 +12,7 @@
         android:layout_gravity="center_horizontal"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="1dp" >
+        android:paddingTop="10dp" >
 
         <com.magizdev.common.view.WheelView
             android:id="@+id/year"
@@ -23,8 +23,8 @@
         <com.magizdev.common.view.WheelView
             android:id="@+id/month"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" 
-            android:layout_weight="1"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <com.magizdev.common.view.WheelView
             android:id="@+id/day"
@@ -53,12 +53,15 @@
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
         android:layout_marginTop="5dp"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" >
 
         <CheckBox
             android:id="@+id/checkNotification"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:text="@string/enable_alarm" />
 
         <LinearLayout
@@ -66,19 +69,19 @@
             android:layout_height="fill_parent" >
 
             <Button
-                android:id="@+id/btn_datetime_sure"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/ok" >
-            </Button>
-
-            <Button
                 android:id="@+id/btn_datetime_cancel"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/cancel" >
+            </Button>
+
+            <Button
+                android:id="@+id/btn_datetime_sure"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/ok" >
             </Button>
         </LinearLayout>
     </LinearLayout>
