@@ -161,7 +161,7 @@ public class DashboardActivity extends Activity implements OnClickListener {
 					rank.Score = ranksArray.getJSONObject(i).getInt("score");
 					String theImei = ranksArray.getJSONObject(i).getString("imei");
 					if(imei.equals(theImei)){
-						myRank = i;
+						myRank = i + 1;
 					}
 					ranks.add(rank);
 				}
