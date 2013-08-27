@@ -38,14 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.google.ads.AdRequest;
-import com.google.ads.AdSize;
-import com.google.ads.AdView;
 import com.kyview.AdViewLayout;
-import com.kyview.AdViewTargeting;
-import com.kyview.AdViewTargeting.RunMode;
-import com.kyview.AdViewTargeting.UpdateMode;
-import com.magizdev.common.view.ArrayWheelAdapter;
 import com.magizdev.common.view.NumericWheelAdapter;
 import com.magizdev.common.view.OnWheelChangedListener;
 import com.magizdev.common.view.WheelView;
@@ -309,7 +302,7 @@ public class TaskListActivity extends Activity implements ITaskClick {
 
 		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(
-				com.magizdev.common.lib.R.layout.time_layout, null);
+				R.layout.time_layout, null);
 
 		wv_year = (WheelView) view.findViewById(R.id.year);
 		wv_year.setAdapter(new NumericWheelAdapter(START_YEAR, END_YEAR));
@@ -341,13 +334,13 @@ public class TaskListActivity extends Activity implements ITaskClick {
 		wv_day.setCurrentItem(day - 1);
 
 		wv_hours = (WheelView) view
-				.findViewById(com.magizdev.common.lib.R.id.hour);
+				.findViewById(R.id.hour);
 		wv_hours.setAdapter(new NumericWheelAdapter(0, 23));
 		wv_hours.setCyclic(true);
 		wv_hours.setCurrentItem(hour);
 
 		wv_mins = (WheelView) view
-				.findViewById(com.magizdev.common.lib.R.id.mins);
+				.findViewById(R.id.mins);
 		wv_mins.setAdapter(new NumericWheelAdapter(0, 59, "%02d"));
 		wv_mins.setCyclic(true);
 		wv_mins.setCurrentItem(minute);
@@ -401,7 +394,7 @@ public class TaskListActivity extends Activity implements ITaskClick {
 		Button btn_cancel = (Button) view
 				.findViewById(R.id.btn_datetime_cancel);
 		enableNotification = (CheckBox) view
-				.findViewById(com.magizdev.common.lib.R.id.checkNotification);
+				.findViewById(R.id.checkNotification);
 		enableNotification
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
