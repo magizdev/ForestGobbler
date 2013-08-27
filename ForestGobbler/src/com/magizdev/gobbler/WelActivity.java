@@ -1,6 +1,10 @@
 package com.magizdev.gobbler;
 
+import com.magizdev.common.util.DisplayOnce;
+import com.magizdev.common.util.IDisplayOnce;
+
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -8,7 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class WelActivity extends Activity implements OnClickListener {
+public class WelActivity extends Activity implements OnClickListener, IDisplayOnce {
 
 	private Button btnPlayEasy;
 	private Button btnPlayHard;
@@ -35,6 +39,9 @@ public class WelActivity extends Activity implements OnClickListener {
 		btnDashboard.setOnClickListener(this);
 		btnPlayEndless.setOnClickListener(this);
 		btnSetting.setOnClickListener(this);
+		
+		DisplayOnce displayOnce = new DisplayOnce(this, this);
+		displayOnce.Check();
 
 		player = MediaPlayer.create(this, R.raw.bg);
 		player.setLooping(true);
@@ -88,6 +95,12 @@ public class WelActivity extends Activity implements OnClickListener {
 
 	public void quit() {
 		this.finish();
+	}
+
+	@Override
+	public void OnFirstTime() {
+		Dialog firstDialog = new FirstTimeDialog(this);
+		firstDialog.show();
 	}
 
 }

@@ -15,7 +15,7 @@
     <string name="feature_gravity_right">Move right (150 stars)</string>
     <string name="feature_rotate">Rotate (50 stars)</string>
     <string name="user_name">Name</string>
-
+	<string name="input_your_name">Input your name</string>
     <color name="score_text_color">#2A0AFF</color>
 
 </resources>

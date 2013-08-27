@@ -33,7 +33,7 @@ import android.widget.TextView;
 import com.magizdev.common.lib.Score;
 import com.magizdev.gobbler.view.GameView;
 
-public class MyDialog extends Dialog implements OnClickListener {
+public class ResultDialog extends Dialog implements OnClickListener {
 
 	private GameView gameview;
 	private Context context;
@@ -42,7 +42,7 @@ public class MyDialog extends Dialog implements OnClickListener {
 	private int rating;
 	private String scoreString;
 
-	public MyDialog(Context context, GameView gameview, String msg, Score score) {
+	public ResultDialog(Context context, GameView gameview, String msg, Score score) {
 		super(context, R.style.dialog);
 		this.gameview = gameview;
 		this.context = context;

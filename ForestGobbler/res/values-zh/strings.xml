@@ -3,19 +3,15 @@
 
     <string name="app_name">动物连连看</string>
     <string name="time">得分：$!</string>
-    <string name="win">完成!</string>
-    <string name="lose">失败!</string>
-    <string name="share">我玩动物连连看得了$分. 你也来试试看吧。 https://play.google.com/store/apps/details?id=com.magizdev.gobbler</string>
-    
-    <string name = "highScore">积分榜</string>
-    <string name = "setting">设置</string>
-    <string name = "settingDesc">收集足够的星星来解锁设置</string>
-    
+    <string name="highScore">积分榜</string>
+    <string name="setting">设置</string>
+    <string name="settingDesc">收集足够的星星来解锁设置</string>
     <string name="feature_gravity_up">向上滑动 (200颗星)</string>
     <string name="feature_gravity_down">向下滑动 (100颗星)</string>
     <string name="feature_gravity_left">向左滑动 (250颗星)</string>
     <string name="feature_gravity_right">向右滑动 (150颗星)</string>
     <string name="feature_rotate">图标翻转(50颗星)</string>
-    <string name = "user_name">用户名</string>
+    <string name="user_name">用户名</string>
+    <string name="input_your_name">请输入名字</string>
 
 </resources>

@@ -38,7 +38,7 @@ public class GameActivity extends Activity implements OnClickListener,
 	private ImageButton btnTip;
 	private GameView gameView;
 	private ProgressBar progress;
-	private static MyDialog dialog;
+	private static ResultDialog dialog;
 	private TextView textRefreshNum;
 	private TextView textTipNum;
 	private ScoreBoard scoreBoard;
@@ -58,7 +58,7 @@ public class GameActivity extends Activity implements OnClickListener,
 				result = getResources().getString(R.string.lose);
 				break;
 			}
-			dialog = new MyDialog(GameActivity.this, gameView, result, score);
+			dialog = new ResultDialog(GameActivity.this, gameView, result, score);
 			dialog.show();
 		}
 	};
