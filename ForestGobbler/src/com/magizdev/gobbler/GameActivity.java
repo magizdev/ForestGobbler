@@ -14,9 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.ads.AdRequest;
-import com.google.ads.AdSize;
 import com.google.ads.AdView;
+import com.kyview.AdViewLayout;
+import com.kyview.AdViewTargeting;
+import com.kyview.AdViewTargeting.RunMode;
+import com.kyview.AdViewTargeting.UpdateMode;
 import com.magizdev.common.lib.Score;
 import com.magizdev.common.view.ScoreBoard;
 import com.magizdev.gobbler.view.GameView;
@@ -49,16 +51,7 @@ public class GameActivity extends Activity implements OnClickListener,
 	private Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			String result = null;
-			switch (msg.what) {
-			case 0:
-				result = getResources().getString(R.string.win);
-				break;
-			case 1:
-				result = getResources().getString(R.string.lose);
-				break;
-			}
-			dialog = new ResultDialog(GameActivity.this, gameView, result, score);
+			dialog = new ResultDialog(GameActivity.this, gameView, score);
 			dialog.show();
 		}
 	};
@@ -72,10 +65,17 @@ public class GameActivity extends Activity implements OnClickListener,
 
 		LinearLayout adContainer = (LinearLayout) this
 				.findViewById(R.id.adContainer);
-		adView = new AdView(this, AdSize.BANNER, "");
-		adContainer.addView(adView);
-		AdRequest adRequest = new AdRequest();
-		adView.loadAd(adRequest);
+
+		// AdViewTargeting.setUpdateMode(UpdateMode.EVERYTIME);
+		// AdViewTargeting.setRunMode(RunMode.TEST);
+		AdViewLayout adViewLayout = new AdViewLayout(this,
+				"SDK201321270908095vgowmnz6v5pxht");
+		adContainer.addView(adViewLayout);
+		adContainer.invalidate();
+		// adView = new AdView(this, AdSize.BANNER, "");
+		// adContainer.addView(adView);
+		// AdRequest adRequest = new AdRequest();
+		// adView.loadAd(adRequest);
 
 		btnRefresh = (ImageButton) findViewById(R.id.refresh_btn);
 		btnTip = (ImageButton) findViewById(R.id.tip_btn);
@@ -120,7 +120,6 @@ public class GameActivity extends Activity implements OnClickListener,
 
 	@Override
 	protected void onDestroy() {
-		adView.destroy();
 		super.onDestroy();
 		gameView.setMode(GameView.QUIT);
 	}

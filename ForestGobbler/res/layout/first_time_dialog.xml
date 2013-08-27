@@ -10,7 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:textColor="@android:color/white"
+        android:textColor="@color/score_text_color"
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
         android:ems="10"

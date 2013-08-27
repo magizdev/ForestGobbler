@@ -42,13 +42,12 @@ public class ResultDialog extends Dialog implements OnClickListener {
 	private int rating;
 	private String scoreString;
 
-	public ResultDialog(Context context, GameView gameview, String msg, Score score) {
+	public ResultDialog(Context context, GameView gameview, Score score) {
 		super(context, R.style.dialog);
 		this.gameview = gameview;
 		this.context = context;
 		this.score = score;
 		this.setContentView(R.layout.dialog_view);
-		TextView text_msg = (TextView) findViewById(R.id.text_message);
 		TextView text_score = (TextView) findViewById(R.id.text_score);
 		Button btn_replay = (Button) findViewById(R.id.replay_btn);
 		ratingBar = (RatingBar) findViewById(R.id.ratingBar1);
@@ -67,7 +66,6 @@ public class ResultDialog extends Dialog implements OnClickListener {
 		dashboardUtil.insertHighScore(score.getScore());
 		dashboardUtil.addStar(this.rating);
 
-		text_msg.setText(msg);
 		scoreString = text_score.getText().toString()
 				.replace("$", String.valueOf(this.score.getScore()));
 		text_score.setText(scoreString);
@@ -84,9 +82,9 @@ public class ResultDialog extends Dialog implements OnClickListener {
 				"Player");
 		int intScore = score.getScore();
 		int mode = 1;
-		if (gameview.getMode() == GameView.HARD_MODE)
+		if (gameview.getGameMode() == GameView.HARD_MODE)
 			mode = 2;
-		if (gameview.getMode() == GameView.ENDLESS_MODE)
+		if (gameview.getGameMode() == GameView.ENDLESS_MODE)
 			mode = 3;
 		String stringUrl = "http://gamerank.ap01.aws.af.cm/rankAdd";
 		TelephonyManager tmManager = (TelephonyManager) context

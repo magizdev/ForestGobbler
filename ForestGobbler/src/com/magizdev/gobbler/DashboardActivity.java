@@ -46,7 +46,7 @@ public class DashboardActivity extends Activity implements OnClickListener {
 	public static final String STAR_ACHIEVEMENT = "STAR_ACHIEVEMENT";
 
 	private SharedPreferences prefs;
-	private TextView myRank;	
+	private TextView myRank;
 	private ListView rankListView;
 	private ProgressBar networkProgress;
 	private Handler uiHandler = new Handler() {
@@ -73,7 +73,7 @@ public class DashboardActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dashboard);
 		rankListView = (ListView) findViewById(R.id.rankList);
-		myRank = (TextView)findViewById(R.id.myRank);
+		myRank = (TextView) findViewById(R.id.myRank);
 		rankListView.setCacheColorHint(android.R.color.transparent);
 		networkProgress = (ProgressBar) findViewById(R.id.networkProgress);
 		String stringUrl = SCORE_SERVER + "rankList?game=forestgobbler&mode=1";
@@ -132,13 +132,16 @@ public class DashboardActivity extends Activity implements OnClickListener {
 
 			// params comes from the execute() call: params[0] is the url.
 			try {
+//				List<RankInfo> ranks = new ArrayList<RankInfo>();
+//				DashboardActivity.this.rankListView
+//						.setAdapter(new RankListAdapter(DashboardActivity.this,
+//								ranks));
 				return downloadUrl(urls[0]);
 			} catch (IOException e) {
 				uiHandler.sendEmptyMessage(-1);
 				return "";
-			}
-			catch (Exception e) {
-				Log.w("a",e.getMessage());
+			} catch (Exception e) {
+				Log.w("a", e.getMessage());
 				return "";
 			}
 		}
@@ -148,7 +151,8 @@ public class DashboardActivity extends Activity implements OnClickListener {
 		protected void onPostExecute(String result) {
 			JSONObject jsonRanks;
 			try {
-				String imei = ((TelephonyManager)DashboardActivity.this.getSystemService(TELEPHONY_SERVICE)).getDeviceId();
+				String imei = ((TelephonyManager) DashboardActivity.this
+						.getSystemService(TELEPHONY_SERVICE)).getDeviceId();
 				int myRank = -1;
 				jsonRanks = (JSONObject) new JSONTokener(result).nextValue();
 				JSONArray ranksArray = jsonRanks.getJSONArray("ranks");
@@ -159,22 +163,23 @@ public class DashboardActivity extends Activity implements OnClickListener {
 					rank.UserName = ranksArray.getJSONObject(i).getString(
 							"username");
 					rank.Score = ranksArray.getJSONObject(i).getInt("score");
-					String theImei = ranksArray.getJSONObject(i).getString("imei");
-					if(imei.equals(theImei)){
+					String theImei = ranksArray.getJSONObject(i).getString(
+							"imei");
+					if (imei.equals(theImei)) {
 						myRank = i + 1;
 					}
 					ranks.add(rank);
 				}
-				
-				if(myRank == -1){
+
+				if (myRank == -1) {
 					DashboardActivity.this.myRank.setText("No rank");
-				}else {
-					DashboardActivity.this.myRank.setText("My Rank:"+myRank);
+				} else {
+					DashboardActivity.this.myRank.setText("My Rank:" + myRank);
 				}
 				RankListAdapter adapter = new RankListAdapter(
 						DashboardActivity.this, ranks);
 				DashboardActivity.this.rankListView.setAdapter(adapter);
-				uiHandler.sendEmptyMessage(1);
+				uiHandler.sendEmptyMessageDelayed(1, 500);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				uiHandler.sendEmptyMessage(-1);

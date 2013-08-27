@@ -37,5 +37,6 @@ public class FirstTimeDialog extends Dialog implements OnClickListener {
 			editor.putString("USER_NAME", username);
 			editor.commit();
 		}
+		this.dismiss();
 	}
 }
