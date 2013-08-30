@@ -1,0 +1,254 @@
+package com.magizdev.dayplan.store;
+
+import android.content.ContentProvider;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.UriMatcher;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.net.Uri;
+import android.text.TextUtils;
+
+import com.magizdev.dayplan.store.DayPlanMetaData.BacklogItemTable;
+import com.magizdev.dayplan.store.DayPlanMetaData.DayTaskTable;
+import com.magizdev.dayplan.store.DayPlanMetaData.DayTaskTimeTable;
+
+public class DayPlanProvider extends ContentProvider {
+
+	private static final UriMatcher uriMatcher;
+	private static final int BACKLOG_ITEM_COLLECTION_URI_INDICATOR = 1;
+	private static final int BACKLOG_ITEM_SINGLE_URI_INDICATOR = 2;
+	private static final int DAY_TASK_COLLECTION_URI_INDICATOR = 3;
+	private static final int DAY_TASK_SINGLE_URI_INDICATOR = 4;
+	private static final int DAY_TASK_TIME_COLLECTION_URI_INDICATOR = 5;
+	private static final int DAY_TASK_TIME_SINGLE_URI_INDICATOR = 6;
+	static {
+		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+		uriMatcher.addURI(DayPlanMetaData.AUTHORITY, "backlogs",
+				BACKLOG_ITEM_COLLECTION_URI_INDICATOR);
+		uriMatcher.addURI(DayPlanMetaData.AUTHORITY, "backlogs/#",
+				BACKLOG_ITEM_SINGLE_URI_INDICATOR);
+		uriMatcher.addURI(DayPlanMetaData.AUTHORITY, "daytasks",
+				DAY_TASK_COLLECTION_URI_INDICATOR);
+		uriMatcher.addURI(DayPlanMetaData.AUTHORITY, "daytasks/#",
+				DAY_TASK_SINGLE_URI_INDICATOR);
+		uriMatcher.addURI(DayPlanMetaData.AUTHORITY, "daytasktime",
+				DAY_TASK_TIME_COLLECTION_URI_INDICATOR);
+		uriMatcher.addURI(DayPlanMetaData.AUTHORITY, "daytasktime/#",
+				DAY_TASK_TIME_SINGLE_URI_INDICATOR);
+	}
+
+	private static class DatabaseHelper extends SQLiteOpenHelper {
+		public DatabaseHelper(Context context) {
+			super(context, DayPlanMetaData.DATABASE_NAME, null,
+					DayPlanMetaData.DATABASE_VERSION);
+		}
+
+		@Override
+		public void onCreate(SQLiteDatabase db) {
+
+			// create backlog item table;
+			db.execSQL("CREATE TABLE " + BacklogItemTable.TABLE_NAME + "("
+					+ BacklogItemTable._ID + " INTEGER PRIMARY KEY,"
+					+ BacklogItemTable.NAME + " TEXT," + BacklogItemTable.DESC
+					+ " TEXT," + BacklogItemTable.STATE + " INTEGER);");
+
+			// create day task table;
+			db.execSQL("CREATE TABLE " + DayTaskTable.TABLE_NAME + "("
+					+ DayTaskTable._ID + " INTEGER PRIMARY KEY,"
+					+ DayTaskTable.DATE + " INTEGER," + DayTaskTable.BIID
+					+ " INTEGER," + DayTaskTable.STATE + " INTEGER);");
+
+			// create day task time table;
+			db.execSQL("CREATE TABLE " + DayTaskTimeTable.TABLE_NAME + "("
+					+ DayTaskTimeTable._ID + " INTEGER PRIMARY KEY,"
+					+ DayTaskTimeTable.DATE + " INTEGER,"
+					+ DayTaskTimeTable.BIID + " INTEGER,"
+					+ DayTaskTimeTable.TIME + " INTEGER,"
+					+ DayTaskTimeTable.TIME_TYPE + " INTEGER);");
+		}
+
+		@Override
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		}
+	}
+
+	private DatabaseHelper dbHelper;
+
+	@Override
+	public boolean onCreate() {
+		dbHelper = new DatabaseHelper(getContext());
+		return false;
+	}
+
+	@Override
+	public Cursor query(Uri uri, String[] projection, String selection,
+			String[] selectionArgs, String sortOrder) {
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		String tableDefaultSort = "";
+
+		switch (uriMatcher.match(uri)) {
+		case BACKLOG_ITEM_COLLECTION_URI_INDICATOR:
+			qb.setTables(BacklogItemTable.TABLE_NAME);
+			qb.setProjectionMap(BacklogItemTable.projectionMap);
+			tableDefaultSort = BacklogItemTable.DEFAULT_SORT_ORDER;
+			break;
+		case BACKLOG_ITEM_SINGLE_URI_INDICATOR:
+			qb.setTables(BacklogItemTable.TABLE_NAME);
+			qb.setProjectionMap(BacklogItemTable.projectionMap);
+			qb.appendWhere(BacklogItemTable._ID + "="
+					+ uri.getPathSegments().get(1));
+			tableDefaultSort = BacklogItemTable.DEFAULT_SORT_ORDER;
+			break;
+		case DAY_TASK_COLLECTION_URI_INDICATOR:
+			qb.setTables(DayTaskTable.TABLE_NAME);
+			qb.setProjectionMap(DayTaskTable.projectionMap);
+			tableDefaultSort = DayTaskTable.DEFAULT_SORT_ORDER;
+			break;
+		case DAY_TASK_SINGLE_URI_INDICATOR:
+			qb.setTables(DayTaskTable.TABLE_NAME);
+			qb.setProjectionMap(DayTaskTable.projectionMap);
+			qb.appendWhere(DayTaskTable._ID + "="
+					+ uri.getPathSegments().get(1));
+			tableDefaultSort = DayTaskTable.DEFAULT_SORT_ORDER;
+			break;
+		case DAY_TASK_TIME_COLLECTION_URI_INDICATOR:
+			qb.setTables(DayTaskTimeTable.TABLE_NAME);
+			qb.setProjectionMap(DayTaskTimeTable.projectionMap);
+			tableDefaultSort = DayTaskTimeTable.DEFAULT_SORT_ORDER;
+			break;
+		case DAY_TASK_TIME_SINGLE_URI_INDICATOR:
+			qb.setTables(DayTaskTimeTable.TABLE_NAME);
+			qb.setProjectionMap(DayTaskTimeTable.projectionMap);
+			qb.appendWhere(DayTaskTimeTable._ID + "="
+					+ uri.getPathSegments().get(1));
+			tableDefaultSort = DayTaskTimeTable.DEFAULT_SORT_ORDER;
+			break;
+		default:
+			throw new IllegalArgumentException("Unknown URI " + uri);
+		}
+
+		String orderBy;
+		if (TextUtils.isEmpty(sortOrder)) {
+			orderBy = tableDefaultSort;
+		} else {
+			orderBy = sortOrder;
+		}
+
+		SQLiteDatabase db = dbHelper.getReadableDatabase();
+		Cursor cursor = qb.query(db, projection, selection, selectionArgs,
+				null, null, orderBy);
+		cursor.setNotificationUri(getContext().getContentResolver(), uri);
+		return cursor;
+	}
+
+	@Override
+	public String getType(Uri uri) {
+		switch (uriMatcher.match(uri)) {
+		case BACKLOG_ITEM_COLLECTION_URI_INDICATOR:
+			return BacklogItemTable.CONTENT_TYPE;
+		case BACKLOG_ITEM_SINGLE_URI_INDICATOR:
+			return BacklogItemTable.CONTENT_ITEM_TYPE;
+		case DAY_TASK_COLLECTION_URI_INDICATOR:
+			return DayTaskTable.CONTENT_TYPE;
+		case DAY_TASK_SINGLE_URI_INDICATOR:
+			return DayTaskTable.CONTENT_ITEM_TYPE;
+		case DAY_TASK_TIME_COLLECTION_URI_INDICATOR:
+			return DayTaskTimeTable.CONTENT_TYPE;
+		case DAY_TASK_TIME_SINGLE_URI_INDICATOR:
+			return DayTaskTimeTable.CONTENT_ITEM_TYPE;
+
+		default:
+			throw new IllegalArgumentException("Unknown Uri " + uri);
+		}
+	}
+
+	@Override
+	public Uri insert(Uri uri, ContentValues values) {
+		int uriType = uriMatcher.match(uri);
+		if (uriType != BACKLOG_ITEM_COLLECTION_URI_INDICATOR
+				&& uriType != DAY_TASK_COLLECTION_URI_INDICATOR
+				&& uriType != DAY_TASK_TIME_COLLECTION_URI_INDICATOR) {
+			throw new IllegalArgumentException("Unknown Uri " + uri);
+		}
+
+		ContentValues contentValues;
+		if (values != null) {
+			contentValues = new ContentValues(values);
+		} else {
+			contentValues = new ContentValues();
+		}
+
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		long rowId = db.insert(TaskTableMetaData.TABLE_NAME,
+				TaskTableMetaData.TASK_NOTE, contentValues);
+		Uri insertedUri = ContentUris.withAppendedId(
+				TaskTableMetaData.CONTENT_URI, rowId);
+		getContext().getContentResolver().notifyChange(insertedUri, null);
+		return insertedUri;
+	}
+
+	@Override
+	public int delete(Uri uri, String selection, String[] selectionArgs) {
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		int count;
+		switch (uriMatcher.match(uri)) {
+		case INCOMING_TASK_COLLECTION_URI_INDICATOR:
+			count = db.delete(TaskTableMetaData.TABLE_NAME, selection,
+					selectionArgs);
+			break;
+
+		case INCOMING_SINGLE_TASK_URI_INDICATOR:
+			String rowId = uri.getPathSegments().get(1);
+			count = db.delete(
+					TaskTableMetaData.TABLE_NAME,
+					TaskTableMetaData._ID
+							+ "="
+							+ rowId
+							+ (!TextUtils.isEmpty(selection) ? " AND ("
+									+ selection + ')' : ""), selectionArgs);
+			break;
+
+		default:
+			throw new IllegalArgumentException("Unknown URI " + uri);
+		}
+
+		getContext().getContentResolver().notifyChange(uri, null);
+		return count;
+	}
+
+	@Override
+	public int update(Uri uri, ContentValues values, String selection,
+			String[] selectionArgs) {
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		int count;
+		switch (uriMatcher.match(uri)) {
+		case INCOMING_TASK_COLLECTION_URI_INDICATOR:
+			count = db.update(TaskTableMetaData.TABLE_NAME, values, selection,
+					selectionArgs);
+			break;
+
+		case INCOMING_SINGLE_TASK_URI_INDICATOR:
+			String rowId = uri.getPathSegments().get(1);
+			count = db.update(
+					TaskTableMetaData.TABLE_NAME,
+					values,
+					TaskTableMetaData._ID
+							+ "="
+							+ rowId
+							+ (!TextUtils.isEmpty(selection) ? " AND ("
+									+ selection + ')' : ""), selectionArgs);
+			break;
+
+		default:
+			throw new IllegalArgumentException("Unknown URI " + uri);
+		}
+
+		getContext().getContentResolver().notifyChange(uri, null);
+		return count;
+	}
+
+}
