@@ -14,6 +14,10 @@ public class BacklogItemInfo implements IStoreableItem{
 	public long Id;
 	public String Name;
 	public String Description;
+	
+	public BacklogItemInfo(){
+		
+	}
 
 	public BacklogItemInfo(long id, String name, String description) {
 		this.Id = id;

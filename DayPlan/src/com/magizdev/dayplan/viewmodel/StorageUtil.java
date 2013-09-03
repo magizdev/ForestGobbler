@@ -13,8 +13,9 @@ public class StorageUtil<T extends IStoreableItem> {
 	private Context context;
 	private T data;
 
-	public StorageUtil(Context context) {
+	public StorageUtil(Context context, T data) {
 		this.context = context;
+		this.data = data;
 	}
 
 	public List<T> getCollection() {
