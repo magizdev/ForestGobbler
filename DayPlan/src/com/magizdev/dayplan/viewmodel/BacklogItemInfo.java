@@ -1,39 +1,63 @@
 package com.magizdev.dayplan.viewmodel;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
-public class BacklogItemInfo {
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
+
+import com.magizdev.dayplan.store.DayPlanMetaData.BacklogItemTable;
+
+
+public class BacklogItemInfo implements IStoreableItem{
 	public long Id;
-	public String Title;
-	public String Note;
-	public Date CreateDate;
-	public Date StartDate;
-	public String Source;
-	public String SourceId;
+	public String Name;
+	public String Description;
 
-	public boolean getEnableNotification() {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(StartDate);
-		int year = calendar.get(Calendar.YEAR);
-		return year > 2000;
-	}
-	
-	public void disableNotification(){
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(StartDate);
-		calendar.set(Calendar.YEAR, 1999);
-		StartDate = calendar.getTime();
-	}
-
-	public BacklogItemInfo(long id, String title, String note, Date createDate,
-			Date startDate, String source, String sourceId) {
+	public BacklogItemInfo(long id, String name, String description) {
 		this.Id = id;
-		this.Title = title;
-		this.Note = note;
-		this.CreateDate = createDate;
-		this.StartDate = startDate;
-		this.Source = source;
-		this.SourceId = sourceId;
+		this.Name = name;
+		this.Description = description;
+	}
+
+	@Override
+	public ContentValues toContentValues() {
+		ContentValues cv = new ContentValues();
+		cv.put(BacklogItemTable.NAME, Name);
+		cv.put(BacklogItemTable.DESC, Description);
+		return cv;
+	}
+
+	@Override
+	public List<IStoreableItem> fromCursor(Cursor cursor) {
+		List<IStoreableItem> backlogs = new ArrayList<IStoreableItem>();
+		try {
+
+			int idxId = cursor
+					.getColumnIndex(BacklogItemTable._ID);
+			int idxName = cursor
+					.getColumnIndex(BacklogItemTable.NAME);
+			int idxDesc = cursor
+					.getColumnIndex(BacklogItemTable.DESC);
+
+			for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
+					.moveToNext()) {
+				int id = cursor.getInt(idxId);
+				String name = cursor.getString(idxName);
+				String desc = cursor.getString(idxDesc);
+				backlogs.add(new BacklogItemInfo(id, name, desc));
+			}
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+		}
+		return backlogs;
+	}
+
+	@Override
+	public Uri contentUri() {
+		return BacklogItemTable.CONTENT_URI;
 	}
 }

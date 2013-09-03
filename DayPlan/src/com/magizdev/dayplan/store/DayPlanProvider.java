@@ -104,24 +104,32 @@ public class DayPlanProvider extends ContentProvider {
 			tableDefaultSort = BacklogItemTable.DEFAULT_SORT_ORDER;
 			break;
 		case DAY_TASK_COLLECTION_URI_INDICATOR:
-			qb.setTables(DayTaskTable.TABLE_NAME);
+			qb.setTables(DayTaskTable.TABLE_NAME + " join "
+					+ BacklogItemTable.TABLE_NAME + " on (" + DayTaskTable.BIID
+					+ "=" + BacklogItemTable._ID + ")");
 			qb.setProjectionMap(DayTaskTable.projectionMap);
 			tableDefaultSort = DayTaskTable.DEFAULT_SORT_ORDER;
 			break;
 		case DAY_TASK_SINGLE_URI_INDICATOR:
-			qb.setTables(DayTaskTable.TABLE_NAME);
+			qb.setTables(DayTaskTable.TABLE_NAME + " join "
+					+ BacklogItemTable.TABLE_NAME + " on (" + DayTaskTable.BIID
+					+ "=" + BacklogItemTable._ID + ")");
 			qb.setProjectionMap(DayTaskTable.projectionMap);
 			qb.appendWhere(DayTaskTable._ID + "="
 					+ uri.getPathSegments().get(1));
 			tableDefaultSort = DayTaskTable.DEFAULT_SORT_ORDER;
 			break;
 		case DAY_TASK_TIME_COLLECTION_URI_INDICATOR:
-			qb.setTables(DayTaskTimeTable.TABLE_NAME);
+			qb.setTables(DayTaskTimeTable.TABLE_NAME + " join "
+					+ BacklogItemTable.TABLE_NAME + " on ("
+					+ DayTaskTimeTable.BIID + "=" + BacklogItemTable._ID + ")");
 			qb.setProjectionMap(DayTaskTimeTable.projectionMap);
 			tableDefaultSort = DayTaskTimeTable.DEFAULT_SORT_ORDER;
 			break;
 		case DAY_TASK_TIME_SINGLE_URI_INDICATOR:
-			qb.setTables(DayTaskTimeTable.TABLE_NAME);
+			qb.setTables(DayTaskTimeTable.TABLE_NAME + " join "
+					+ BacklogItemTable.TABLE_NAME + " on ("
+					+ DayTaskTimeTable.BIID + "=" + BacklogItemTable._ID + ")");
 			qb.setProjectionMap(DayTaskTimeTable.projectionMap);
 			qb.appendWhere(DayTaskTimeTable._ID + "="
 					+ uri.getPathSegments().get(1));
@@ -175,6 +183,31 @@ public class DayPlanProvider extends ContentProvider {
 			throw new IllegalArgumentException("Unknown Uri " + uri);
 		}
 
+		String tableName;
+		String nullColumnHack;
+		Uri contentUri;
+
+		switch (uriType) {
+		case BACKLOG_ITEM_COLLECTION_URI_INDICATOR:
+			tableName = BacklogItemTable.TABLE_NAME;
+			nullColumnHack = BacklogItemTable.NAME;
+			contentUri = BacklogItemTable.CONTENT_URI;
+			break;
+		case DAY_TASK_COLLECTION_URI_INDICATOR:
+			tableName = DayTaskTable.TABLE_NAME;
+			nullColumnHack = DayTaskTable.BIID;
+			contentUri = DayTaskTable.CONTENT_URI;
+			break;
+		case DAY_TASK_TIME_COLLECTION_URI_INDICATOR:
+			tableName = DayTaskTimeTable.TABLE_NAME;
+			nullColumnHack = DayTaskTimeTable.BIID;
+			contentUri = DayTaskTimeTable.CONTENT_URI;
+			break;
+
+		default:
+			throw new IllegalArgumentException("Unknown Uri " + uri);
+		}
+
 		ContentValues contentValues;
 		if (values != null) {
 			contentValues = new ContentValues(values);
@@ -183,10 +216,8 @@ public class DayPlanProvider extends ContentProvider {
 		}
 
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		long rowId = db.insert(TaskTableMetaData.TABLE_NAME,
-				TaskTableMetaData.TASK_NOTE, contentValues);
-		Uri insertedUri = ContentUris.withAppendedId(
-				TaskTableMetaData.CONTENT_URI, rowId);
+		long rowId = db.insert(tableName, nullColumnHack, contentValues);
+		Uri insertedUri = ContentUris.withAppendedId(contentUri, rowId);
 		getContext().getContentResolver().notifyChange(insertedUri, null);
 		return insertedUri;
 	}
@@ -194,27 +225,42 @@ public class DayPlanProvider extends ContentProvider {
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		int count;
+		int count = 0;
+		String tableName;
+		String rowId = "-1";
+		String whereString;
 		switch (uriMatcher.match(uri)) {
-		case INCOMING_TASK_COLLECTION_URI_INDICATOR:
-			count = db.delete(TaskTableMetaData.TABLE_NAME, selection,
-					selectionArgs);
+		case BACKLOG_ITEM_COLLECTION_URI_INDICATOR:
+			tableName = BacklogItemTable.TABLE_NAME;
 			break;
-
-		case INCOMING_SINGLE_TASK_URI_INDICATOR:
-			String rowId = uri.getPathSegments().get(1);
-			count = db.delete(
-					TaskTableMetaData.TABLE_NAME,
-					TaskTableMetaData._ID
-							+ "="
-							+ rowId
-							+ (!TextUtils.isEmpty(selection) ? " AND ("
-									+ selection + ')' : ""), selectionArgs);
+		case BACKLOG_ITEM_SINGLE_URI_INDICATOR:
+			tableName = BacklogItemTable.TABLE_NAME;
+			rowId = uri.getPathSegments().get(1);
+			break;
+		case DAY_TASK_COLLECTION_URI_INDICATOR:
+			tableName = DayTaskTable.TABLE_NAME;
+			break;
+		case DAY_TASK_SINGLE_URI_INDICATOR:
+			tableName = DayTaskTable.TABLE_NAME;
+			rowId = uri.getPathSegments().get(1);
+			break;
+		case DAY_TASK_TIME_COLLECTION_URI_INDICATOR:
+			tableName = DayTaskTimeTable.TABLE_NAME;
+			break;
+		case DAY_TASK_TIME_SINGLE_URI_INDICATOR:
+			tableName = DayTaskTimeTable.TABLE_NAME;
+			rowId = uri.getPathSegments().get(1);
 			break;
 
 		default:
-			throw new IllegalArgumentException("Unknown URI " + uri);
+			throw new IllegalArgumentException("Unknown Uri " + uri);
 		}
+
+		whereString = (rowId == "-1" ? "" : DayTaskTable._ID + "=" + rowId)
+				+ (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')'
+						: "");
+		
+		count = db.delete(tableName, whereString, selectionArgs);
 
 		getContext().getContentResolver().notifyChange(uri, null);
 		return count;
@@ -224,29 +270,42 @@ public class DayPlanProvider extends ContentProvider {
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		int count;
+		int count = 0;
+		String tableName;
+		String rowId = "-1";
+		String whereString;
 		switch (uriMatcher.match(uri)) {
-		case INCOMING_TASK_COLLECTION_URI_INDICATOR:
-			count = db.update(TaskTableMetaData.TABLE_NAME, values, selection,
-					selectionArgs);
+		case BACKLOG_ITEM_COLLECTION_URI_INDICATOR:
+			tableName = BacklogItemTable.TABLE_NAME;
 			break;
-
-		case INCOMING_SINGLE_TASK_URI_INDICATOR:
-			String rowId = uri.getPathSegments().get(1);
-			count = db.update(
-					TaskTableMetaData.TABLE_NAME,
-					values,
-					TaskTableMetaData._ID
-							+ "="
-							+ rowId
-							+ (!TextUtils.isEmpty(selection) ? " AND ("
-									+ selection + ')' : ""), selectionArgs);
+		case BACKLOG_ITEM_SINGLE_URI_INDICATOR:
+			tableName = BacklogItemTable.TABLE_NAME;
+			rowId = uri.getPathSegments().get(1);
+			break;
+		case DAY_TASK_COLLECTION_URI_INDICATOR:
+			tableName = DayTaskTable.TABLE_NAME;
+			break;
+		case DAY_TASK_SINGLE_URI_INDICATOR:
+			tableName = DayTaskTable.TABLE_NAME;
+			rowId = uri.getPathSegments().get(1);
+			break;
+		case DAY_TASK_TIME_COLLECTION_URI_INDICATOR:
+			tableName = DayTaskTimeTable.TABLE_NAME;
+			break;
+		case DAY_TASK_TIME_SINGLE_URI_INDICATOR:
+			tableName = DayTaskTimeTable.TABLE_NAME;
+			rowId = uri.getPathSegments().get(1);
 			break;
 
 		default:
-			throw new IllegalArgumentException("Unknown URI " + uri);
+			throw new IllegalArgumentException("Unknown Uri " + uri);
 		}
 
+		whereString = (rowId == "-1" ? "" : DayTaskTable._ID + "=" + rowId)
+				+ (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')'
+						: "");
+		
+		count = db.update(tableName, values, whereString, selectionArgs);
 		getContext().getContentResolver().notifyChange(uri, null);
 		return count;
 	}

@@ -65,6 +65,7 @@ public class DayPlanMetaData {
 			projectionMap.put(DayTaskTable._ID, DayTaskTable._ID);
 			projectionMap.put(DayTaskTable.DATE, DayTaskTable.DATE);
 			projectionMap.put(DayTaskTable.BIID, DayTaskTable.BIID);
+			projectionMap.put(BacklogItemTable.NAME, BacklogItemTable.NAME);
 			projectionMap.put(DayTaskTable.STATE, DayTaskTable.STATE);
 		}
 	}
@@ -96,6 +97,7 @@ public class DayPlanMetaData {
 			projectionMap.put(DayTaskTimeTable._ID, DayTaskTimeTable._ID);
 			projectionMap.put(DayTaskTimeTable.DATE, DayTaskTimeTable.DATE);
 			projectionMap.put(DayTaskTimeTable.BIID, DayTaskTimeTable.BIID);
+			projectionMap.put(BacklogItemTable.NAME, BacklogItemTable.NAME);
 			projectionMap.put(DayTaskTimeTable.TIME, DayTaskTimeTable.TIME);
 			projectionMap.put(DayTaskTimeTable.TIME_TYPE, DayTaskTimeTable.TIME_TYPE);
 		}
