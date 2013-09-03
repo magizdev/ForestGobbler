@@ -75,7 +75,7 @@ public class BacklogItemAdapter extends BaseAdapter {
 			if (convertView == null) {
 				viewHolder = new ViewHolder();
 				LayoutInflater inflater = LayoutInflater.from(context);
-				convertView = inflater.inflate(R.layout.backlog_item_add, null);
+				convertView = inflater.inflate(R.layout.backlog_item, null);
 				viewHolder.name = (TextView) convertView
 						.findViewById(R.id.tVName);
 				convertView.setTag(viewHolder);
@@ -90,7 +90,7 @@ public class BacklogItemAdapter extends BaseAdapter {
 			if (convertView == null) {
 				viewHolder = new ViewHolder();
 				LayoutInflater inflater = LayoutInflater.from(context);
-				convertView = inflater.inflate(R.layout.backlog_item, null);
+				convertView = inflater.inflate(R.layout.backlog_item_add, null);
 				viewHolder.etName = (EditText) convertView
 						.findViewById(R.id.eTName);
 				viewHolder.addButton = (Button) convertView
