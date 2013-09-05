@@ -10,6 +10,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -24,14 +27,16 @@ public class BacklogItemAdapter extends BaseAdapter {
 		this.context = context;
 		BacklogItemInfo blank = new BacklogItemInfo();
 		storageUtil = new StorageUtil<BacklogItemInfo>(context, blank);
-		backlogs = storageUtil.getCollection();
+		String[] whereStrings = new String[0];
+		backlogs = storageUtil.getCollection(whereStrings);
 	}
 
 	public void removeAt(int index) {
 	}
 
 	public void refresh() {
-		backlogs = storageUtil.getCollection();
+		String[] whereStrings = new String[0];
+		backlogs = storageUtil.getCollection(whereStrings);
 	}
 
 	@Override
@@ -71,6 +76,7 @@ public class BacklogItemAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final ViewHolder viewHolder;
+		final int finalPosition = position;
 		if (position < backlogs.size()) {
 			if (convertView == null) {
 				viewHolder = new ViewHolder();
@@ -78,6 +84,15 @@ public class BacklogItemAdapter extends BaseAdapter {
 				convertView = inflater.inflate(R.layout.backlog_item, null);
 				viewHolder.name = (TextView) convertView
 						.findViewById(R.id.tVName);
+				viewHolder.checkBox = (CheckBox)convertView.findViewById(R.id.checkBox1);
+				viewHolder.checkBox.setChecked(backlogs.get(position).Selected);
+				viewHolder.checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+					
+					@Override
+					public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+						backlogs.get(finalPosition).Selected = arg1;
+					}
+				});
 				convertView.setTag(viewHolder);
 			} else {
 				viewHolder = (ViewHolder) convertView.getTag();
@@ -106,6 +121,7 @@ public class BacklogItemAdapter extends BaseAdapter {
 					BacklogItemInfo newItem = new BacklogItemInfo(-1,
 							viewHolder.etName.getText().toString(), null);
 					storageUtil.add(newItem);
+					BacklogItemAdapter.this.notifyDataSetChanged();
 				}
 			});
 
@@ -137,6 +153,7 @@ public class BacklogItemAdapter extends BaseAdapter {
 		public TextView name;
 		public EditText etName;
 		public Button addButton;
+		public CheckBox checkBox;
 		// public Button deleteBtn;
 		// public ImageButton notificationSetter;
 	}

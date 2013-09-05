@@ -94,4 +94,10 @@ public class DayTaskTimeInfo implements IStoreableItem {
 		return DayTaskTable.CONTENT_URI;
 	}
 
+	@Override
+	public String[] projection() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

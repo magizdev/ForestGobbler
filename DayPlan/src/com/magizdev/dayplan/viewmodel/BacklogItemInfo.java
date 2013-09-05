@@ -14,6 +14,7 @@ public class BacklogItemInfo implements IStoreableItem{
 	public long Id;
 	public String Name;
 	public String Description;
+	public boolean Selected;
 	
 	public BacklogItemInfo(){
 		
@@ -63,5 +64,10 @@ public class BacklogItemInfo implements IStoreableItem{
 	@Override
 	public Uri contentUri() {
 		return BacklogItemTable.CONTENT_URI;
+	}
+
+	@Override
+	public String[] projection() {
+		return null;
 	}
 }

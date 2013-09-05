@@ -106,7 +106,7 @@ public class DayPlanProvider extends ContentProvider {
 		case DAY_TASK_COLLECTION_URI_INDICATOR:
 			qb.setTables(DayTaskTable.TABLE_NAME + " join "
 					+ BacklogItemTable.TABLE_NAME + " on (" + DayTaskTable.BIID
-					+ "=" + BacklogItemTable._ID + ")");
+					+ "=" + BacklogItemTable.TABLE_NAME + "." + BacklogItemTable._ID + ")");
 			qb.setProjectionMap(DayTaskTable.projectionMap);
 			tableDefaultSort = DayTaskTable.DEFAULT_SORT_ORDER;
 			break;

@@ -10,4 +10,5 @@ public interface IStoreableItem {
 	ContentValues toContentValues();
 	List<IStoreableItem> fromCursor(Cursor cursor);
 	Uri contentUri();
+	String[] projection();
 }

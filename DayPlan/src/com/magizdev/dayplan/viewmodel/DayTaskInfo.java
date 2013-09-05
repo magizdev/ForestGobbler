@@ -20,6 +20,10 @@ public class DayTaskInfo implements IStoreableItem {
 	public long BIID;
 	public String BIName;
 	public TaskState State;
+	
+	public DayTaskInfo(){
+		
+	}
 
 	public DayTaskInfo(long id, long date, long biid, String biname,
 			TaskState state) {
@@ -55,7 +59,7 @@ public class DayTaskInfo implements IStoreableItem {
 		List<IStoreableItem> daytask = new ArrayList<IStoreableItem>();
 		try {
 
-			int idxId = cursor.getColumnIndex(DayTaskTable._ID);
+			int idxId = cursor.getColumnIndexOrThrow(DayTaskTable.TABLE_NAME + "." +DayTaskTable._ID);
 			int idxDate = cursor.getColumnIndex(DayTaskTable.DATE);
 			int idxBIID = cursor.getColumnIndex(DayTaskTable.BIID);
 			int idxState = cursor.getColumnIndex(DayTaskTable.STATE);
@@ -84,5 +88,19 @@ public class DayTaskInfo implements IStoreableItem {
 	public Uri contentUri() {
 		return DayTaskTable.CONTENT_URI;
 	}
+
+	@Override
+	public String[] projection() {
+		String[] projection=new String[5];
+		projection[0] = DayTaskTable.TABLE_NAME + "." + DayTaskTable._ID;
+		projection[1] = DayTaskTable.DATE;
+		projection[2] = DayTaskTable.BIID;
+		projection[3] = BacklogItemTable.NAME;
+		projection[4] = DayTaskTable.STATE;
+		
+		return projection;
+	}
+	
+	
 
 }

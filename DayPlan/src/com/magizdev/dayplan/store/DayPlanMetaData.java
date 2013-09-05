@@ -26,7 +26,7 @@ public class DayPlanMetaData {
 
 		public static final String NAME = "name";
 		public static final String DESC = "desc";
-		public static final String STATE = "state";
+		public static final String STATE = "bi_state";
 		public static final int STATE_ACTIVE = 0;
 		public static final int STATE_COMPLETE = 1;
 		
@@ -50,7 +50,7 @@ public class DayPlanMetaData {
 				+ AUTHORITY + "/daytasks");
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.magizdev.dayplan.daytask";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.magizdev.dayplan.daytask";
-		public static final String DEFAULT_SORT_ORDER = "create_date DESC";
+		public static final String DEFAULT_SORT_ORDER = "date";
 
 		public static final String DATE = "date";
 		public static final String BIID = "backlogid";
@@ -62,7 +62,7 @@ public class DayPlanMetaData {
 
 		static {
 			projectionMap = new HashMap<String, String>();
-			projectionMap.put(DayTaskTable._ID, DayTaskTable._ID);
+			projectionMap.put(DayTaskTable.TABLE_NAME + "." + DayTaskTable._ID, DayTaskTable.TABLE_NAME + "." + DayTaskTable._ID);
 			projectionMap.put(DayTaskTable.DATE, DayTaskTable.DATE);
 			projectionMap.put(DayTaskTable.BIID, DayTaskTable.BIID);
 			projectionMap.put(BacklogItemTable.NAME, BacklogItemTable.NAME);
@@ -80,7 +80,7 @@ public class DayPlanMetaData {
 
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.magizdev.dayplan.daytasktime";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.magizdev.dayplan.daytasktime";
-		public static final String DEFAULT_SORT_ORDER = "create_date DESC";
+		public static final String DEFAULT_SORT_ORDER = "date";
 
 		public static final String DATE = "date";
 		public static final String BIID = "backlogid";

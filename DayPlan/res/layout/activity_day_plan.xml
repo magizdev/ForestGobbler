@@ -5,4 +5,10 @@
     android:focusable="true"
     android:focusableInTouchMode="true" >
 
+    <ListView
+        android:id="@+id/listViewDayPlan"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </ListView>
+
 </RelativeLayout>

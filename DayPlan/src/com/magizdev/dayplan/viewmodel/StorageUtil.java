@@ -18,11 +18,11 @@ public class StorageUtil<T extends IStoreableItem> {
 		this.data = data;
 	}
 
-	public List<T> getCollection() {
+	public List<T> getCollection(String[] whereString) {
 		ContentResolver cr = context.getContentResolver();
 		Uri uri = data.contentUri();
 		Cursor cursor = null;
-		cursor = cr.query(uri, null, null, null, null);
+		cursor = cr.query(uri, null, null, whereString, null);
 		List<IStoreableItem> results = data.fromCursor(cursor);
 		List<T> typedResult = new ArrayList<T>();
 		for (IStoreableItem item : results) {
@@ -38,7 +38,8 @@ public class StorageUtil<T extends IStoreableItem> {
 		T returnValue = null;
 		try {
 			cursor = cr.query(uri, null, null, null, null);
-			List<T> results = getCollection();
+			String[] whereStrings = new String[0];
+			List<T> results = getCollection(whereStrings);
 			returnValue = results.get(0);
 
 		} finally {
