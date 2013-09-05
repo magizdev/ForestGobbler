@@ -109,6 +109,13 @@ public class DayPlanProvider extends ContentProvider {
 					+ "=" + BacklogItemTable.TABLE_NAME + "." + BacklogItemTable._ID + ")");
 			qb.setProjectionMap(DayTaskTable.projectionMap);
 			tableDefaultSort = DayTaskTable.DEFAULT_SORT_ORDER;
+			
+			int count = DayTaskTable.projectionMap.size();
+			projection = new String[count];
+			for(int i=0;i<count; i++){
+				DayTaskTable.projectionMap.keySet().toArray(projection);
+			}
+			
 			break;
 		case DAY_TASK_SINGLE_URI_INDICATOR:
 			qb.setTables(DayTaskTable.TABLE_NAME + " join "

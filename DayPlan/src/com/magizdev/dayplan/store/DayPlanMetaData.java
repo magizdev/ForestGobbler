@@ -62,7 +62,7 @@ public class DayPlanMetaData {
 
 		static {
 			projectionMap = new HashMap<String, String>();
-			projectionMap.put(DayTaskTable.TABLE_NAME + "." + DayTaskTable._ID, DayTaskTable.TABLE_NAME + "." + DayTaskTable._ID);
+			projectionMap.put(DayTaskTable._ID, DayTaskTable.TABLE_NAME + "." + DayTaskTable._ID);
 			projectionMap.put(DayTaskTable.DATE, DayTaskTable.DATE);
 			projectionMap.put(DayTaskTable.BIID, DayTaskTable.BIID);
 			projectionMap.put(BacklogItemTable.NAME, BacklogItemTable.NAME);

@@ -27,16 +27,14 @@ public class BacklogItemAdapter extends BaseAdapter {
 		this.context = context;
 		BacklogItemInfo blank = new BacklogItemInfo();
 		storageUtil = new StorageUtil<BacklogItemInfo>(context, blank);
-		String[] whereStrings = new String[0];
-		backlogs = storageUtil.getCollection(whereStrings);
+		backlogs = storageUtil.getCollection(null);
 	}
 
 	public void removeAt(int index) {
 	}
 
 	public void refresh() {
-		String[] whereStrings = new String[0];
-		backlogs = storageUtil.getCollection(whereStrings);
+		backlogs = storageUtil.getCollection(null);
 	}
 
 	@Override

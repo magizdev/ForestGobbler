@@ -59,7 +59,7 @@ public class DayTaskInfo implements IStoreableItem {
 		List<IStoreableItem> daytask = new ArrayList<IStoreableItem>();
 		try {
 
-			int idxId = cursor.getColumnIndexOrThrow(DayTaskTable.TABLE_NAME + "." +DayTaskTable._ID);
+			int idxId = cursor.getColumnIndexOrThrow(DayTaskTable._ID);
 			int idxDate = cursor.getColumnIndex(DayTaskTable.DATE);
 			int idxBIID = cursor.getColumnIndex(DayTaskTable.BIID);
 			int idxState = cursor.getColumnIndex(DayTaskTable.STATE);

@@ -6,13 +6,10 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -29,8 +26,7 @@ public class DayTaskAdapter extends BaseAdapter {
 		this.context = context;
 		DayTaskInfo blank = new DayTaskInfo();
 		storageUtil = new StorageUtil<DayTaskInfo>(context, blank);
-		String[] whereStrings = new String[1];
-		whereStrings[0] = DayTaskTable.DATE + "=" + DayUtil.Today();
+		String whereStrings = DayTaskTable.DATE + "=" + DayUtil.Today();
 		tasks = storageUtil.getCollection(whereStrings);
 	}
 
@@ -38,8 +34,7 @@ public class DayTaskAdapter extends BaseAdapter {
 	}
 
 	public void refresh() {
-		String[] whereStrings = new String[1];
-		whereStrings[0] = DayTaskTable.DATE + "=" + DayUtil.Today();
+		String whereStrings = DayTaskTable.DATE + "=" + DayUtil.Today();
 		tasks = storageUtil.getCollection(whereStrings);
 	}
 
