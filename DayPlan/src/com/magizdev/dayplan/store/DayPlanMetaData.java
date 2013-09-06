@@ -80,7 +80,7 @@ public class DayPlanMetaData {
 
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.magizdev.dayplan.daytasktime";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.magizdev.dayplan.daytasktime";
-		public static final String DEFAULT_SORT_ORDER = "date";
+		public static final String DEFAULT_SORT_ORDER = "time DESC";
 
 		public static final String DATE = "date";
 		public static final String BIID = "backlogid";
@@ -94,7 +94,7 @@ public class DayPlanMetaData {
 
 		static {
 			projectionMap = new HashMap<String, String>();
-			projectionMap.put(DayTaskTimeTable._ID, DayTaskTimeTable._ID);
+			projectionMap.put(DayTaskTimeTable._ID, DayTaskTimeTable.TABLE_NAME + "." + DayTaskTimeTable._ID);
 			projectionMap.put(DayTaskTimeTable.DATE, DayTaskTimeTable.DATE);
 			projectionMap.put(DayTaskTimeTable.BIID, DayTaskTimeTable.BIID);
 			projectionMap.put(BacklogItemTable.NAME, BacklogItemTable.NAME);

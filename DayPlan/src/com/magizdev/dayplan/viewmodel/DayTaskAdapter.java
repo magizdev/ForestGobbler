@@ -6,21 +6,23 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.store.DayPlanMetaData.DayTaskTable;
+import com.magizdev.dayplan.util.DayTaskUtil;
 import com.magizdev.dayplan.util.DayUtil;
+import com.magizdev.dayplan.viewmodel.DayTaskTimeInfo.TimeType;
 
 public class DayTaskAdapter extends BaseAdapter {
 	Context context;
 	StorageUtil<DayTaskInfo> storageUtil;
 	List<DayTaskInfo> tasks;
+	DayTaskUtil taskUtil;
 
 	public DayTaskAdapter(Context context) {
 		this.context = context;
@@ -28,6 +30,7 @@ public class DayTaskAdapter extends BaseAdapter {
 		storageUtil = new StorageUtil<DayTaskInfo>(context, blank);
 		String whereStrings = DayTaskTable.DATE + "=" + DayUtil.Today();
 		tasks = storageUtil.getCollection(whereStrings);
+		taskUtil = new DayTaskUtil(context);
 	}
 
 	public void removeAt(int index) {
@@ -72,15 +75,32 @@ public class DayTaskAdapter extends BaseAdapter {
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
 			LayoutInflater inflater = LayoutInflater.from(context);
-			convertView = inflater.inflate(R.layout.backlog_item, null);
-			viewHolder.name = (TextView) convertView.findViewById(R.id.tVName);
+			convertView = inflater.inflate(R.layout.backlog_item_track, null);
+			viewHolder.name = (TextView) convertView.findViewById(R.id.tVName1);
+			viewHolder.startButton = (ImageButton) convertView.findViewById(R.id.startButton);
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 		DayTaskInfo taskInfo = tasks.get(position);
 		viewHolder.name.setText(taskInfo.BIName);
-
+		final long biid = taskInfo.BIID;
+		TimeType state = taskUtil.GetTaskState(biid);
+		int imageId = state == TimeType.Start?android.R.drawable.ic_media_pause:android.R.drawable.ic_media_play;
+		viewHolder.startButton.setImageResource(imageId);
+		viewHolder.startButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				TimeType state = taskUtil.GetTaskState(biid);
+				if(state == TimeType.Start){
+					taskUtil.StopTask(biid);
+				}else {
+					taskUtil.StartTask(biid);
+				}
+				DayTaskAdapter.this.notifyDataSetChanged();
+			}
+		});
 		return convertView;
 	}
 
@@ -106,9 +126,8 @@ public class DayTaskAdapter extends BaseAdapter {
 
 	public class ViewHolder {
 		public TextView name;
-		public EditText etName;
-		public Button addButton;
-		public CheckBox checkBox;
+		public ImageButton startButton;
+
 		// public Button deleteBtn;
 		// public ImageButton notificationSetter;
 	}

@@ -106,21 +106,23 @@ public class DayPlanProvider extends ContentProvider {
 		case DAY_TASK_COLLECTION_URI_INDICATOR:
 			qb.setTables(DayTaskTable.TABLE_NAME + " join "
 					+ BacklogItemTable.TABLE_NAME + " on (" + DayTaskTable.BIID
-					+ "=" + BacklogItemTable.TABLE_NAME + "." + BacklogItemTable._ID + ")");
+					+ "=" + BacklogItemTable.TABLE_NAME + "."
+					+ BacklogItemTable._ID + ")");
 			qb.setProjectionMap(DayTaskTable.projectionMap);
 			tableDefaultSort = DayTaskTable.DEFAULT_SORT_ORDER;
-			
+
 			int count = DayTaskTable.projectionMap.size();
 			projection = new String[count];
-			for(int i=0;i<count; i++){
+			for (int i = 0; i < count; i++) {
 				DayTaskTable.projectionMap.keySet().toArray(projection);
 			}
-			
+
 			break;
 		case DAY_TASK_SINGLE_URI_INDICATOR:
 			qb.setTables(DayTaskTable.TABLE_NAME + " join "
 					+ BacklogItemTable.TABLE_NAME + " on (" + DayTaskTable.BIID
-					+ "=" + BacklogItemTable._ID + ")");
+					+ "=" + BacklogItemTable.TABLE_NAME + "."
+					+ BacklogItemTable._ID + ")");
 			qb.setProjectionMap(DayTaskTable.projectionMap);
 			qb.appendWhere(DayTaskTable._ID + "="
 					+ uri.getPathSegments().get(1));
@@ -129,14 +131,16 @@ public class DayPlanProvider extends ContentProvider {
 		case DAY_TASK_TIME_COLLECTION_URI_INDICATOR:
 			qb.setTables(DayTaskTimeTable.TABLE_NAME + " join "
 					+ BacklogItemTable.TABLE_NAME + " on ("
-					+ DayTaskTimeTable.BIID + "=" + BacklogItemTable._ID + ")");
+					+ DayTaskTimeTable.BIID + "=" + BacklogItemTable.TABLE_NAME
+					+ "." + BacklogItemTable._ID + ")");
 			qb.setProjectionMap(DayTaskTimeTable.projectionMap);
 			tableDefaultSort = DayTaskTimeTable.DEFAULT_SORT_ORDER;
 			break;
 		case DAY_TASK_TIME_SINGLE_URI_INDICATOR:
 			qb.setTables(DayTaskTimeTable.TABLE_NAME + " join "
 					+ BacklogItemTable.TABLE_NAME + " on ("
-					+ DayTaskTimeTable.BIID + "=" + BacklogItemTable._ID + ")");
+					+ DayTaskTimeTable.BIID + "=" + BacklogItemTable.TABLE_NAME
+					+ "." + BacklogItemTable._ID + ")");
 			qb.setProjectionMap(DayTaskTimeTable.projectionMap);
 			qb.appendWhere(DayTaskTimeTable._ID + "="
 					+ uri.getPathSegments().get(1));
@@ -152,7 +156,7 @@ public class DayPlanProvider extends ContentProvider {
 		} else {
 			orderBy = sortOrder;
 		}
-//		dbHelper = new DatabaseHelper(getContext());
+		// dbHelper = new DatabaseHelper(getContext());
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		Cursor cursor = qb.query(db, projection, selection, selectionArgs,
 				null, null, orderBy);
@@ -266,7 +270,7 @@ public class DayPlanProvider extends ContentProvider {
 		whereString = (rowId == "-1" ? "" : DayTaskTable._ID + "=" + rowId)
 				+ (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')'
 						: "");
-		
+
 		count = db.delete(tableName, whereString, selectionArgs);
 
 		getContext().getContentResolver().notifyChange(uri, null);
@@ -311,7 +315,7 @@ public class DayPlanProvider extends ContentProvider {
 		whereString = (rowId == "-1" ? "" : DayTaskTable._ID + "=" + rowId)
 				+ (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')'
 						: "");
-		
+
 		count = db.update(tableName, values, whereString, selectionArgs);
 		getContext().getContentResolver().notifyChange(uri, null);
 		return count;

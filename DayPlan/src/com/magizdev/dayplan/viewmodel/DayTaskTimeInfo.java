@@ -3,14 +3,13 @@ package com.magizdev.dayplan.viewmodel;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.magizdev.dayplan.store.DayPlanMetaData.BacklogItemTable;
-import com.magizdev.dayplan.store.DayPlanMetaData.DayTaskTable;
-import com.magizdev.dayplan.store.DayPlanMetaData.DayTaskTimeTable;
-
-import android.R.integer;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+
+import com.magizdev.dayplan.store.DayPlanMetaData.BacklogItemTable;
+import com.magizdev.dayplan.store.DayPlanMetaData.DayTaskTable;
+import com.magizdev.dayplan.store.DayPlanMetaData.DayTaskTimeTable;
 
 public class DayTaskTimeInfo implements IStoreableItem {
 	public enum TimeType {
@@ -23,6 +22,10 @@ public class DayTaskTimeInfo implements IStoreableItem {
 	public String BIName;
 	public long Time;
 	public TimeType timeType;
+	
+	public DayTaskTimeInfo(){
+		
+	}
 
 	public DayTaskTimeInfo(long id, long date, long biid, String biname,
 			long time, TimeType timeType) {
@@ -91,7 +94,7 @@ public class DayTaskTimeInfo implements IStoreableItem {
 
 	@Override
 	public Uri contentUri() {
-		return DayTaskTable.CONTENT_URI;
+		return DayTaskTimeTable.CONTENT_URI;
 	}
 
 	@Override
