@@ -16,8 +16,8 @@ public class DayPlanActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_day_plan);
-		
-		ListView taskListView = (ListView)findViewById(R.id.listViewDayPlan);
+
+		ListView taskListView = (ListView) findViewById(R.id.listViewDayPlan);
 		DayTaskAdapter adapter = new DayTaskAdapter(this);
 		taskListView.setAdapter(adapter);
 
@@ -26,8 +26,6 @@ public class DayPlanActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		
-
 	}
 
 	@Override
@@ -37,19 +35,19 @@ public class DayPlanActivity extends Activity {
 
 		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle presses on the action bar items
-	    switch (item.getItemId()) {
-	        case R.id.action_pickup:
-	            Intent intent = new Intent();
-	            intent.setClass(this, BacklogItemActivity.class);
-	            startActivity(intent);
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.action_mark:
+			Intent intent = new Intent();
+			intent.setClass(this, BacklogItemActivity.class);
+			startActivity(intent);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 }

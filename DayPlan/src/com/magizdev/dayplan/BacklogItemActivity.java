@@ -24,15 +24,11 @@ public class BacklogItemActivity extends Activity {
 		BacklogItemAdapter adapter = new BacklogItemAdapter(this);
 		listView.setAdapter(adapter);
 		dayTaskUtil = new DayTaskUtil(this);
-
-		
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		
-
 	}
 
 	@Override
@@ -47,7 +43,7 @@ public class BacklogItemActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
-	        case R.id.action_mark:
+	        case R.id.action_pickup:
 	            addTasks();
 	            return true;
 	        default:
