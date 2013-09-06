@@ -3,8 +3,6 @@ package com.magizdev.dayplan.viewmodel;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.magizdev.dayplan.store.DayPlanProvider;
-
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -14,7 +12,6 @@ import android.net.Uri;
 public class StorageUtil<T extends IStoreableItem> {
 	private Context context;
 	private T data;
-	private DayPlanProvider provider;
 
 	public StorageUtil(Context context, T data) {
 		this.context = context;
@@ -23,9 +20,9 @@ public class StorageUtil<T extends IStoreableItem> {
 	}
 
 	public List<T> getCollection(String selection) {
-		this.provider = new DayPlanProvider();
+		ContentResolver cr = context.getContentResolver();
 		Uri uri = data.contentUri();
-		Cursor cursor = provider.query(uri, null, selection, null, null);
+		Cursor cursor = cr.query(uri, null, selection, null, null);
 		List<IStoreableItem> results = data.fromCursor(cursor);
 		List<T> typedResult = new ArrayList<T>();
 		for (IStoreableItem item : results) {
@@ -35,8 +32,9 @@ public class StorageUtil<T extends IStoreableItem> {
 	}
 
 	public T getSingle(long id) {
+		ContentResolver cr = context.getContentResolver();
 		Uri uri = Uri.withAppendedPath(data.contentUri(), String.valueOf(id));
-		Cursor cursor = provider.query(uri, null, null, null, null);
+		Cursor cursor = cr.query(uri, null, null, null, null);
 		T returnValue = null;
 		try {
 			List<IStoreableItem> results = data.fromCursor(cursor);

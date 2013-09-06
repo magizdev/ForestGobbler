@@ -81,7 +81,7 @@ public class DayPlanProvider extends ContentProvider {
 	@Override
 	public boolean onCreate() {
 		dbHelper = new DatabaseHelper(getContext());
-		return false;
+		return true;
 	}
 
 	@Override
@@ -152,7 +152,7 @@ public class DayPlanProvider extends ContentProvider {
 		} else {
 			orderBy = sortOrder;
 		}
-
+//		dbHelper = new DatabaseHelper(getContext());
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		Cursor cursor = qb.query(db, projection, selection, selectionArgs,
 				null, null, orderBy);

@@ -20,11 +20,13 @@ public class DayPlanActivity extends Activity {
 		ListView taskListView = (ListView)findViewById(R.id.listViewDayPlan);
 		DayTaskAdapter adapter = new DayTaskAdapter(this);
 		taskListView.setAdapter(adapter);
+
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		
 
 	}
 
