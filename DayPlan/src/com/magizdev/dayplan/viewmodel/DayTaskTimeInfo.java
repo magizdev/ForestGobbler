@@ -17,18 +17,18 @@ public class DayTaskTimeInfo implements IStoreableItem {
 	}
 
 	public long ID;
-	public long Date;
+	public int Date;
 	public long BIID;
 	public String BIName;
-	public long Time;
+	public int Time;
 	public TimeType timeType;
 	
 	public DayTaskTimeInfo(){
 		
 	}
 
-	public DayTaskTimeInfo(long id, long date, long biid, String biname,
-			long time, TimeType timeType) {
+	public DayTaskTimeInfo(long id, int date, long biid, String biname,
+			int time, TimeType timeType) {
 		this.ID = id;
 		this.Date = date;
 		this.BIID = biid;
@@ -74,10 +74,10 @@ public class DayTaskTimeInfo implements IStoreableItem {
 			for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
 					.moveToNext()) {
 				int id = cursor.getInt(idxId);
-				long date = cursor.getLong(idxDate);
+				int date = cursor.getInt(idxDate);
 				long biid = cursor.getLong(idxBIID);
 				String biname = cursor.getString(idxBIName);
-				long time = cursor.getLong(idxTime);
+				int time = cursor.getInt(idxTime);
 				int timeType = cursor.getInt(idxTimeType);
 
 				TimeType timeType2 = timeType == DayTaskTimeTable.TIME_TYPE_START ? TimeType.Start

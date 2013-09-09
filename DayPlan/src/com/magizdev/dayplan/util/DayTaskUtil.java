@@ -1,5 +1,6 @@
 package com.magizdev.dayplan.util;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -31,14 +32,14 @@ public class DayTaskUtil {
 	public void StartTask(long backlogId) {
 		Date now = new Date();
 		DayTaskTimeInfo timeInfo = new DayTaskTimeInfo(-1, DayUtil.Today(),
-				backlogId, null, now.getTime(), TimeType.Start);
+				backlogId, null, DayUtil.minOfDay(now), TimeType.Start);
 		timeStorageUtil.add(timeInfo);
 	}
 
 	public void StopTask(long backlogId) {
 		Date now = new Date();
 		DayTaskTimeInfo timeInfo = new DayTaskTimeInfo(-1, DayUtil.Today(),
-				backlogId, null, now.getTime(), TimeType.Stop);
+				backlogId, null, DayUtil.minOfDay(now), TimeType.Stop);
 		timeStorageUtil.add(timeInfo);
 	}
 

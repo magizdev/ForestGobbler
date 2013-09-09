@@ -16,7 +16,7 @@ public class DayTaskInfo implements IStoreableItem {
 	}
 
 	public long ID;
-	public long Date;
+	public int Date;
 	public long BIID;
 	public String BIName;
 	public TaskState State;
@@ -25,7 +25,7 @@ public class DayTaskInfo implements IStoreableItem {
 		
 	}
 
-	public DayTaskInfo(long id, long date, long biid, String biname,
+	public DayTaskInfo(long id, int date, long biid, String biname,
 			TaskState state) {
 		this.ID = id;
 		this.Date = date;
@@ -68,7 +68,7 @@ public class DayTaskInfo implements IStoreableItem {
 			for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
 					.moveToNext()) {
 				int id = cursor.getInt(idxId);
-				long date = cursor.getLong(idxDate);
+				int date = cursor.getInt(idxDate);
 				long biid = cursor.getLong(idxBIID);
 				String biname = cursor.getString(idxBIName);
 				int state = cursor.getInt(idxState);

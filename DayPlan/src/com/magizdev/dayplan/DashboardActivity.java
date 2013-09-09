@@ -10,7 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-public class DayPlanActivity extends Activity {
+public class DashboardActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,14 +39,10 @@ public class DayPlanActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle presses on the action bar items
-		Intent intent = new Intent();
 		switch (item.getItemId()) {
 		case R.id.action_mark:
+			Intent intent = new Intent();
 			intent.setClass(this, BacklogItemActivity.class);
-			startActivity(intent);
-			return true;
-		case R.id.action_report:
-			intent.setClass(this, PieChartBuilder.class);
 			startActivity(intent);
 			return true;
 		default:
