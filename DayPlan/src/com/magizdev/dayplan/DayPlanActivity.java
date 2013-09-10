@@ -11,21 +11,24 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 public class DayPlanActivity extends Activity {
+	private ListView taskListView;
+	private DayTaskAdapter adapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_day_plan);
 
-		ListView taskListView = (ListView) findViewById(R.id.listViewDayPlan);
-		DayTaskAdapter adapter = new DayTaskAdapter(this);
+		taskListView = (ListView) findViewById(R.id.listViewDayPlan);
+		adapter = new DayTaskAdapter(this);
 		taskListView.setAdapter(adapter);
-
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		adapter.refresh();
+		taskListView.invalidateViews();
 	}
 
 	@Override

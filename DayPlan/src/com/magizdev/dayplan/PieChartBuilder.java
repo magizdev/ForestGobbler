@@ -24,6 +24,7 @@ import org.achartengine.GraphicalView;
 import org.achartengine.model.CategorySeries;
 import org.achartengine.model.SeriesSelection;
 import org.achartengine.renderer.DefaultRenderer;
+import org.achartengine.renderer.SimpleSeriesRenderer;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -79,9 +80,11 @@ public class PieChartBuilder extends Activity {
 
 		for (PieChartData pieChartData : chartDatas) {
 			mSeries.add(pieChartData.backlogName, pieChartData.data);
+	        SimpleSeriesRenderer renderer = new SimpleSeriesRenderer();
+	        renderer.setColor(COLORS[(mSeries.getItemCount() - 1) % COLORS.length]);
+	        mRenderer.addSeriesRenderer(renderer);
 		}
 
-		mChartView.repaint();
 	}
 
 	@Override
@@ -130,7 +133,8 @@ public class PieChartBuilder extends Activity {
 			DayTaskTimeInfo current = input.get(i);
 			int span = 0;
 			if (couter.containsKey(current.BIName)) {
-				span = current.Date - couter.get(current.BIName);
+				span = current.Time - couter.get(current.BIName);
+				couter.remove(current.BIName);
 			} else {
 				couter.put(current.BIName, current.Time);
 			}

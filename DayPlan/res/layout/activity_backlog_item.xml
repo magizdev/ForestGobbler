@@ -4,10 +4,45 @@
     android:layout_height="match_parent"
     android:background="#000000" >
 
+    <RelativeLayout
+        android:id="@+id/inputArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:animateLayoutChanges="true"
+        android:background="#FFFFFF"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/btnAddBacklog"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="1dp"
+            android:background="@drawable/list_selector"
+            android:src="@android:drawable/ic_menu_send" />
+
+        <EditText
+            android:id="@+id/editTextBacklog"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="4dp"
+            android:layout_toLeftOf="@id/btnAddBacklog"
+            android:background="@android:drawable/edit_text"
+            android:ellipsize="end"
+            android:ems="10"
+            android:inputType="text"
+            android:singleLine="true" >
+        </EditText>
+    </RelativeLayout>
+
     <ListView
-        android:id="@+id/listView1"
+        android:id="@+id/listViewBacklog"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent"
+        android:layout_below="@id/inputArea" >
     </ListView>
 
 </RelativeLayout>
