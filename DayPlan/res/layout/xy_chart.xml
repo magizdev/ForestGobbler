@@ -4,6 +4,38 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageButton
+            android:id="@+id/btnLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:background="#00000000"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_menu_back"/>
+
+        <ImageButton
+            android:id="@+id/btnRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_menu_forward" />
+
+        <Spinner
+            android:id="@+id/spinner1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" 
+            android:layout_toLeftOf="@id/btnRight"
+            android:layout_toRightOf="@id/btnLeft"/>
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/chart"
         android:layout_width="fill_parent"
@@ -15,12 +47,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/new_series"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="new" />
     </LinearLayout>
 
 </LinearLayout>
