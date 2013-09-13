@@ -15,8 +15,6 @@
  */
 package com.magizdev.dayplan;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.achartengine.ChartFactory;
@@ -34,9 +32,9 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.magizdev.dayplan.util.DayNavigate;
 import com.magizdev.dayplan.util.DayTaskTimeUtil;
-import com.magizdev.dayplan.util.DayUtil;
-import com.magizdev.dayplan.viewmodel.DayTaskTimeInfo;
+import com.magizdev.dayplan.util.INavigate;
 
 public class PieChartBuilder extends Activity {
 	/** Colors to be used for the pie slices. */
@@ -48,6 +46,7 @@ public class PieChartBuilder extends Activity {
 	private DefaultRenderer mRenderer = new DefaultRenderer();
 	/** Button for adding entered data to the current series. */
 	private GraphicalView mChartView;
+	private INavigate navigate;
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedState) {
@@ -69,27 +68,18 @@ public class PieChartBuilder extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.xy_chart);
 
-		DayTaskTimeUtil util = new DayTaskTimeUtil(this);
-		List<DayTaskTimeInfo> data = util.GetByDate(DayUtil.Today());
-
-		List<PieChartData> chartDatas = compute(data);
+		navigate = new DayNavigate(this);
 
 		mRenderer.setZoomButtonsVisible(true);
 		mRenderer.setStartAngle(180);
 		mRenderer.setDisplayValues(true);
-
-		for (PieChartData pieChartData : chartDatas) {
-			mSeries.add(pieChartData.backlogName, pieChartData.data);
-	        SimpleSeriesRenderer renderer = new SimpleSeriesRenderer();
-	        renderer.setColor(COLORS[(mSeries.getItemCount() - 1) % COLORS.length]);
-	        mRenderer.addSeriesRenderer(renderer);
-		}
-
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		List<PieChartData> chartDatas = navigate.GetPieChartData();
+		refreshChart(chartDatas);
 		if (mChartView == null) {
 			LinearLayout layout = (LinearLayout) findViewById(R.id.chart);
 			mChartView = ChartFactory.getPieChartView(this, mSeries, mRenderer);
@@ -126,38 +116,19 @@ public class PieChartBuilder extends Activity {
 		}
 	}
 
-	public List<PieChartData> compute(List<DayTaskTimeInfo> input) {
-		HashMap<String, Integer> data = new HashMap<String, Integer>();
-		HashMap<String, Integer> couter = new HashMap<String, Integer>();
-		for (int i = input.size() - 1; i > -1; i--) {
-			DayTaskTimeInfo current = input.get(i);
-			int span = 0;
-			if (couter.containsKey(current.BIName)) {
-				span = current.Time - couter.get(current.BIName);
-				couter.remove(current.BIName);
-			} else {
-				couter.put(current.BIName, current.Time);
-			}
-
-			if (span > 0) {
-				if (data.containsKey(current.BIName)) {
-					span = data.get(current.BIName) + span;
-					data.put(current.BIName, span);
-				} else {
-					data.put(current.BIName, span);
-				}
-			}
+	private void refreshChart(List<PieChartData> data) {
+		mSeries.clear();
+		mRenderer.removeAllRenderers();
+		for (PieChartData pieChartData : data) {
+			mSeries.add(pieChartData.backlogName, pieChartData.data);
+			SimpleSeriesRenderer renderer = new SimpleSeriesRenderer();
+			renderer.setColor(COLORS[(mSeries.getItemCount() - 1)
+					% COLORS.length]);
+			mRenderer.addSeriesRenderer(renderer);
 		}
-
-		List<PieChartData> result = new ArrayList<PieChartBuilder.PieChartData>();
-		for (String key : data.keySet()) {
-			result.add(new PieChartData(key, data.get(key)));
-		}
-
-		return result;
 	}
 
-	public class PieChartData {
+	public static class PieChartData {
 		public String backlogName;
 		public int data;
 
