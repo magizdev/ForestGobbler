@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:animateLayoutChanges="true"
-        android:background="#FFFFFF"
+        android:background="#000000"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="horizontal" >
@@ -30,7 +30,6 @@
             android:layout_height="50dp"
             android:layout_margin="4dp"
             android:layout_toLeftOf="@id/btnAddBacklog"
-            android:background="@android:drawable/edit_text"
             android:ellipsize="end"
             android:ems="10"
             android:inputType="text"

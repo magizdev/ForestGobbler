@@ -1,18 +1,12 @@
 <resources>
 
-    <string name="app_name">Easy Task</string>
-    <string name="menu_settings">Settings</string>
-    <string name="title_activity_task_list">TaskListActivity</string>
-    <string name="title_activity_task_edit">TaskEditActivity</string>
-    <string name="task_list_label">View Tasks</string>
-    <string name="task_edit_label">Edit Task</string>
-    <string name="task_group_past">Past</string>
-    <string name="task_group_incoming">Incoming</string>
-    <string name="task_group_future">Future</string>
+    <string name="app_name">Time Tracker</string>
+    <string name="backlog_item_activity_label">Backlog Items</string>
+    <string name="day_plan_activity_label">Tasks of Today</string>
+    <string name="dashboard_activity_label">Review</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="ok">OK</string>
-    <string name="enable_alarm">Enable notification</string>
     <string name="action_mark">Add</string>
 
     <string-array name="rangs">

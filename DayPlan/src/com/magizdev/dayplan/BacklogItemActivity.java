@@ -25,6 +25,7 @@ public class BacklogItemActivity extends Activity {
 	private ListView listView;
 	private EditText backlog;
 	private StorageUtil<BacklogItemInfo> storageUtil;
+	private BacklogItemAdapter adapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class BacklogItemActivity extends Activity {
 		listView = (ListView) findViewById(R.id.listViewBacklog);
 		backlog = (EditText) findViewById(R.id.editTextBacklog);
 		ImageButton addButton = (ImageButton) findViewById(R.id.btnAddBacklog);
-		BacklogItemAdapter adapter = new BacklogItemAdapter(this);
+		adapter = new BacklogItemAdapter(this);
 		listView.setAdapter(adapter);
 		dayTaskUtil = new DayTaskUtil(this);
 		storageUtil = new StorageUtil<BacklogItemInfo>(this,
@@ -46,7 +47,9 @@ public class BacklogItemActivity extends Activity {
 				BacklogItemInfo newItem = new BacklogItemInfo(-1, backlog
 						.getText().toString(), null);
 				storageUtil.add(newItem);
-				listView.invalidate();
+				adapter.refresh();
+				adapter.notifyDataSetChanged();
+				backlog.getText().clear();
 			}
 		});
 	}

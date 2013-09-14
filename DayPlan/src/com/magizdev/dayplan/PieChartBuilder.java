@@ -89,7 +89,6 @@ public class PieChartBuilder extends Activity {
 		mRenderer.setZoomButtonsVisible(true);
 		mRenderer.setStartAngle(180);
 		mRenderer.setDisplayValues(true);
-
 		Spinner spinner = (Spinner) findViewById(R.id.spinner1);
 
 		ArrayAdapter<CharSequence> mAdapter = ArrayAdapter.createFromResource(
@@ -167,8 +166,10 @@ public class PieChartBuilder extends Activity {
 			SimpleSeriesRenderer renderer = new SimpleSeriesRenderer();
 			renderer.setColor(COLORS[(mSeries.getItemCount() - 1)
 					% COLORS.length]);
+			renderer.setChartValuesTextSize(40);
 			mRenderer.addSeriesRenderer(renderer);
 		}
+		mRenderer.setChartTitle(navigate.CurrentTitle());
 		chartTitle.setText(navigate.CurrentTitle());
 	}
 

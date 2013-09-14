@@ -1,16 +1,17 @@
 <resources>
 
-    <string name="app_name">待办提醒</string>
-    <string name="menu_settings">设置</string>
-    <string name="title_activity_task_list">TaskListActivity</string>
-    <string name="title_activity_task_edit">TaskEditActivity</string>
-    <string name="task_list_label">待办</string>
-    <string name="task_edit_label">编辑</string>
-    <string name="task_group_past">已过时</string>
-    <string name="task_group_incoming">近期</string>
-    <string name="task_group_future">将来</string>
-    <string name="cancel">取消</string>
-    <string name="save">保存</string>
-	<string name="ok">OK</string>
-    <string name="enable_alarm">设置提醒</string>
+    <string name="app_name">Time Tracker</string>
+    <string name="backlog_item_activity_label">待办事项</string>
+    <string name="day_plan_activity_label">今天的任务</string>
+    <string name="dashboard_activity_label">回顾</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="ok">OK</string>
+    <string name="action_mark">Add</string>
+
+    <string-array name="rangs">
+        <item>按天回顾</item>
+        <item>按周回顾</item>
+    </string-array>
+
 </resources>
