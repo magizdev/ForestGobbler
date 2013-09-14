@@ -15,4 +15,9 @@
     <string name="enable_alarm">Enable notification</string>
     <string name="action_mark">Add</string>
 
+    <string-array name="rangs">
+        <item>Daily</item>
+        <item>Weekly</item>
+    </string-array>
+
 </resources>

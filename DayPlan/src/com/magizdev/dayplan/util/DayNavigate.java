@@ -18,6 +18,8 @@ public class DayNavigate implements INavigate {
 
 	public DayNavigate(Context context) {
 		util = new DayTaskTimeUtil(context);
+		current = DayUtil.Today();
+		today = current;
 	}
 
 	@Override

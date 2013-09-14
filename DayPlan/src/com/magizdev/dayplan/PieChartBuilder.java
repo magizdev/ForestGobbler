@@ -1,18 +1,3 @@
-/**
- * Copyright (C) 2009 - 2013 SC 4ViewSoft SRL
- *  
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *  
- *      http://www.apache.org/licenses/LICENSE-2.0
- *  
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.magizdev.dayplan;
 
 import java.util.List;
@@ -28,24 +13,32 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.magizdev.dayplan.util.DayNavigate;
-import com.magizdev.dayplan.util.DayTaskTimeUtil;
 import com.magizdev.dayplan.util.INavigate;
+import com.magizdev.dayplan.util.WeekNavigate;
 
 public class PieChartBuilder extends Activity {
-	/** Colors to be used for the pie slices. */
+
 	private static int[] COLORS = new int[] { Color.GREEN, Color.BLUE,
 			Color.MAGENTA, Color.CYAN };
-	/** The main series that will include all the data. */
+
 	private CategorySeries mSeries = new CategorySeries("");
-	/** The main renderer for the main dataset. */
+
 	private DefaultRenderer mRenderer = new DefaultRenderer();
-	/** Button for adding entered data to the current series. */
+
 	private GraphicalView mChartView;
+	private TextView chartTitle;
 	private INavigate navigate;
 
 	@Override
@@ -67,19 +60,68 @@ public class PieChartBuilder extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.xy_chart);
+		ImageButton backButton = (ImageButton) findViewById(R.id.btnLeft);
+		ImageButton forwardButton = (ImageButton) findViewById(R.id.btnRight);
+		chartTitle = (TextView)findViewById(R.id.chartTitle);
+		backButton.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				navigate.Backword();
+
+				refresh();
+			}
+		});
+
+		forwardButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (!navigate.IsLast()) {
+					navigate.Forward();
+
+					refresh();
+				}
+			}
+		});
 		navigate = new DayNavigate(this);
 
 		mRenderer.setZoomButtonsVisible(true);
 		mRenderer.setStartAngle(180);
 		mRenderer.setDisplayValues(true);
+
+		Spinner spinner = (Spinner) findViewById(R.id.spinner1);
+
+		ArrayAdapter<CharSequence> mAdapter = ArrayAdapter.createFromResource(
+				this, R.array.rangs,
+				android.R.layout.simple_spinner_dropdown_item);
+
+		spinner.setAdapter(mAdapter);
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				if (position == 0) {
+					navigate = new DayNavigate(PieChartBuilder.this);
+
+					refresh();
+				} else {
+					navigate = new WeekNavigate();
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+
+			}
+		});
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		List<PieChartData> chartDatas = navigate.GetPieChartData();
-		refreshChart(chartDatas);
+		refresh();
 		if (mChartView == null) {
 			LinearLayout layout = (LinearLayout) findViewById(R.id.chart);
 			mChartView = ChartFactory.getPieChartView(this, mSeries, mRenderer);
@@ -110,13 +152,14 @@ public class PieChartBuilder extends Activity {
 				}
 			});
 			layout.addView(mChartView, new LayoutParams(
-					LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		} else {
 			mChartView.repaint();
 		}
 	}
 
-	private void refreshChart(List<PieChartData> data) {
+	private void refresh() {
+		List<PieChartData> data = navigate.GetPieChartData();
 		mSeries.clear();
 		mRenderer.removeAllRenderers();
 		for (PieChartData pieChartData : data) {
@@ -126,6 +169,7 @@ public class PieChartBuilder extends Activity {
 					% COLORS.length]);
 			mRenderer.addSeriesRenderer(renderer);
 		}
+		chartTitle.setText(navigate.CurrentTitle());
 	}
 
 	public static class PieChartData {
