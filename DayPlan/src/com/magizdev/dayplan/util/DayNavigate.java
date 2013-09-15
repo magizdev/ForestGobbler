@@ -48,13 +48,13 @@ public class DayNavigate implements INavigate {
 
 	@Override
 	public List<PieChartData> GetPieChartData() {
-		List<DayTaskTimeInfo> data = util.GetByDate(DayUtil.Today());
+		List<DayTaskTimeInfo> data = util.GetByDate(current);
 
 		List<PieChartData> chartDatas = compute(data);
 		return chartDatas;
 	}
 	
-	private List<PieChartData> compute(List<DayTaskTimeInfo> input) {
+	static List<PieChartData> compute(List<DayTaskTimeInfo> input) {
 		HashMap<String, Integer> data = new HashMap<String, Integer>();
 		HashMap<String, Integer> couter = new HashMap<String, Integer>();
 		for (int i = input.size() - 1; i > -1; i--) {

@@ -62,7 +62,7 @@ public class PieChartBuilder extends Activity {
 		setContentView(R.layout.xy_chart);
 		ImageButton backButton = (ImageButton) findViewById(R.id.btnLeft);
 		ImageButton forwardButton = (ImageButton) findViewById(R.id.btnRight);
-		chartTitle = (TextView)findViewById(R.id.chartTitle);
+		chartTitle = (TextView) findViewById(R.id.chartTitle);
 		backButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -106,7 +106,9 @@ public class PieChartBuilder extends Activity {
 
 					refresh();
 				} else {
-					navigate = new WeekNavigate();
+					navigate = new WeekNavigate(PieChartBuilder.this);
+
+					refresh();
 				}
 			}
 
@@ -171,6 +173,9 @@ public class PieChartBuilder extends Activity {
 		}
 		mRenderer.setChartTitle(navigate.CurrentTitle());
 		chartTitle.setText(navigate.CurrentTitle());
+		if (mChartView != null) {
+			mChartView.repaint();
+		}
 	}
 
 	public static class PieChartData {

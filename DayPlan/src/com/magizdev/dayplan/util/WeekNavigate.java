@@ -1,38 +1,73 @@
 package com.magizdev.dayplan.util;
 
+import java.util.Calendar;
 import java.util.List;
 
+import android.content.Context;
+
 import com.magizdev.dayplan.PieChartBuilder.PieChartData;
+import com.magizdev.dayplan.viewmodel.DayTaskTimeInfo;
 
 public class WeekNavigate implements INavigate {
+	private int currentWeekOfYear;
+	private int currentWeekStartDay;
+	private int nowWeekOfYear;
+	private int today;
+	private DayTaskTimeUtil util;
+
+	private int currentWeekEndDay() {
+		if (currentWeekOfYear == nowWeekOfYear) {
+			return today + 1;
+		} else {
+			return currentWeekStartDay + 7;
+		}
+	}
+
+	public WeekNavigate(Context context) {
+		util = new DayTaskTimeUtil(context);
+		today = DayUtil.Today();
+		Calendar cToday = DayUtil.toCalendar(today);
+		nowWeekOfYear = cToday.get(Calendar.WEEK_OF_YEAR);
+		currentWeekOfYear = nowWeekOfYear;
+		cToday.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+		currentWeekStartDay = DayUtil.toDate(cToday.getTime());
+	}
 
 	@Override
 	public void Backword() {
-		// TODO Auto-generated method stub
-
+		currentWeekOfYear--;
+		currentWeekStartDay -= 7;
 	}
 
 	@Override
 	public void Forward() {
-		// TODO Auto-generated method stub
+		if (!IsLast()) {
+			currentWeekOfYear++;
+			currentWeekStartDay += 7;
+		}
 
 	}
 
 	@Override
 	public String CurrentTitle() {
-		return "Weekly";
+		Calendar startDay = DayUtil.toCalendar(currentWeekStartDay);
+		Calendar endDay = DayUtil.toCalendar(currentWeekEndDay());
+		return startDay.get(Calendar.YEAR) + "-" + startDay.get(Calendar.MONTH)
+				+ "-" + startDay.get(Calendar.DAY_OF_MONTH) + " -- "
+				+ endDay.get(Calendar.YEAR) + "-" + endDay.get(Calendar.MONTH)
+				+ "-" + endDay.get(Calendar.DAY_OF_MONTH);
 	}
 
 	@Override
 	public boolean IsLast() {
-		// TODO Auto-generated method stub
-		return false;
+		return currentWeekOfYear == nowWeekOfYear;
 	}
 
 	@Override
 	public List<PieChartData> GetPieChartData() {
-		// TODO Auto-generated method stub
-		return null;
+		List<DayTaskTimeInfo> data = util.GetByDateRange(currentWeekStartDay,
+				currentWeekEndDay());
+		return DayNavigate.compute(data);
 	}
 
 }
