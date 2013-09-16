@@ -19,12 +19,22 @@ public class BacklogItemAdapter extends BaseAdapter {
 	Context context;
 	StorageUtil<BacklogItemInfo> storageUtil;
 	List<BacklogItemInfo> backlogs;
+	List<Long> selectedIds;
 
-	public BacklogItemAdapter(Context context) {
+	public BacklogItemAdapter(Context context, List<Long> selectedIds) {
 		this.context = context;
 		BacklogItemInfo blank = new BacklogItemInfo();
+		this.selectedIds = selectedIds;
 		storageUtil = new StorageUtil<BacklogItemInfo>(context, blank);
 		backlogs = storageUtil.getCollection(null);
+		for (int i = 0; i < backlogs.size(); i++) {
+			BacklogItemInfo backlogItemInfo = backlogs.get(i);
+			if (selectedIds.contains(backlogItemInfo.Id)) {
+				backlogItemInfo.Selected = true;
+			} else {
+				backlogItemInfo.Selected = false;
+			}
+		}
 	}
 
 	public void removeAt(int index) {
@@ -32,6 +42,14 @@ public class BacklogItemAdapter extends BaseAdapter {
 
 	public void refresh() {
 		backlogs = storageUtil.getCollection(null);
+		for (int i = 0; i < backlogs.size(); i++) {
+			BacklogItemInfo backlogItemInfo = backlogs.get(i);
+			if (selectedIds.contains(backlogItemInfo.Id)) {
+				backlogItemInfo.Selected = true;
+			} else {
+				backlogItemInfo.Selected = false;
+			}
+		}
 	}
 
 	@Override
@@ -67,7 +85,6 @@ public class BacklogItemAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final ViewHolder viewHolder;
-		final int finalPosition = position;
 
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
@@ -76,35 +93,26 @@ public class BacklogItemAdapter extends BaseAdapter {
 			viewHolder.name = (TextView) convertView.findViewById(R.id.tVName);
 			viewHolder.checkBox = (CheckBox) convertView
 					.findViewById(R.id.checkBox1);
-			viewHolder.checkBox.setChecked(backlogs.get(position).Selected);
 			viewHolder.checkBox
 					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 						@Override
-						public void onCheckedChanged(CompoundButton arg0,
-								boolean arg1) {
-							backlogs.get(finalPosition).Selected = arg1;
+						public void onCheckedChanged(CompoundButton buttonView,
+								boolean isChecked) {
+							BacklogItemInfo backlogItemInfo = (BacklogItemInfo) buttonView
+									.getTag();
+							backlogItemInfo.Selected = isChecked;
 						}
 					});
+
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
-			viewHolder.name = (TextView) convertView.findViewById(R.id.tVName);
-			viewHolder.checkBox = (CheckBox) convertView
-					.findViewById(R.id.checkBox1);
-			viewHolder.checkBox.setChecked(backlogs.get(position).Selected);
-			viewHolder.checkBox
-					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-						@Override
-						public void onCheckedChanged(CompoundButton arg0,
-								boolean arg1) {
-							backlogs.get(finalPosition).Selected = arg1;
-						}
-					});
 		}
 		BacklogItemInfo backlog = backlogs.get(position);
 		viewHolder.name.setText(backlog.Name);
+		viewHolder.checkBox.setChecked(backlogs.get(position).Selected);
+		viewHolder.checkBox.setTag(backlogs.get(position));
 
 		return convertView;
 

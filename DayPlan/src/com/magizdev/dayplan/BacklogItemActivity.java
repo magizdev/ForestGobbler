@@ -2,12 +2,6 @@ package com.magizdev.dayplan;
 
 import java.util.List;
 
-import com.magizdev.dayplan.util.DayTaskUtil;
-import com.magizdev.dayplan.util.DayUtil;
-import com.magizdev.dayplan.viewmodel.BacklogItemAdapter;
-import com.magizdev.dayplan.viewmodel.BacklogItemInfo;
-import com.magizdev.dayplan.viewmodel.StorageUtil;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,6 +13,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+
+import com.magizdev.dayplan.util.DayTaskUtil;
+import com.magizdev.dayplan.util.DayUtil;
+import com.magizdev.dayplan.viewmodel.BacklogItemAdapter;
+import com.magizdev.dayplan.viewmodel.BacklogItemInfo;
+import com.magizdev.dayplan.viewmodel.StorageUtil;
 
 public class BacklogItemActivity extends Activity {
 	private DayTaskUtil dayTaskUtil;
@@ -35,8 +35,7 @@ public class BacklogItemActivity extends Activity {
 		listView = (ListView) findViewById(R.id.listViewBacklog);
 		backlog = (EditText) findViewById(R.id.editTextBacklog);
 		ImageButton addButton = (ImageButton) findViewById(R.id.btnAddBacklog);
-		adapter = new BacklogItemAdapter(this);
-		listView.setAdapter(adapter);
+
 		dayTaskUtil = new DayTaskUtil(this);
 		storageUtil = new StorageUtil<BacklogItemInfo>(this,
 				new BacklogItemInfo());
@@ -61,17 +60,8 @@ public class BacklogItemActivity extends Activity {
 		super.onResume();
 		List<Long> selectedBacklogs = dayTaskUtil.GetTasksByDate(DayUtil
 				.Today());
-		ListAdapter adapter = listView.getAdapter();
-		int count = adapter.getCount();
-		for (int i = 0; i < count; i++) {
-			BacklogItemInfo backlogItemInfo = (BacklogItemInfo) adapter
-					.getItem(i);
-			if (selectedBacklogs.contains(backlogItemInfo.Id)) {
-				backlogItemInfo.Selected = true;
-			} else {
-				backlogItemInfo.Selected = false;
-			}
-		}
+		adapter = new BacklogItemAdapter(this, selectedBacklogs);
+		listView.setAdapter(adapter);
 		listView.invalidate();
 	}
 
