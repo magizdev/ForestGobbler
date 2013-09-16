@@ -22,7 +22,7 @@
             android:layout_alignParentRight="true"
             android:layout_margin="1dp"
             android:background="@drawable/list_selector"
-            android:src="@android:drawable/ic_menu_send" />
+            android:src="@android:drawable/ic_menu_add" />
 
         <EditText
             android:id="@+id/editTextBacklog"

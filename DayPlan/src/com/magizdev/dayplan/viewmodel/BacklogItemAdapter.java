@@ -89,6 +89,19 @@ public class BacklogItemAdapter extends BaseAdapter {
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
+			viewHolder.name = (TextView) convertView.findViewById(R.id.tVName);
+			viewHolder.checkBox = (CheckBox) convertView
+					.findViewById(R.id.checkBox1);
+			viewHolder.checkBox.setChecked(backlogs.get(position).Selected);
+			viewHolder.checkBox
+					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+						@Override
+						public void onCheckedChanged(CompoundButton arg0,
+								boolean arg1) {
+							backlogs.get(finalPosition).Selected = arg1;
+						}
+					});
 		}
 		BacklogItemInfo backlog = backlogs.get(position);
 		viewHolder.name.setText(backlog.Name);

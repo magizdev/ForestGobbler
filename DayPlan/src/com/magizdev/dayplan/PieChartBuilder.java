@@ -32,9 +32,7 @@ public class PieChartBuilder extends Activity {
 
 	private static int[] COLORS = new int[] { Color.GREEN, Color.BLUE,
 			Color.MAGENTA, Color.CYAN };
-
 	private CategorySeries mSeries = new CategorySeries("");
-
 	private DefaultRenderer mRenderer = new DefaultRenderer();
 
 	private GraphicalView mChartView;
@@ -79,7 +77,6 @@ public class PieChartBuilder extends Activity {
 			public void onClick(View v) {
 				if (!navigate.IsLast()) {
 					navigate.Forward();
-
 					refresh();
 				}
 			}
@@ -132,11 +129,7 @@ public class PieChartBuilder extends Activity {
 				public void onClick(View v) {
 					SeriesSelection seriesSelection = mChartView
 							.getCurrentSeriesAndPoint();
-					if (seriesSelection == null) {
-						Toast.makeText(PieChartBuilder.this,
-								"No chart element selected", Toast.LENGTH_SHORT)
-								.show();
-					} else {
+					if (seriesSelection != null) {
 						for (int i = 0; i < mSeries.getItemCount(); i++) {
 							mRenderer.getSeriesRendererAt(i).setHighlighted(
 									i == seriesSelection.getPointIndex());
@@ -144,9 +137,9 @@ public class PieChartBuilder extends Activity {
 						mChartView.repaint();
 						Toast.makeText(
 								PieChartBuilder.this,
-								"Chart data point index "
-										+ seriesSelection.getPointIndex()
-										+ " selected" + " point value="
+								mSeries.getCategory(seriesSelection
+										.getPointIndex())
+										+ ":"
 										+ seriesSelection.getValue(),
 								Toast.LENGTH_SHORT).show();
 					}
@@ -172,7 +165,6 @@ public class PieChartBuilder extends Activity {
 			mRenderer.addSeriesRenderer(renderer);
 		}
 		mRenderer.setChartTitle(navigate.CurrentTitle());
-		chartTitle.setText(navigate.CurrentTitle());
 		if (mChartView != null) {
 			mChartView.repaint();
 		}

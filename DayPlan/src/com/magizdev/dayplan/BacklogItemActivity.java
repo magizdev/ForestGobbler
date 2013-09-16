@@ -44,12 +44,14 @@ public class BacklogItemActivity extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
-				BacklogItemInfo newItem = new BacklogItemInfo(-1, backlog
-						.getText().toString(), null);
-				storageUtil.add(newItem);
-				adapter.refresh();
-				adapter.notifyDataSetChanged();
-				backlog.getText().clear();
+				if (backlog.getText().toString().length() > 0) {
+					BacklogItemInfo newItem = new BacklogItemInfo(-1, backlog
+							.getText().toString(), null);
+					storageUtil.add(newItem);
+					adapter.refresh();
+					adapter.notifyDataSetChanged();
+					backlog.getText().clear();
+				}
 			}
 		});
 	}
