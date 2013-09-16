@@ -1,13 +1,10 @@
 package com.magizdev.dayplan.util;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
 
-import com.magizdev.dayplan.PieChartBuilder;
 import com.magizdev.dayplan.PieChartBuilder.PieChartData;
 import com.magizdev.dayplan.viewmodel.DayTaskTimeInfo;
 
@@ -50,39 +47,10 @@ public class DayNavigate implements INavigate {
 	public List<PieChartData> GetPieChartData() {
 		List<DayTaskTimeInfo> data = util.GetByDate(current);
 
-		List<PieChartData> chartDatas = compute(data);
+		List<PieChartData> chartDatas = DayTaskTimeUtil.compute(data);
 		return chartDatas;
 	}
 	
-	static List<PieChartData> compute(List<DayTaskTimeInfo> input) {
-		HashMap<String, Integer> data = new HashMap<String, Integer>();
-		HashMap<String, Integer> couter = new HashMap<String, Integer>();
-		for (int i = input.size() - 1; i > -1; i--) {
-			DayTaskTimeInfo current = input.get(i);
-			int span = 0;
-			if (couter.containsKey(current.BIName)) {
-				span = current.Time - couter.get(current.BIName);
-				couter.remove(current.BIName);
-			} else {
-				couter.put(current.BIName, current.Time);
-			}
 
-			if (span > 0) {
-				if (data.containsKey(current.BIName)) {
-					span = data.get(current.BIName) + span;
-					data.put(current.BIName, span);
-				} else {
-					data.put(current.BIName, span);
-				}
-			}
-		}
-
-		List<PieChartData> result = new ArrayList<PieChartBuilder.PieChartData>();
-		for (String key : data.keySet()) {
-			result.add(new PieChartData(key, data.get(key)));
-		}
-
-		return result;
-	}
 
 }

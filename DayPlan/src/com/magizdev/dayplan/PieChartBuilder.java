@@ -179,10 +179,12 @@ public class PieChartBuilder extends Activity {
 	}
 
 	public static class PieChartData {
+		public long biid;
 		public String backlogName;
 		public int data;
 
-		public PieChartData(String backlogName, int data) {
+		public PieChartData(long biid, String backlogName, int data) {
+			this.biid = biid;
 			this.backlogName = backlogName;
 			this.data = data;
 		}

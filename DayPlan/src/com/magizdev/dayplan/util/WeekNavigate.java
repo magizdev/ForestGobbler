@@ -51,7 +51,7 @@ public class WeekNavigate implements INavigate {
 	@Override
 	public String CurrentTitle() {
 		Calendar startDay = DayUtil.toCalendar(currentWeekStartDay);
-		Calendar endDay = DayUtil.toCalendar(currentWeekEndDay());
+		Calendar endDay = DayUtil.toCalendar(currentWeekEndDay() - 1);
 		return startDay.get(Calendar.YEAR) + "-" + startDay.get(Calendar.MONTH)
 				+ "-" + startDay.get(Calendar.DAY_OF_MONTH) + " -- "
 				+ endDay.get(Calendar.YEAR) + "-" + endDay.get(Calendar.MONTH)
@@ -67,7 +67,7 @@ public class WeekNavigate implements INavigate {
 	public List<PieChartData> GetPieChartData() {
 		List<DayTaskTimeInfo> data = util.GetByDateRange(currentWeekStartDay,
 				currentWeekEndDay());
-		return DayNavigate.compute(data);
+		return DayTaskTimeUtil.compute(data);
 	}
 
 }
