@@ -77,7 +77,9 @@ public class DayTaskTimeUtil {
 							current.Time);
 				}
 			} else {
-				dayTasksTime.put(current.BIID, new HashMap<Integer, Integer>());
+				HashMap<Integer, Integer> first = new HashMap<Integer, Integer>();
+				first.put(current.Date, current.Time);
+				dayTasksTime.put(current.BIID, first);
 			}
 		}
 
