@@ -20,19 +20,19 @@
         style="?android:attr/progressBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true" />
+        android:progressDrawable="@drawable/customprogress" />
 
     <TextView
         android:id="@+id/tVName1"
         android:layout_width="250dp"
         android:layout_height="fill_parent"
-        android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/taskStatus"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp"
         android:layout_toLeftOf="@id/startButton"
+        android:layout_toRightOf="@id/taskStatus"
         android:gravity="center_vertical"
         android:text="TextView"
         android:textSize="25dp" />
