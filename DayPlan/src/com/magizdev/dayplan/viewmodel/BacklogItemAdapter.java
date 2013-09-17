@@ -111,8 +111,8 @@ public class BacklogItemAdapter extends BaseAdapter {
 		}
 		BacklogItemInfo backlog = backlogs.get(position);
 		viewHolder.name.setText(backlog.Name);
-		viewHolder.checkBox.setChecked(backlogs.get(position).Selected);
 		viewHolder.checkBox.setTag(backlogs.get(position));
+		viewHolder.checkBox.setChecked(backlogs.get(position).Selected);
 
 		return convertView;
 

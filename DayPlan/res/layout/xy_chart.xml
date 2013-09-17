@@ -30,23 +30,21 @@
             android:id="@+id/spinner1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:layout_toLeftOf="@id/btnRight"
-            android:layout_toRightOf="@id/btnLeft" />
+            android:layout_centerInParent="true"
+            android:gravity="center" />
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
-        <TextView android:layout_width="fill_parent"
+        <TextView
+            android:id="@+id/chartTitle"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:textSize="25dp"
-            android:id="@+id/chartTitle" />
+            android:textSize="25dp" />
     </RelativeLayout>
 
     <LinearLayout

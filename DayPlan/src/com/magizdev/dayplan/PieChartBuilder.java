@@ -10,7 +10,6 @@ import org.achartengine.renderer.DefaultRenderer;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,8 +29,8 @@ import com.magizdev.dayplan.util.WeekNavigate;
 
 public class PieChartBuilder extends Activity {
 
-	private static int[] COLORS = new int[] { Color.GREEN, Color.BLUE,
-			Color.MAGENTA, Color.CYAN };
+	private static int[] COLORS = new int[] { 0xffB2C938, 0xff3BA9B8,
+			0xffFF9910, 0xffC74C47, 0xff5B1A69, 0xffA83AAE, 0xffF981C5 };
 	private CategorySeries mSeries = new CategorySeries("");
 	private DefaultRenderer mRenderer = new DefaultRenderer();
 
@@ -164,7 +163,7 @@ public class PieChartBuilder extends Activity {
 			renderer.setChartValuesTextSize(40);
 			mRenderer.addSeriesRenderer(renderer);
 		}
-		mRenderer.setChartTitle(navigate.CurrentTitle());
+		chartTitle.setText(navigate.CurrentTitle());
 		if (mChartView != null) {
 			mChartView.repaint();
 		}
