@@ -51,14 +51,14 @@ public class DayTaskUtil {
 	public void StartTask(long backlogId) {
 		Date now = new Date();
 		DayTaskTimeInfo timeInfo = new DayTaskTimeInfo(-1, DayUtil.Today(),
-				backlogId, null, DayUtil.minOfDay(now), TimeType.Start);
+				backlogId, null, DayUtil.msOfDay(now), TimeType.Start);
 		timeStorageUtil.add(timeInfo);
 	}
 
 	public void StopTask(long backlogId) {
 		Date now = new Date();
 		DayTaskTimeInfo timeInfo = new DayTaskTimeInfo(-1, DayUtil.Today(),
-				backlogId, null, DayUtil.minOfDay(now), TimeType.Stop);
+				backlogId, null, DayUtil.msOfDay(now), TimeType.Stop);
 		timeStorageUtil.add(timeInfo);
 	}
 

@@ -85,6 +85,8 @@ public class PieChartBuilder extends Activity {
 		mRenderer.setZoomButtonsVisible(true);
 		mRenderer.setStartAngle(180);
 		mRenderer.setDisplayValues(true);
+		mRenderer.setLegendTextSize(50);
+		mRenderer.setLabelsTextSize(50);
 		Spinner spinner = (Spinner) findViewById(R.id.spinner1);
 
 		ArrayAdapter<CharSequence> mAdapter = ArrayAdapter.createFromResource(

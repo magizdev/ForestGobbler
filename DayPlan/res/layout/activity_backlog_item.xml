@@ -33,6 +33,7 @@
             android:ellipsize="end"
             android:ems="10"
             android:inputType="text"
+            android:hint = "@string/hint_add_backlog_title"
             android:singleLine="true" >
         </EditText>
     </RelativeLayout>

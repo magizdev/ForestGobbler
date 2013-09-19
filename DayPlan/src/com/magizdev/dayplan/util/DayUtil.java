@@ -3,25 +3,35 @@ package com.magizdev.dayplan.util;
 import java.util.Calendar;
 import java.util.Date;
 
-
 public class DayUtil {
-	public static int toDate(Date date){
+	public static int toDate(Date date) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		return calendar.get(Calendar.YEAR)*1000 + calendar.get(Calendar.DAY_OF_YEAR);
+		return calendar.get(Calendar.YEAR) * 1000
+				+ calendar.get(Calendar.DAY_OF_YEAR);
 	}
-	
-	public static int minOfDay(Date date){
+
+	public static int minOfDay(Date date) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		return calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
+		return calendar.get(Calendar.HOUR_OF_DAY) * 60
+				+ calendar.get(Calendar.MINUTE);
 	}
-	
-	public static int Today(){
+
+	public static int msOfDay(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		return calendar.get(Calendar.HOUR_OF_DAY) * 60 * 60 * 1000
+				+ calendar.get(Calendar.MINUTE) * 60 * 1000
+				+ calendar.get(Calendar.SECOND) * 1000
+				+ calendar.get(Calendar.MILLISECOND);
+	}
+
+	public static int Today() {
 		return toDate(new Date());
 	}
-	
-	public static Calendar toCalendar(int date){
+
+	public static Calendar toCalendar(int date) {
 		Calendar calendar = Calendar.getInstance();
 		int year = date / 1000;
 		int dayinyear = date % 1000;

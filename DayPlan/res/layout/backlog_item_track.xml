@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_margin="10dp"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp" >
+    android:paddingRight="10dp" >
 
     <ImageButton
         android:id="@+id/startButton"
@@ -17,12 +16,12 @@
 
     <ProgressBar
         android:id="@+id/taskStatus"
-        style="?android:attr/progressBarStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:progressDrawable="@drawable/customprogress"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:progressDrawable="@drawable/customprogress" />
+         />
 
     <TextView
         android:id="@+id/tVName1"
@@ -31,10 +30,9 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp"
+        android:layout_marginLeft="40dp"
         android:layout_toLeftOf="@id/startButton"
-        android:layout_toRightOf="@id/taskStatus"
         android:gravity="center_vertical"
-        android:text="TextView"
+        android:text=""
         android:textSize="25dp" />
-
 </RelativeLayout>

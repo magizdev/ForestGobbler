@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.magizdev.dayplan.R;
@@ -77,30 +78,42 @@ public class DayTaskAdapter extends BaseAdapter {
 			LayoutInflater inflater = LayoutInflater.from(context);
 			convertView = inflater.inflate(R.layout.backlog_item_track, null);
 			viewHolder.name = (TextView) convertView.findViewById(R.id.tVName1);
-			viewHolder.startButton = (ImageButton) convertView.findViewById(R.id.startButton);
+			viewHolder.startButton = (ImageButton) convertView
+					.findViewById(R.id.startButton);
+			viewHolder.progress = (ProgressBar) convertView
+					.findViewById(R.id.taskStatus);
+			DayTaskInfo taskInfo = tasks.get(position);
+			viewHolder.startButton.setTag(taskInfo);
 			convertView.setTag(viewHolder);
+			viewHolder.startButton.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					DayTaskInfo taskInfo = (DayTaskInfo)v.getTag();
+					TimeType state = taskUtil.GetTaskState(taskInfo.BIID);
+					if (state == TimeType.Start) {
+						taskUtil.StopTask(taskInfo.BIID);
+						refresh();
+					} else {
+						taskUtil.StartTask(taskInfo.BIID);
+						refresh();
+					}
+					DayTaskAdapter.this.notifyDataSetChanged();
+				}
+			});
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
-		DayTaskInfo taskInfo = tasks.get(position);
+		DayTaskInfo taskInfo = (DayTaskInfo) viewHolder.startButton.getTag();
 		viewHolder.name.setText(taskInfo.BIName);
 		final long biid = taskInfo.BIID;
 		TimeType state = taskUtil.GetTaskState(biid);
-		int imageId = state == TimeType.Start?android.R.drawable.ic_media_pause:android.R.drawable.ic_media_play;
+		int imageId = state == TimeType.Start ? android.R.drawable.ic_media_pause
+				: android.R.drawable.ic_media_play;
 		viewHolder.startButton.setImageResource(imageId);
-		viewHolder.startButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				TimeType state = taskUtil.GetTaskState(biid);
-				if(state == TimeType.Start){
-					taskUtil.StopTask(biid);
-				}else {
-					taskUtil.StartTask(biid);
-				}
-				DayTaskAdapter.this.notifyDataSetChanged();
-			}
-		});
+		int visibility = state == TimeType.Start ? View.VISIBLE : View.GONE;
+		viewHolder.progress.setVisibility(visibility);
+
 		return convertView;
 	}
 
@@ -127,6 +140,7 @@ public class DayTaskAdapter extends BaseAdapter {
 	public class ViewHolder {
 		public TextView name;
 		public ImageButton startButton;
+		public ProgressBar progress;
 
 		// public Button deleteBtn;
 		// public ImageButton notificationSetter;

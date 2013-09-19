@@ -9,21 +9,23 @@ import android.net.Uri;
 
 import com.magizdev.dayplan.store.DayPlanMetaData.BacklogItemTable;
 
-
-public class BacklogItemInfo implements IStoreableItem{
+public class BacklogItemInfo implements IStoreableItem {
 	public long Id;
 	public String Name;
 	public String Description;
 	public boolean Selected;
-	
-	public BacklogItemInfo(){
-		
+	public boolean Completed;
+
+	public BacklogItemInfo() {
+
 	}
 
-	public BacklogItemInfo(long id, String name, String description) {
+	public BacklogItemInfo(long id, String name, String description,
+			boolean completed) {
 		this.Id = id;
 		this.Name = name;
 		this.Description = description;
+		this.Completed = completed;
 	}
 
 	@Override
@@ -31,6 +33,9 @@ public class BacklogItemInfo implements IStoreableItem{
 		ContentValues cv = new ContentValues();
 		cv.put(BacklogItemTable.NAME, Name);
 		cv.put(BacklogItemTable.DESC, Description);
+		cv.put(BacklogItemTable.STATE,
+				Completed ? BacklogItemTable.STATE_COMPLETE
+						: BacklogItemTable.STATE_ACTIVE);
 		return cv;
 	}
 
@@ -39,19 +44,18 @@ public class BacklogItemInfo implements IStoreableItem{
 		List<IStoreableItem> backlogs = new ArrayList<IStoreableItem>();
 		try {
 
-			int idxId = cursor
-					.getColumnIndex(BacklogItemTable._ID);
-			int idxName = cursor
-					.getColumnIndex(BacklogItemTable.NAME);
-			int idxDesc = cursor
-					.getColumnIndex(BacklogItemTable.DESC);
+			int idxId = cursor.getColumnIndex(BacklogItemTable._ID);
+			int idxName = cursor.getColumnIndex(BacklogItemTable.NAME);
+			int idxDesc = cursor.getColumnIndex(BacklogItemTable.DESC);
+			int idxState = cursor.getColumnIndex(BacklogItemTable.STATE);
 
 			for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
 					.moveToNext()) {
 				int id = cursor.getInt(idxId);
 				String name = cursor.getString(idxName);
 				String desc = cursor.getString(idxDesc);
-				backlogs.add(new BacklogItemInfo(id, name, desc));
+				boolean completed = cursor.getInt(idxState) == BacklogItemTable.STATE_COMPLETE;
+				backlogs.add(new BacklogItemInfo(id, name, desc, completed));
 			}
 		} finally {
 			if (cursor != null) {

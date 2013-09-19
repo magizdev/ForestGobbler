@@ -3,12 +3,15 @@ package com.magizdev.dayplan;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
@@ -45,11 +48,27 @@ public class BacklogItemActivity extends Activity {
 			public void onClick(View arg0) {
 				if (backlog.getText().toString().length() > 0) {
 					BacklogItemInfo newItem = new BacklogItemInfo(-1, backlog
-							.getText().toString(), null);
+							.getText().toString(), null, false);
 					storageUtil.add(newItem);
 					adapter.refresh();
 					adapter.notifyDataSetChanged();
 					backlog.getText().clear();
+				}
+			}
+		});
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				long backlogId = ((BacklogItemAdapter) listView.getAdapter())
+						.getItemId(arg2);
+				if (backlogId > -1) {
+					Intent editTaskIntent = new Intent(
+							BacklogItemActivity.this, BacklogEditActivity.class);
+					editTaskIntent.putExtra("backlogId", backlogId);
+
+					startActivityForResult(editTaskIntent, 1);
 				}
 			}
 		});

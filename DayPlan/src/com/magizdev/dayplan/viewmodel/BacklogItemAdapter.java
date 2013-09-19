@@ -14,10 +14,14 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import com.magizdev.dayplan.R;
+import com.magizdev.dayplan.store.DayPlanMetaData.BacklogItemTable;
 
 public class BacklogItemAdapter extends BaseAdapter {
+	private static String condition = "(" + BacklogItemTable.STATE + "="
+			+ BacklogItemTable.STATE_ACTIVE + ")";
 	Context context;
 	StorageUtil<BacklogItemInfo> storageUtil;
+	int completedCount;
 	List<BacklogItemInfo> backlogs;
 	List<Long> selectedIds;
 
@@ -26,7 +30,7 @@ public class BacklogItemAdapter extends BaseAdapter {
 		BacklogItemInfo blank = new BacklogItemInfo();
 		this.selectedIds = selectedIds;
 		storageUtil = new StorageUtil<BacklogItemInfo>(context, blank);
-		backlogs = storageUtil.getCollection(null);
+		backlogs = storageUtil.getCollection(condition);
 		for (int i = 0; i < backlogs.size(); i++) {
 			BacklogItemInfo backlogItemInfo = backlogs.get(i);
 			if (selectedIds.contains(backlogItemInfo.Id)) {
@@ -41,7 +45,7 @@ public class BacklogItemAdapter extends BaseAdapter {
 	}
 
 	public void refresh() {
-		backlogs = storageUtil.getCollection(null);
+		backlogs = storageUtil.getCollection(condition);
 		for (int i = 0; i < backlogs.size(); i++) {
 			BacklogItemInfo backlogItemInfo = backlogs.get(i);
 			if (selectedIds.contains(backlogItemInfo.Id)) {
@@ -73,9 +77,7 @@ public class BacklogItemAdapter extends BaseAdapter {
 	}
 
 	public long getItemId(int position) {
-
 		return backlogs.get(position).Id;
-
 	}
 
 	@Override

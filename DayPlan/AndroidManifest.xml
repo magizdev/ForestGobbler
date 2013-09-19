@@ -32,6 +32,12 @@
             android:theme="@android:style/Theme.Holo" >
         </activity>
         <activity
+            android:name=".BacklogEditActivity"
+            android:label="@string/backlog_item_activity_label"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo" >
+        </activity>
+        <activity
             android:name=".PieChartBuilder"
             android:label="@string/dashboard_activity_label"
             android:screenOrientation="portrait"

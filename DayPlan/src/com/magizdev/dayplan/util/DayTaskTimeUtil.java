@@ -41,8 +41,6 @@ public class DayTaskTimeUtil {
 	}
 
 	public static List<PieChartData> compute(List<DayTaskTimeInfo> input) {
-		Integer startMark = 0;
-		Integer endMark = 1;
 		HashMap<Long, HashMap<Integer, Integer>> dayTasksTime = new HashMap<Long, HashMap<Integer, Integer>>();
 		HashMap<Long, Integer> dayTasksEffort = new HashMap<Long, Integer>();
 		HashMap<Long, String> idToName = new HashMap<Long, String>();
