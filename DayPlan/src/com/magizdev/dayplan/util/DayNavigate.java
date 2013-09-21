@@ -1,6 +1,7 @@
 package com.magizdev.dayplan.util;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
@@ -51,6 +52,12 @@ public class DayNavigate implements INavigate {
 		return chartDatas;
 	}
 	
+	@Override
+	public HashMap<Integer, List<PieChartData>> GetBarChartData() {
+		List<DayTaskTimeInfo> data = util.GetByDate(current);
 
+		HashMap<Integer, List<PieChartData>> chartDatas = DayTaskTimeUtil.computeBarData(data);
+		return chartDatas;
+	}
 
 }

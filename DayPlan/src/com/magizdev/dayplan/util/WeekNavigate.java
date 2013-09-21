@@ -1,6 +1,7 @@
 package com.magizdev.dayplan.util;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
@@ -68,6 +69,15 @@ public class WeekNavigate implements INavigate {
 		List<DayTaskTimeInfo> data = util.GetByDateRange(currentWeekStartDay,
 				currentWeekEndDay());
 		return DayTaskTimeUtil.compute(data);
+	}
+
+	@Override
+	public HashMap<Integer, List<PieChartData>> GetBarChartData() {
+		List<DayTaskTimeInfo> data = util.GetByDateRange(currentWeekStartDay,
+				currentWeekEndDay());
+
+		HashMap<Integer, List<PieChartData>> chartDatas = DayTaskTimeUtil.computeBarData(data);
+		return chartDatas;
 	}
 
 }

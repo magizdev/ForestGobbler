@@ -1,5 +1,6 @@
 package com.magizdev.dayplan.util;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.magizdev.dayplan.PieChartBuilder.PieChartData;
@@ -10,4 +11,5 @@ public interface INavigate {
 	String CurrentTitle();
 	boolean IsLast();
 	List<PieChartData> GetPieChartData();
+	HashMap<Integer, List<PieChartData>> GetBarChartData();
 }
