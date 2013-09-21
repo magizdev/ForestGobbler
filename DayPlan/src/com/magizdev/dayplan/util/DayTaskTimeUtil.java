@@ -130,8 +130,9 @@ public class DayTaskTimeUtil {
 				first.put(current.BIID, current.Time);
 				dayTasksTime.put(current.Date, first);
 
-				first.put(current.BIID, 0);
-				dayTasksEffort.put(current.Date, first);
+				HashMap<Long, Integer> second = new HashMap<Long, Integer>();
+				second.put(current.BIID, 0);
+				dayTasksEffort.put(current.Date, second);
 			}
 		}
 

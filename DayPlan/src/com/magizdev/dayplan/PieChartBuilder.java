@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -203,7 +204,7 @@ public class PieChartBuilder extends Activity {
 			dataset = buildBarDataset();
 			renderer = buildBarRenderer();
 			mBarChartView = ChartFactory.getBarChartView(this, dataset,
-					renderer, BarChart.Type.STACKED);
+					renderer, BarChart.Type.DEFAULT);
 			barLayout.removeAllViews();
 			barLayout.addView(mBarChartView, new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
@@ -226,6 +227,14 @@ public class PieChartBuilder extends Activity {
 		seriesCount = 0;
 		HashMap<Integer, List<PieChartData>> chartData = navigate
 				.GetBarChartData();
+		
+		for (List<PieChartData> datas : chartData.values()) {
+			for (PieChartData pieChartData : datas) {
+				Log.w("dayplan", pieChartData.backlogName);
+				Log.w("dayplan", pieChartData.data + "");
+			}
+		}
+		
 		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 		HashMap<Long, CategorySeries> categoryMap = new HashMap<Long, CategorySeries>();
 		for (Integer date : chartData.keySet()) {
@@ -269,8 +278,7 @@ public class PieChartBuilder extends Activity {
 	}
 
 	private XYMultipleSeriesRenderer buildBarRenderer() {
-		int[] colors = new int[] { Color.BLUE, Color.CYAN };
-		XYMultipleSeriesRenderer renderer = buildBarRenderer(colors);
+		XYMultipleSeriesRenderer renderer = buildBarRenderer(COLORS);
 		// renderer.getSeriesRendererAt(0).setDisplayChartValues(true);
 		// renderer.getSeriesRendererAt(1).setDisplayChartValues(true);
 		renderer.setXLabels(12);
@@ -285,6 +293,7 @@ public class PieChartBuilder extends Activity {
 	}
 
 	protected XYMultipleSeriesRenderer buildBarRenderer(int[] colors) {
+		Log.w("dayplan", seriesCount+"");
 		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
 		renderer.setAxisTitleTextSize(16);
 		renderer.setChartTitleTextSize(20);
