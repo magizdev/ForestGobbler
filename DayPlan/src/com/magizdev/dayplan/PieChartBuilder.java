@@ -283,11 +283,11 @@ public class PieChartBuilder extends Activity {
 		XYMultipleSeriesRenderer renderer = buildBarRenderer(COLORS);
 		// renderer.getSeriesRendererAt(0).setDisplayChartValues(true);
 		// renderer.getSeriesRendererAt(1).setDisplayChartValues(true);
-		renderer.setXLabels(12);
-		renderer.setYLabels(10);
+//		renderer.setXLabels(12);
+//		renderer.setYLabels(10);
 		renderer.setXLabelsAlign(Align.LEFT);
 		renderer.setYLabelsAlign(Align.LEFT);
-		renderer.setPanEnabled(true, false);
+		renderer.setPanEnabled(false, false);
 		renderer.setZoomEnabled(false);
 		renderer.setZoomRate(1f);
 		renderer.setBarSpacing(1f);
