@@ -10,6 +10,7 @@ import org.achartengine.chart.BarChart;
 import org.achartengine.model.CategorySeries;
 import org.achartengine.model.SeriesSelection;
 import org.achartengine.model.XYMultipleSeriesDataset;
+import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.DefaultRenderer;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
@@ -236,25 +237,26 @@ public class PieChartBuilder extends Activity {
 		}
 		
 		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-		HashMap<Long, CategorySeries> categoryMap = new HashMap<Long, CategorySeries>();
+		HashMap<Long, XYSeries> categoryMap = new HashMap<Long, XYSeries>();
 		for (Integer date : chartData.keySet()) {
 			Calendar calendar = DayUtil.toCalendar(date);
 			String title = calendar.get(Calendar.MONTH) + "/"
 					+ calendar.get(Calendar.DAY_OF_MONTH);
+			int index=0;
 			for (PieChartData data : chartData.get(date)) {
 				if (categoryMap.containsKey(data.biid)) {
-					categoryMap.get(data.biid).add(title, data.data);
+					categoryMap.get(data.biid).add(index++, data.data);
 				} else {
-					CategorySeries series = new CategorySeries(data.backlogName);
-					series.add(title, data.data);
+					XYSeries series = new XYSeries(data.backlogName);
+					series.add(index++, data.data);
 					categoryMap.put(data.biid, series);
 					seriesCount++;
 				}
 			}
 		}
 
-		for (CategorySeries series : categoryMap.values()) {
-			dataset.addSeries(series.toXYSeries());
+		for (XYSeries series : categoryMap.values()) {
+			dataset.addSeries(series);
 		}
 
 		return dataset;
@@ -286,9 +288,9 @@ public class PieChartBuilder extends Activity {
 		renderer.setXLabelsAlign(Align.LEFT);
 		renderer.setYLabelsAlign(Align.LEFT);
 		renderer.setPanEnabled(true, false);
-		// renderer.setZoomEnabled(false);
-		renderer.setZoomRate(1.1f);
-		renderer.setBarSpacing(0.5f);
+		renderer.setZoomEnabled(false);
+		renderer.setZoomRate(1f);
+		renderer.setBarSpacing(1f);
 		return renderer;
 	}
 
@@ -303,6 +305,7 @@ public class PieChartBuilder extends Activity {
 		for (int i = 0; i < seriesCount; i++) {
 			SimpleSeriesRenderer r = new SimpleSeriesRenderer();
 			r.setColor(colors[i % length]);
+			r.setDisplayChartValues(true);
 			renderer.addSeriesRenderer(r);
 		}
 		return renderer;
