@@ -263,6 +263,7 @@ public class PieChartBuilder extends Activity {
 		renderer.setAxisTitleTextSize(16);
 		renderer.setChartTitleTextSize(20);
 		renderer.setLabelsTextSize(15);
+		renderer.setBarWidth(50);
 		renderer.setLegendTextSize(15);
 		int length = COLORS.length;
 		for (int i = 0; i < seriesCount; i++) {
