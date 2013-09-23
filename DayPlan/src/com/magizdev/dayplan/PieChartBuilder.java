@@ -52,6 +52,8 @@ public class PieChartBuilder extends Activity {
 	private XYMultipleSeriesDataset dataset;
 	private XYMultipleSeriesRenderer renderer;
 	private LinearLayout barLayout;
+	private HashMap<Integer, List<PieChartData>> chartData;
+	private int maxY;
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedState) {
@@ -226,33 +228,26 @@ public class PieChartBuilder extends Activity {
 
 	private XYMultipleSeriesDataset buildBarDataset() {
 		seriesCount = 0;
-		HashMap<Integer, List<PieChartData>> chartData = navigate
-				.GetBarChartData();
-		
-		for (List<PieChartData> datas : chartData.values()) {
-			for (PieChartData pieChartData : datas) {
-				Log.w("dayplan", pieChartData.backlogName);
-				Log.w("dayplan", pieChartData.data + "");
-			}
-		}
-		
+		chartData = navigate.GetBarChartData();
+
 		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 		HashMap<Long, XYSeries> categoryMap = new HashMap<Long, XYSeries>();
+		int index = chartData.size() + 1;
+		maxY = 0;
 		for (Integer date : chartData.keySet()) {
-			Calendar calendar = DayUtil.toCalendar(date);
-			String title = calendar.get(Calendar.MONTH) + "/"
-					+ calendar.get(Calendar.DAY_OF_MONTH);
-			int index=0;
 			for (PieChartData data : chartData.get(date)) {
 				if (categoryMap.containsKey(data.biid)) {
-					categoryMap.get(data.biid).add(index++, data.data);
+					categoryMap.get(data.biid).add(index, data.data);
 				} else {
 					XYSeries series = new XYSeries(data.backlogName);
-					series.add(index++, data.data);
+					series.add(index, data.data);
 					categoryMap.put(data.biid, series);
 					seriesCount++;
 				}
+				
+				maxY = data.data > maxY? data.data: maxY;
 			}
+			index--;
 		}
 
 		for (XYSeries series : categoryMap.values()) {
@@ -263,51 +258,37 @@ public class PieChartBuilder extends Activity {
 
 	}
 
-	protected XYMultipleSeriesDataset buildBarDataset(String[] titles,
-			List<double[]> values) {
-		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-		int length = titles.length;
-		for (int i = 0; i < length; i++) {
-			CategorySeries series = new CategorySeries(titles[i]);
-			double[] v = values.get(i);
-			int seriesLength = v.length;
-			for (int k = 0; k < seriesLength; k++) {
-				series.add(v[k]);
-			}
-			dataset.addSeries(series.toXYSeries());
-		}
-		return dataset;
-	}
-
 	private XYMultipleSeriesRenderer buildBarRenderer() {
-		XYMultipleSeriesRenderer renderer = buildBarRenderer(COLORS);
-		// renderer.getSeriesRendererAt(0).setDisplayChartValues(true);
-		// renderer.getSeriesRendererAt(1).setDisplayChartValues(true);
-//		renderer.setXLabels(12);
-//		renderer.setYLabels(10);
-		renderer.setXLabelsAlign(Align.LEFT);
-		renderer.setYLabelsAlign(Align.LEFT);
-		renderer.setPanEnabled(false, false);
-		renderer.setZoomEnabled(false);
-		renderer.setZoomRate(1f);
-		renderer.setBarSpacing(1f);
-		return renderer;
-	}
-
-	protected XYMultipleSeriesRenderer buildBarRenderer(int[] colors) {
-		Log.w("dayplan", seriesCount+"");
 		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
 		renderer.setAxisTitleTextSize(16);
 		renderer.setChartTitleTextSize(20);
 		renderer.setLabelsTextSize(15);
 		renderer.setLegendTextSize(15);
-		int length = colors.length;
+		int length = COLORS.length;
 		for (int i = 0; i < seriesCount; i++) {
 			SimpleSeriesRenderer r = new SimpleSeriesRenderer();
-			r.setColor(colors[i % length]);
+			r.setColor(COLORS[i % length]);
 			r.setDisplayChartValues(true);
 			renderer.addSeriesRenderer(r);
 		}
+
+		renderer.setXLabelsAlign(Align.LEFT);
+		renderer.setYLabelsAlign(Align.LEFT);
+		renderer.setPanEnabled(false, false);
+		renderer.setYAxisMin(0);
+		renderer.setYAxisMax(maxY);
+		renderer.setXAxisMin(0);
+		renderer.setXAxisMax(chartData.size() + 2);
+		int index = chartData.size() + 1;
+		for (int date : chartData.keySet()) {
+			Calendar calendar = DayUtil.toCalendar(date);
+			String title = calendar.get(Calendar.MONTH) + "/"
+					+ calendar.get(Calendar.DAY_OF_MONTH);
+			renderer.addXTextLabel(index--, title);
+		}
+		renderer.setZoomEnabled(false);
+		renderer.setZoomRate(1f);
+		renderer.setBarSpacing(1f);
 		return renderer;
 	}
 }

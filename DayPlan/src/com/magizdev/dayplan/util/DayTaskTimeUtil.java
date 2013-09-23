@@ -84,7 +84,7 @@ public class DayTaskTimeUtil {
 		List<PieChartData> result = new ArrayList<PieChartBuilder.PieChartData>();
 		for (Long key : idToName.keySet()) {
 			result.add(new PieChartData(key, idToName.get(key), dayTasksEffort
-					.get(key)));
+					.get(key) / 1000));
 		}
 
 		return result;
@@ -141,7 +141,7 @@ public class DayTaskTimeUtil {
 			List<PieChartData> oneDaysRecord = new ArrayList<PieChartBuilder.PieChartData>();
 			for (Long biid : dayTasksEffort.get(date).keySet()) {
 				PieChartData oneRecord = new PieChartData(biid,
-						idToName.get(biid), dayTasksEffort.get(date).get(biid));
+						idToName.get(biid), dayTasksEffort.get(date).get(biid) / 1000);
 				oneDaysRecord.add(oneRecord);
 			}
 			result.put(date, oneDaysRecord);
