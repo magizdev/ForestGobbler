@@ -1,6 +1,7 @@
 package com.magizdev.dayplan;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,6 +55,8 @@ public class PieChartBuilder extends Activity {
 	private LinearLayout barLayout;
 	private HashMap<Integer, List<PieChartData>> chartData;
 	private int maxY;
+	private Integer startDate;
+	private Integer endDate;
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedState) {
@@ -234,20 +237,47 @@ public class PieChartBuilder extends Activity {
 		HashMap<Long, XYSeries> categoryMap = new HashMap<Long, XYSeries>();
 		int index = chartData.size() + 1;
 		maxY = 0;
-		for (Integer date : chartData.keySet()) {
-			for (PieChartData data : chartData.get(date)) {
-				if (categoryMap.containsKey(data.biid)) {
-					categoryMap.get(data.biid).add(index, data.data);
-				} else {
+
+		startDate = DayUtil.toDate(new Date());
+		endDate = DayUtil.toDate(new Date(0));
+
+		if (chartData.size() == 1) {
+			int i = 1;
+			for (Integer j : chartData.keySet()) {
+				for (PieChartData data : chartData.get(j)) {
 					XYSeries series = new XYSeries(data.backlogName);
-					series.add(index, data.data);
+					series.add(i++, data.data);
 					categoryMap.put(data.biid, series);
 					seriesCount++;
+
+					maxY = data.data > maxY ? data.data : maxY;
 				}
-				
-				maxY = data.data > maxY? data.data: maxY;
 			}
-			index--;
+
+		} else {
+			for (Integer date : chartData.keySet()) {
+				if (startDate > date) {
+					startDate = date;
+				}
+				if (endDate < date) {
+					endDate = date;
+				}
+			}
+			for (Integer date : chartData.keySet()) {
+				for (PieChartData data : chartData.get(date)) {
+					if (categoryMap.containsKey(data.biid)) {
+						categoryMap.get(data.biid).add(index, data.data);
+					} else {
+						XYSeries series = new XYSeries(data.backlogName);
+						series.add(date - startDate + 1, data.data);
+						categoryMap.put(data.biid, series);
+						seriesCount++;
+					}
+
+					maxY = data.data > maxY ? data.data : maxY;
+				}
+				index--;
+			}
 		}
 
 		for (XYSeries series : categoryMap.values()) {
@@ -279,14 +309,26 @@ public class PieChartBuilder extends Activity {
 		renderer.setYAxisMin(0);
 		renderer.setYAxisMax(maxY);
 		renderer.setXAxisMin(0);
-		renderer.setXAxisMax(chartData.size() + 2);
-		int index = chartData.size() + 1;
-		for (int date : chartData.keySet()) {
-			Calendar calendar = DayUtil.toCalendar(date);
-			String title = calendar.get(Calendar.MONTH) + "/"
-					+ calendar.get(Calendar.DAY_OF_MONTH);
-			renderer.addXTextLabel(index--, title);
+		if (chartData.size() == 1) {
+			for (Integer i : chartData.keySet()) {
+				List<PieChartData> datas = chartData.get(i);
+				renderer.setXAxisMax(datas.size() + 2);
+
+				for (int j = 1; j < datas.size() + 1; j++) {
+					renderer.addXTextLabel(j, datas.get(j - 1).backlogName);
+				}
+			}
+		} else {
+			renderer.setXAxisMax(endDate - startDate + 2);
+
+			for (int i = 0; i < endDate - startDate + 2; i++) {
+				Calendar calendar = DayUtil.toCalendar(startDate + i);
+				String title = calendar.get(Calendar.MONTH) + "/"
+						+ calendar.get(Calendar.DAY_OF_MONTH);
+				renderer.addXTextLabel(startDate + i, title);
+			}
 		}
+
 		renderer.setZoomEnabled(false);
 		renderer.setZoomRate(1f);
 		renderer.setBarSpacing(1f);
