@@ -1,8 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-     >
+    android:layout_height="match_parent" >
 
     <RelativeLayout
         android:id="@+id/inputArea"
@@ -32,10 +31,18 @@
             android:background="@android:drawable/edit_text"
             android:ellipsize="end"
             android:ems="10"
+            android:hint="@string/hint_add_backlog_title"
             android:inputType="text"
-            android:hint = "@string/hint_add_backlog_title"
             android:singleLine="true" >
         </EditText>
+
+        <CheckBox
+            android:id="@+id/checkBoxShowAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/editTextBacklog"
+            android:text="Show Completed Items" />
     </RelativeLayout>
 
     <ListView

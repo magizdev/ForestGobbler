@@ -17,19 +17,22 @@ import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.store.DayPlanMetaData.BacklogItemTable;
 
 public class BacklogItemAdapter extends BaseAdapter {
-	private static String condition = "(" + BacklogItemTable.STATE + "="
-			+ BacklogItemTable.STATE_ACTIVE + ")";
+	private static String conditionActiveOnly = "(" + BacklogItemTable.STATE
+			+ "=" + BacklogItemTable.STATE_ACTIVE + ")";
+	private static String conditionAll = "(1=1)";
 	Context context;
 	StorageUtil<BacklogItemInfo> storageUtil;
 	int completedCount;
 	List<BacklogItemInfo> backlogs;
 	List<Long> selectedIds;
+	private String condition;
 
 	public BacklogItemAdapter(Context context, List<Long> selectedIds) {
 		this.context = context;
 		BacklogItemInfo blank = new BacklogItemInfo();
 		this.selectedIds = selectedIds;
 		storageUtil = new StorageUtil<BacklogItemInfo>(context, blank);
+		condition = conditionActiveOnly;
 		backlogs = storageUtil.getCollection(condition);
 		for (int i = 0; i < backlogs.size(); i++) {
 			BacklogItemInfo backlogItemInfo = backlogs.get(i);
@@ -44,6 +47,19 @@ public class BacklogItemAdapter extends BaseAdapter {
 	public void removeAt(int index) {
 	}
 
+	public void setShowAll(Boolean showAll) {
+		if (showAll) {
+			condition = conditionAll;
+		} else {
+			condition = conditionActiveOnly;
+		}
+		refresh();
+	}
+	
+	public void setSelected(List<Long> selected){
+		this.selectedIds = selected;
+	}
+
 	public void refresh() {
 		backlogs = storageUtil.getCollection(condition);
 		for (int i = 0; i < backlogs.size(); i++) {
@@ -54,6 +70,8 @@ public class BacklogItemAdapter extends BaseAdapter {
 				backlogItemInfo.Selected = false;
 			}
 		}
+		
+		notifyDataSetChanged();
 	}
 
 	@Override

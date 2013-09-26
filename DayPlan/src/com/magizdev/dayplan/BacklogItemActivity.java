@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
@@ -38,6 +41,18 @@ public class BacklogItemActivity extends Activity {
 		listView = (ListView) findViewById(R.id.listViewBacklog);
 		backlog = (EditText) findViewById(R.id.editTextBacklog);
 		ImageButton addButton = (ImageButton) findViewById(R.id.btnAddBacklog);
+		CheckBox showAll = (CheckBox) findViewById(R.id.checkBoxShowAll);
+		showAll.setChecked(false);
+		showAll.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				BacklogItemAdapter adapter = (BacklogItemAdapter) listView
+						.getAdapter();
+				adapter.setShowAll(isChecked);
+			}
+		});
 
 		dayTaskUtil = new DayTaskUtil(this);
 		storageUtil = new StorageUtil<BacklogItemInfo>(this,
@@ -79,8 +94,13 @@ public class BacklogItemActivity extends Activity {
 		super.onResume();
 		List<Long> selectedBacklogs = dayTaskUtil.GetTasksByDate(DayUtil
 				.Today());
-		adapter = new BacklogItemAdapter(this, selectedBacklogs);
-		listView.setAdapter(adapter);
+		adapter = (BacklogItemAdapter) listView.getAdapter();
+		if (adapter != null) {
+			adapter.setSelected(selectedBacklogs);
+		} else {
+			adapter = new BacklogItemAdapter(this, selectedBacklogs);
+			listView.setAdapter(adapter);
+		}
 		listView.invalidate();
 	}
 
