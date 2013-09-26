@@ -325,7 +325,7 @@ public class PieChartBuilder extends Activity {
 			renderer.setXAxisMax(endDate - startDate + 2);
 
 			for (int i = 1; i < endDate - startDate + 2; i++) {
-				Calendar calendar = DayUtil.toCalendar(startDate);
+				Calendar calendar = DayUtil.toCalendar(startDate + i - 1);
 				String title = calendar.get(Calendar.MONTH) + "/"
 						+ calendar.get(Calendar.DAY_OF_MONTH);
 				renderer.addXTextLabel(i, title);
