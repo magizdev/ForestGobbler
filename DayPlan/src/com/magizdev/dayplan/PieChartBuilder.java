@@ -235,21 +235,19 @@ public class PieChartBuilder extends Activity {
 
 		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 		HashMap<Long, XYSeries> categoryMap = new HashMap<Long, XYSeries>();
-		int index = chartData.size() + 1;
 		maxY = 0;
 
 		startDate = DayUtil.toDate(new Date());
 		endDate = DayUtil.toDate(new Date(0));
 
 		if (chartData.size() == 1) {
+			seriesCount = 1;
 			int i = 1;
+			XYSeries series = new XYSeries("test");
+			categoryMap.put(1L, series);
 			for (Integer j : chartData.keySet()) {
 				for (PieChartData data : chartData.get(j)) {
-					XYSeries series = new XYSeries(data.backlogName);
 					series.add(i++, data.data);
-					categoryMap.put(data.biid, series);
-					seriesCount++;
-
 					maxY = data.data > maxY ? data.data : maxY;
 				}
 			}
@@ -266,7 +264,8 @@ public class PieChartBuilder extends Activity {
 			for (Integer date : chartData.keySet()) {
 				for (PieChartData data : chartData.get(date)) {
 					if (categoryMap.containsKey(data.biid)) {
-						categoryMap.get(data.biid).add(index, data.data);
+						categoryMap.get(data.biid).add(date - startDate + 1,
+								data.data);
 					} else {
 						XYSeries series = new XYSeries(data.backlogName);
 						series.add(date - startDate + 1, data.data);
@@ -276,8 +275,8 @@ public class PieChartBuilder extends Activity {
 
 					maxY = data.data > maxY ? data.data : maxY;
 				}
-				index--;
 			}
+			maxY *= 1.2;
 		}
 
 		for (XYSeries series : categoryMap.values()) {
@@ -293,7 +292,9 @@ public class PieChartBuilder extends Activity {
 		renderer.setAxisTitleTextSize(16);
 		renderer.setChartTitleTextSize(20);
 		renderer.setLabelsTextSize(15);
-		renderer.setBarWidth(50);
+		renderer.setBarWidth(20);
+		renderer.setApplyBackgroundColor(true);
+		renderer.setBackgroundColor(Color.WHITE);
 		renderer.setLegendTextSize(15);
 		int length = COLORS.length;
 		for (int i = 0; i < seriesCount; i++) {
@@ -308,6 +309,7 @@ public class PieChartBuilder extends Activity {
 		renderer.setPanEnabled(false, false);
 		renderer.setYAxisMin(0);
 		renderer.setYAxisMax(maxY);
+		renderer.setXLabels(0);
 		renderer.setXAxisMin(0);
 		if (chartData.size() == 1) {
 			for (Integer i : chartData.keySet()) {
@@ -315,17 +317,18 @@ public class PieChartBuilder extends Activity {
 				renderer.setXAxisMax(datas.size() + 2);
 
 				for (int j = 1; j < datas.size() + 1; j++) {
+					renderer.removeXTextLabel(j);
 					renderer.addXTextLabel(j, datas.get(j - 1).backlogName);
 				}
 			}
 		} else {
 			renderer.setXAxisMax(endDate - startDate + 2);
 
-			for (int i = 0; i < endDate - startDate + 2; i++) {
-				Calendar calendar = DayUtil.toCalendar(startDate + i);
+			for (int i = 1; i < endDate - startDate + 2; i++) {
+				Calendar calendar = DayUtil.toCalendar(startDate);
 				String title = calendar.get(Calendar.MONTH) + "/"
 						+ calendar.get(Calendar.DAY_OF_MONTH);
-				renderer.addXTextLabel(startDate + i, title);
+				renderer.addXTextLabel(i, title);
 			}
 		}
 
