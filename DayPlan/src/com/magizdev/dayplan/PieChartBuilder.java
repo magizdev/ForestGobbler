@@ -17,10 +17,8 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -103,11 +101,10 @@ public class PieChartBuilder extends Activity {
 		});
 		navigate = new DayNavigate(this);
 
-		mRenderer.setZoomButtonsVisible(true);
 		mRenderer.setStartAngle(180);
 		mRenderer.setDisplayValues(true);
-		mRenderer.setLegendTextSize(50);
-		mRenderer.setLabelsTextSize(50);
+		mRenderer.setLegendTextSize(30);
+		mRenderer.setLabelsTextSize(30);
 		Spinner spinner = (Spinner) findViewById(R.id.spinner1);
 
 		ArrayAdapter<CharSequence> mAdapter = ArrayAdapter.createFromResource(
@@ -146,7 +143,7 @@ public class PieChartBuilder extends Activity {
 			LinearLayout layout = (LinearLayout) findViewById(R.id.pieChart);
 			mPieChartView = ChartFactory.getPieChartView(this, mSeries,
 					mRenderer);
-			mRenderer.setClickEnabled(true);
+			// mRenderer.setClickEnabled(true);
 			mPieChartView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -243,7 +240,7 @@ public class PieChartBuilder extends Activity {
 		if (chartData.size() == 1) {
 			seriesCount = 1;
 			int i = 1;
-			XYSeries series = new XYSeries("test");
+			XYSeries series = new XYSeries("");
 			categoryMap.put(1L, series);
 			for (Integer j : chartData.keySet()) {
 				for (PieChartData data : chartData.get(j)) {
@@ -294,7 +291,8 @@ public class PieChartBuilder extends Activity {
 		renderer.setLabelsTextSize(15);
 		renderer.setBarWidth(20);
 		renderer.setApplyBackgroundColor(true);
-		renderer.setBackgroundColor(Color.WHITE);
+		renderer.setBackgroundColor(0xFFFAFAFA);
+		renderer.setMarginsColor(0xFFFAFAFA);
 		renderer.setLegendTextSize(15);
 		int length = COLORS.length;
 		for (int i = 0; i < seriesCount; i++) {

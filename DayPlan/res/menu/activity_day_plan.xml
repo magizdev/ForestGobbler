@@ -8,7 +8,7 @@
         android:title="@string/action_mark"/>
     <item
         android:id="@+id/action_report"
-        android:icon="@android:drawable/ic_menu_view"
+        android:icon="@drawable/ic_menu_view"
         android:showAsAction="ifRoom"
         android:title="@string/action_mark"/>
 
