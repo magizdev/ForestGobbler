@@ -12,13 +12,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Switch;
 
 import com.magizdev.dayplan.util.DayTaskUtil;
 import com.magizdev.dayplan.util.DayUtil;
@@ -41,7 +41,7 @@ public class BacklogItemActivity extends Activity {
 		listView = (ListView) findViewById(R.id.listViewBacklog);
 		backlog = (EditText) findViewById(R.id.editTextBacklog);
 		ImageButton addButton = (ImageButton) findViewById(R.id.btnAddBacklog);
-		CheckBox showAll = (CheckBox) findViewById(R.id.checkBoxShowAll);
+		Switch showAll = (Switch) findViewById(R.id.switchShowAll);
 		showAll.setChecked(false);
 		showAll.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
