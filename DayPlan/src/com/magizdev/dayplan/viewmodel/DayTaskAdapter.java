@@ -113,6 +113,7 @@ public class DayTaskAdapter extends BaseAdapter {
 		viewHolder.startButton.setImageResource(imageId);
 		int visibility = state == TimeType.Start ? View.VISIBLE : View.GONE;
 		viewHolder.progress.setVisibility(visibility);
+		
 
 		return convertView;
 	}

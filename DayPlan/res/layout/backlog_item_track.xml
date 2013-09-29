@@ -16,23 +16,27 @@
 
     <ProgressBar
         android:id="@+id/taskStatus"
-        android:progressDrawable="@drawable/customprogress"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-         />
+        android:layout_margin="5dp"
+        android:indeterminateDrawable="@drawable/customprogress" />
 
     <TextView
         android:id="@+id/tVName1"
-        android:layout_width="250dp"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_centerVertical="true"
         android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
         android:layout_marginLeft="40dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
         android:layout_toLeftOf="@id/startButton"
+        android:ellipsize="end"
         android:gravity="center_vertical"
+        android:singleLine="true"
         android:text=""
         android:textSize="25dp" />
+
 </RelativeLayout>
