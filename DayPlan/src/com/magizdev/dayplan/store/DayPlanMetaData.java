@@ -27,6 +27,9 @@ public class DayPlanMetaData {
 		public static final String NAME = "name";
 		public static final String DESC = "desc";
 		public static final String STATE = "bi_state";
+		public static final String ESTIMATE = "estimate";
+		public static final String REMAIN_ESTIMATE = "remain_estimate";
+		public static final String DUE_DATE = "due_date";
 		public static final int STATE_ACTIVE = 0;
 		public static final int STATE_COMPLETE = 1;
 		
@@ -100,6 +103,34 @@ public class DayPlanMetaData {
 			projectionMap.put(BacklogItemTable.NAME, BacklogItemTable.NAME);
 			projectionMap.put(DayTaskTimeTable.TIME, DayTaskTimeTable.TIME);
 			projectionMap.put(DayTaskTimeTable.TIME_TYPE, DayTaskTimeTable.TIME_TYPE);
+		}
+	}
+	
+	public static final class DayTaskBurndownTable implements BaseColumns {
+		private DayTaskBurndownTable() {
+		}
+
+		public static final String TABLE_NAME = "daytaskburndown";
+		public static final Uri CONTENT_URI = Uri.parse("content://"
+				+ AUTHORITY + "/daytaskburndown");
+
+		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.magizdev.dayplan.daytaskburndown";
+		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.magizdev.dayplan.daytaskburndown";
+		public static final String DEFAULT_SORT_ORDER = "time DESC";
+
+		public static final String DATE = "date";
+		public static final String BIID = "backlogid";
+		public static final String EFFORT = "effort";
+		
+		public static HashMap<String, String> projectionMap;
+
+		static {
+			projectionMap = new HashMap<String, String>();
+			projectionMap.put(DayTaskBurndownTable._ID, DayTaskBurndownTable.TABLE_NAME + "." + DayTaskBurndownTable._ID);
+			projectionMap.put(DayTaskBurndownTable.DATE, DayTaskBurndownTable.DATE);
+			projectionMap.put(DayTaskBurndownTable.BIID, DayTaskBurndownTable.BIID);
+			projectionMap.put(DayTaskBurndownTable.EFFORT, DayTaskBurndownTable.EFFORT);
+			projectionMap.put(BacklogItemTable.NAME, BacklogItemTable.NAME);
 		}
 	}
 }

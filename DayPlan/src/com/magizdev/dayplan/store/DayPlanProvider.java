@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import com.magizdev.dayplan.store.DayPlanMetaData.BacklogItemTable;
+import com.magizdev.dayplan.store.DayPlanMetaData.DayTaskBurndownTable;
 import com.magizdev.dayplan.store.DayPlanMetaData.DayTaskTable;
 import com.magizdev.dayplan.store.DayPlanMetaData.DayTaskTimeTable;
 
@@ -54,7 +55,10 @@ public class DayPlanProvider extends ContentProvider {
 			db.execSQL("CREATE TABLE " + BacklogItemTable.TABLE_NAME + "("
 					+ BacklogItemTable._ID + " INTEGER PRIMARY KEY,"
 					+ BacklogItemTable.NAME + " TEXT," + BacklogItemTable.DESC
-					+ " TEXT," + BacklogItemTable.STATE + " INTEGER);");
+					+ " TEXT," + BacklogItemTable.STATE + " INTEGER,"
+					+ BacklogItemTable.ESTIMATE + " INTEGER,"
+					+ BacklogItemTable.REMAIN_ESTIMATE + " INTEGER,"
+					+ BacklogItemTable.DUE_DATE + " INTEGER);");
 
 			// create day task table;
 			db.execSQL("CREATE TABLE " + DayTaskTable.TABLE_NAME + "("
@@ -69,6 +73,13 @@ public class DayPlanProvider extends ContentProvider {
 					+ DayTaskTimeTable.BIID + " INTEGER,"
 					+ DayTaskTimeTable.TIME + " INTEGER,"
 					+ DayTaskTimeTable.TIME_TYPE + " INTEGER);");
+			
+			// create day task effort table;
+			db.execSQL("CREATE TABLE " + DayTaskBurndownTable.TABLE_NAME + "("
+					+ DayTaskBurndownTable._ID + " INTEGER PRIMARY KEY,"
+					+ DayTaskBurndownTable.DATE + " INTEGER,"
+					+ DayTaskBurndownTable.BIID + " INTEGER,"
+					+ DayTaskBurndownTable.EFFORT + " INTEGER);");
 		}
 
 		@Override
