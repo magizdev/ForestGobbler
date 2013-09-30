@@ -40,16 +40,16 @@ public class PieChartBuilder extends Activity {
 
 	private static int[] COLORS = new int[] { 0xffB2C938, 0xff3BA9B8,
 			0xffFF9910, 0xffC74C47, 0xff5B1A69, 0xffA83AAE, 0xffF981C5 };
-	private CategorySeries mSeries = new CategorySeries("");
-	private DefaultRenderer mRenderer = new DefaultRenderer();
+	private CategorySeries mPieSeries = new CategorySeries("");
+	private DefaultRenderer mPieRenderer = new DefaultRenderer();
 
 	private GraphicalView mPieChartView;
 	private GraphicalView mBarChartView;
 	private TextView chartTitle;
 	private INavigate navigate;
 	private int seriesCount;
-	private XYMultipleSeriesDataset dataset;
-	private XYMultipleSeriesRenderer renderer;
+	private XYMultipleSeriesDataset mBarDataset;
+	private XYMultipleSeriesRenderer mBarRenderer;
 	private LinearLayout barLayout;
 	private HashMap<Integer, List<PieChartData>> chartData;
 	private int maxY;
@@ -59,16 +59,17 @@ public class PieChartBuilder extends Activity {
 	@Override
 	protected void onRestoreInstanceState(Bundle savedState) {
 		super.onRestoreInstanceState(savedState);
-		mSeries = (CategorySeries) savedState.getSerializable("current_series");
-		mRenderer = (DefaultRenderer) savedState
+		mPieSeries = (CategorySeries) savedState
+				.getSerializable("current_series");
+		mPieRenderer = (DefaultRenderer) savedState
 				.getSerializable("current_renderer");
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putSerializable("current_series", mSeries);
-		outState.putSerializable("current_renderer", mRenderer);
+		outState.putSerializable("current_series", mPieSeries);
+		outState.putSerializable("current_renderer", mPieRenderer);
 	}
 
 	@Override
@@ -84,7 +85,6 @@ public class PieChartBuilder extends Activity {
 			@Override
 			public void onClick(View v) {
 				navigate.Backword();
-
 				refresh();
 			}
 		});
@@ -101,10 +101,10 @@ public class PieChartBuilder extends Activity {
 		});
 		navigate = new DayNavigate(this);
 
-		mRenderer.setStartAngle(180);
-		mRenderer.setDisplayValues(true);
-		mRenderer.setLegendTextSize(30);
-		mRenderer.setLabelsTextSize(30);
+		mPieRenderer.setStartAngle(180);
+		mPieRenderer.setDisplayValues(true);
+		mPieRenderer.setLegendTextSize(30);
+		mPieRenderer.setLabelsTextSize(30);
 		Spinner spinner = (Spinner) findViewById(R.id.spinner1);
 
 		ArrayAdapter<CharSequence> mAdapter = ArrayAdapter.createFromResource(
@@ -141,30 +141,30 @@ public class PieChartBuilder extends Activity {
 		refresh();
 		if (mPieChartView == null) {
 			LinearLayout layout = (LinearLayout) findViewById(R.id.pieChart);
-			mPieChartView = ChartFactory.getPieChartView(this, mSeries,
-					mRenderer);
+			mPieChartView = ChartFactory.getPieChartView(this, mPieSeries,
+					mPieRenderer);
 			// mRenderer.setClickEnabled(true);
-			mPieChartView.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					SeriesSelection seriesSelection = mPieChartView
-							.getCurrentSeriesAndPoint();
-					if (seriesSelection != null) {
-						for (int i = 0; i < mSeries.getItemCount(); i++) {
-							mRenderer.getSeriesRendererAt(i).setHighlighted(
-									i == seriesSelection.getPointIndex());
-						}
-						mPieChartView.repaint();
-						Toast.makeText(
-								PieChartBuilder.this,
-								mSeries.getCategory(seriesSelection
-										.getPointIndex())
-										+ ":"
-										+ seriesSelection.getValue(),
-								Toast.LENGTH_SHORT).show();
-					}
-				}
-			});
+//			mPieChartView.setOnClickListener(new View.OnClickListener() {
+//				@Override
+//				public void onClick(View v) {
+//					SeriesSelection seriesSelection = mPieChartView
+//							.getCurrentSeriesAndPoint();
+//					if (seriesSelection != null) {
+//						for (int i = 0; i < mPieSeries.getItemCount(); i++) {
+//							mPieRenderer.getSeriesRendererAt(i).setHighlighted(
+//									i == seriesSelection.getPointIndex());
+//						}
+//						mPieChartView.repaint();
+//						Toast.makeText(
+//								PieChartBuilder.this,
+//								mPieSeries.getCategory(seriesSelection
+//										.getPointIndex())
+//										+ ":"
+//										+ seriesSelection.getValue(),
+//								Toast.LENGTH_SHORT).show();
+//					}
+//				}
+//			});
 			layout.addView(mPieChartView, new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		} else {
@@ -172,10 +172,10 @@ public class PieChartBuilder extends Activity {
 		}
 		if (mBarChartView == null) {
 
-			dataset = buildBarDataset();
-			renderer = buildBarRenderer();
-			mBarChartView = ChartFactory.getBarChartView(this, dataset,
-					renderer, BarChart.Type.STACKED);
+			mBarDataset = buildBarDataset();
+			mBarRenderer = buildBarRenderer();
+			mBarChartView = ChartFactory.getBarChartView(this, mBarDataset,
+					mBarRenderer, BarChart.Type.STACKED);
 
 			barLayout.addView(mBarChartView, new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
@@ -186,28 +186,28 @@ public class PieChartBuilder extends Activity {
 
 	private void refresh() {
 		List<PieChartData> data = navigate.GetPieChartData();
-		mSeries.clear();
-		mRenderer.removeAllRenderers();
+		mPieSeries.clear();
+		mPieRenderer.removeAllRenderers();
 		for (PieChartData pieChartData : data) {
-			mSeries.add(pieChartData.backlogName, pieChartData.data);
+			mPieSeries.add(pieChartData.backlogName, pieChartData.data);
 			SimpleSeriesRenderer renderer = new SimpleSeriesRenderer();
-			renderer.setColor(COLORS[(mSeries.getItemCount() - 1)
+			renderer.setColor(COLORS[(mPieSeries.getItemCount() - 1)
 					% COLORS.length]);
 			renderer.setChartValuesTextSize(40);
-			mRenderer.addSeriesRenderer(renderer);
+			mPieRenderer.addSeriesRenderer(renderer);
 		}
 		chartTitle.setText(navigate.CurrentTitle());
 		if (mPieChartView != null) {
 			mPieChartView.repaint();
 		}
 
-		dataset = buildBarDataset();
-		renderer = buildBarRenderer();
+		mBarDataset = buildBarDataset();
+		mBarRenderer = buildBarRenderer();
 		if (mBarChartView != null) {
-			dataset = buildBarDataset();
-			renderer = buildBarRenderer();
-			mBarChartView = ChartFactory.getBarChartView(this, dataset,
-					renderer, BarChart.Type.DEFAULT);
+			mBarDataset = buildBarDataset();
+			mBarRenderer = buildBarRenderer();
+			mBarChartView = ChartFactory.getBarChartView(this, mBarDataset,
+					mBarRenderer, BarChart.Type.DEFAULT);
 			barLayout.removeAllViews();
 			barLayout.addView(mBarChartView, new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
@@ -299,6 +299,9 @@ public class PieChartBuilder extends Activity {
 			SimpleSeriesRenderer r = new SimpleSeriesRenderer();
 			r.setColor(COLORS[i % length]);
 			r.setDisplayChartValues(true);
+			if (seriesCount == 1) {
+				r.setShowLegendItem(false);
+			}
 			renderer.addSeriesRenderer(r);
 		}
 
