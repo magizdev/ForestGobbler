@@ -42,27 +42,27 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@id/editTextBacklog"
-            android:visibility="gone"
             android:layout_marginRight="10dp"
-            android:text="Show Completed Items" />
+            android:text="Show Completed Items"
+            android:visibility="gone" />
 
         <Switch
             android:id="@+id/switchShowAll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_below="@id/editTextBacklog"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_alignParentRight="true"
             android:text="Show Completed Items" />
-
     </RelativeLayout>
 
     <ListView
         android:id="@+id/listViewBacklog"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/inputArea" >
+        android:layout_below="@id/inputArea"
+        android:animateLayoutChanges="true" >
     </ListView>
 
 </RelativeLayout>
