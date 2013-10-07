@@ -13,6 +13,7 @@ public class WeekNavigate implements INavigate {
 	private int currentWeekOfYear;
 	private int currentWeekStartDay;
 	private int nowWeekOfYear;
+	private int nowWeekStartDay;
 	private int today;
 	private DayTaskTimeUtil util;
 
@@ -32,6 +33,7 @@ public class WeekNavigate implements INavigate {
 		currentWeekOfYear = nowWeekOfYear;
 		cToday.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 		currentWeekStartDay = DayUtil.toDate(cToday.getTime());
+		nowWeekStartDay = currentWeekStartDay;
 	}
 
 	@Override
@@ -53,10 +55,12 @@ public class WeekNavigate implements INavigate {
 	public String CurrentTitle() {
 		Calendar startDay = DayUtil.toCalendar(currentWeekStartDay);
 		Calendar endDay = DayUtil.toCalendar(currentWeekEndDay() - 1);
-		return startDay.get(Calendar.YEAR) + "-" + startDay.get(Calendar.MONTH)
-				+ "-" + startDay.get(Calendar.DAY_OF_MONTH) + " -- "
-				+ endDay.get(Calendar.YEAR) + "-" + endDay.get(Calendar.MONTH)
-				+ "-" + endDay.get(Calendar.DAY_OF_MONTH);
+		return startDay.get(Calendar.YEAR) + "-"
+				+ (startDay.get(Calendar.MONTH) + 1) + "-"
+				+ startDay.get(Calendar.DAY_OF_MONTH) + " -- "
+				+ endDay.get(Calendar.YEAR) + "-"
+				+ (endDay.get(Calendar.MONTH) + 1) + "-"
+				+ endDay.get(Calendar.DAY_OF_MONTH);
 	}
 
 	@Override
@@ -76,8 +80,15 @@ public class WeekNavigate implements INavigate {
 		List<DayTaskTimeInfo> data = util.GetByDateRange(currentWeekStartDay,
 				currentWeekEndDay());
 
-		HashMap<Integer, List<PieChartData>> chartDatas = DayTaskTimeUtil.computeBarData(data);
+		HashMap<Integer, List<PieChartData>> chartDatas = DayTaskTimeUtil
+				.computeBarData(data);
 		return chartDatas;
 	}
 
+	@Override
+	public void SetPostion(int offset) {
+		currentWeekOfYear = nowWeekOfYear + offset;
+		currentWeekStartDay = nowWeekStartDay + offset * 7;
+
+	}
 }

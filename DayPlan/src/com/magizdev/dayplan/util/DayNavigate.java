@@ -35,8 +35,9 @@ public class DayNavigate implements INavigate {
 	@Override
 	public String CurrentTitle() {
 		Calendar calendar = DayUtil.toCalendar(current);
-		return calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH)
-				+ "-" + calendar.get(Calendar.DAY_OF_MONTH);
+		return calendar.get(Calendar.YEAR) + "-"
+				+ (calendar.get(Calendar.MONTH) + 1) + "-"
+				+ calendar.get(Calendar.DAY_OF_MONTH);
 	}
 
 	@Override
@@ -51,13 +52,19 @@ public class DayNavigate implements INavigate {
 		List<PieChartData> chartDatas = DayTaskTimeUtil.compute(data);
 		return chartDatas;
 	}
-	
+
 	@Override
 	public HashMap<Integer, List<PieChartData>> GetBarChartData() {
 		List<DayTaskTimeInfo> data = util.GetByDate(current);
 
-		HashMap<Integer, List<PieChartData>> chartDatas = DayTaskTimeUtil.computeBarData(data);
+		HashMap<Integer, List<PieChartData>> chartDatas = DayTaskTimeUtil
+				.computeBarData(data);
 		return chartDatas;
+	}
+
+	@Override
+	public void SetPostion(int offset) {
+		current = today + offset;
 	}
 
 }

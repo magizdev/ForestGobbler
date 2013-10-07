@@ -8,6 +8,7 @@ import com.magizdev.dayplan.PieChartBuilder.PieChartData;
 public interface INavigate {
 	void Backword();
 	void Forward();
+	void SetPostion(int offset);
 	String CurrentTitle();
 	boolean IsLast();
 	List<PieChartData> GetPieChartData();
