@@ -2,25 +2,18 @@ package com.magizdev.dayplan.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.util.INavigate;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements OnClickListener {
 	private INavigate navigate;
-	private ViewPager pager;
 	private boolean mShowingBack;
 	private BaseChartFragment fragment;
-
-	public void setPager(ViewPager pager) {
-		this.pager = pager;
-	}
 
 	public void setDataSource(INavigate naviate) {
 		this.navigate = naviate;
@@ -36,17 +29,7 @@ public class DashboardFragment extends Fragment {
 		ViewGroup rootView = (ViewGroup) inflater.inflate(
 				R.layout.fragment_report, container, false);
 
-		Button flipChart = (Button) rootView.findViewById(R.id.flipChart);
-		flipChart.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				flipCard();
-			}
-		});
-
 		fragment = new PieChartFragment();
-		fragment.setPager(pager);
 		fragment.setDataSource(navigate);
 
 		if (savedInstanceState == null) {
@@ -69,7 +52,6 @@ public class DashboardFragment extends Fragment {
 		mShowingBack = true;
 
 		fragment = new BarChartFragment();
-		fragment.setPager(pager);
 		fragment.setDataSource(navigate);
 		// Create and commit a new fragment transaction that adds the fragment
 		// for the back of
@@ -102,6 +84,11 @@ public class DashboardFragment extends Fragment {
 
 				// Commit the transaction.
 				.commit();
+	}
+
+	@Override
+	public void onClick(View v) {
+		flipCard();
 	}
 
 }
