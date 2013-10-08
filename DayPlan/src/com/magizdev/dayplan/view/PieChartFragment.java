@@ -9,11 +9,13 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import com.magizdev.dayplan.PieChartBuilder.PieChartData;
 
 public class PieChartFragment extends BaseChartFragment {
-	private DefaultRenderer mPieRenderer = new DefaultRenderer();
-	private CategorySeries mPieSeries = new CategorySeries("");
+	private DefaultRenderer mPieRenderer;
+	private CategorySeries mPieSeries;
 
 	@Override
 	protected GraphicalView GetChart() {
+		mPieRenderer = new DefaultRenderer();
+		mPieSeries = new CategorySeries("");
 		mPieRenderer.setStartAngle(180);
 		mPieRenderer.setDisplayValues(true);
 		mPieRenderer.setLegendTextSize(30);
