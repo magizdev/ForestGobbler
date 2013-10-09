@@ -4,25 +4,20 @@ import org.achartengine.GraphicalView;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.util.INavigate;
 
 public abstract class BaseChartFragment extends Fragment {
 	protected INavigate navigate;
-	private TextView chartTitle;
-	private OnClickListener onClickListener;
+
 	private GraphicalView graphicalView;
 	protected static int[] COLORS = new int[] { 0xffB2C938, 0xff3BA9B8,
 			0xffFF9910, 0xffC74C47, 0xff5B1A69, 0xffA83AAE, 0xffF981C5 };
@@ -31,10 +26,6 @@ public abstract class BaseChartFragment extends Fragment {
 
 	public void setDataSource(INavigate naviate) {
 		this.navigate = naviate;
-	}
-
-	public void setOnClick(OnClickListener onClickListener) {
-		this.onClickListener = onClickListener;
 	}
 
 	public BaseChartFragment() {
@@ -47,14 +38,11 @@ public abstract class BaseChartFragment extends Fragment {
 		rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chart,
 				container, false);
 
-
 		Spinner spinner = (Spinner) rootView.findViewById(R.id.spinner1);
 
 		Log.w("BaseChartFragment", "onCreateView");
-		ImageButton flipChart = (ImageButton) rootView
-				.findViewById(R.id.flipButton);
 		chartArea = (LinearLayout) rootView.findViewById(R.id.chartArea);
-		flipChart.setOnClickListener(onClickListener);
+
 		buildChart();
 
 		return rootView;
@@ -76,8 +64,6 @@ public abstract class BaseChartFragment extends Fragment {
 	}
 
 	private void buildChart() {
-		chartTitle = (TextView) rootView.findViewById(R.id.chartTitle);
-		chartTitle.setText(navigate.CurrentTitle());
 
 		graphicalView = GetChart();
 		chartArea.removeAllViews();

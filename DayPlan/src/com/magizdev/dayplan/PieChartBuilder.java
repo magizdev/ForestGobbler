@@ -31,7 +31,7 @@ public class PieChartBuilder extends FragmentActivity {
 		pager.setAdapter(pagerAdapter);
 		pager.setPageTransformer(true, new ZoomOutPageTransformer());
 		pager.setOffscreenPageLimit(0);
-//		pager.setCurrentItem(pagerAdapter.getCount() - 1);
+		pager.setCurrentItem(pagerAdapter.getCount() - 1);
 	}
 
 	public static class PieChartData {

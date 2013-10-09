@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.util.INavigate;
@@ -40,12 +41,25 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 				.findViewById(R.id.btnLeft);
 		ImageButton forwardButton = (ImageButton) rootView
 				.findViewById(R.id.btnRight);
+		TextView chartTitle = (TextView) rootView.findViewById(R.id.chartTitle);
+		ImageButton flipChart = (ImageButton) rootView
+				.findViewById(R.id.flipButton);
 
 		backButton.setOnClickListener(this);
 		forwardButton.setOnClickListener(this);
+		chartTitle.setText(navigate.CurrentTitle());
+		flipChart.setOnClickListener(this);
 
 		Log.w("DashboardFragment", "onCreateView");
 		Log.w("DashboardFragment", navigate.CurrentTitle());
+
+		if (savedInstanceState == null) {
+			BaseChartFragment fragment = new PieChartFragment();
+			fragment.setDataSource(navigate);
+
+			getActivity().getFragmentManager().beginTransaction()
+					.add(R.id.container, fragment).commit();
+		}
 
 		return rootView;
 	}
@@ -57,17 +71,26 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 		Log.w("DashboardFragment", navigate.CurrentTitle());
 		BaseChartFragment fragment = new PieChartFragment();
 		fragment.setDataSource(navigate);
-		fragment.setOnClick(this);
 
 		getActivity().getFragmentManager().beginTransaction()
-				.add(R.id.container, fragment).commit();
+				.replace(R.id.container, fragment).commit();
 
 	}
 
 	private void flipCard() {
 		if (mShowingBack) {
 			mShowingBack = false;
-			getActivity().getFragmentManager().popBackStack();
+			BaseChartFragment fragment = new PieChartFragment();
+			fragment.setDataSource(navigate);
+
+			getActivity()
+					.getFragmentManager()
+					.beginTransaction()
+					.setCustomAnimations(R.animator.flip_right_in,
+							R.animator.flip_right_out, R.animator.flip_left_in,
+							R.animator.flip_left_out)
+					.replace(R.id.container, fragment).commit();
+
 			return;
 		}
 
@@ -77,7 +100,6 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 
 		BaseChartFragment fragment = new BarChartFragment();
 		fragment.setDataSource(navigate);
-		fragment.setOnClick(this);
 		// Create and commit a new fragment transaction that adds the fragment
 		// for the back of
 		// the card, uses custom animations, and is part of the fragment
