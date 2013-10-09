@@ -24,7 +24,6 @@ public class PieChartBuilder extends FragmentActivity {
 		setContentView(R.layout.activity_dashboard);
 		ImageButton backButton = (ImageButton) findViewById(R.id.btnLeft);
 		ImageButton forwardButton = (ImageButton) findViewById(R.id.btnRight);
-		ImageButton flipChart = (ImageButton)findViewById(R.id.flipButton);
 
 		pager = (ViewPager) findViewById(R.id.pager);
 		backButton.setOnClickListener(new OnClickListener() {
@@ -51,7 +50,7 @@ public class PieChartBuilder extends FragmentActivity {
 
 		navigate = new WeekNavigate(this);
 		DashboardFragmentAdapter pagerAdapter = new DashboardFragmentAdapter(
-				getSupportFragmentManager(), navigate);
+				getSupportFragmentManager(), this);
 		pager.setAdapter(pagerAdapter);
 		pager.setPageTransformer(true, new DepthPageTransformer());
 		pager.setCurrentItem(pagerAdapter.getCount() - 1);

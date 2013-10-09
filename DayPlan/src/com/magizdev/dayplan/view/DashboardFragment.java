@@ -2,6 +2,7 @@ package com.magizdev.dayplan.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,7 +14,6 @@ import com.magizdev.dayplan.util.INavigate;
 public class DashboardFragment extends Fragment implements OnClickListener {
 	private INavigate navigate;
 	private boolean mShowingBack;
-	private BaseChartFragment fragment;
 
 	public void setDataSource(INavigate naviate) {
 		this.navigate = naviate;
@@ -29,8 +29,11 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 		ViewGroup rootView = (ViewGroup) inflater.inflate(
 				R.layout.fragment_report, container, false);
 
-		fragment = new PieChartFragment();
+		Log.w("DashboardFragment", "onCreateView");
+		Log.w("DashboardFragment", navigate.CurrentTitle());
+		BaseChartFragment fragment = new PieChartFragment();
 		fragment.setDataSource(navigate);
+		fragment.setOnClick(this);
 
 		if (savedInstanceState == null) {
 			getActivity().getFragmentManager().beginTransaction()
@@ -38,6 +41,20 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 		}
 
 		return rootView;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		Log.w("DashboardFragment", "onResume");
+		Log.w("DashboardFragment", navigate.CurrentTitle());
+		BaseChartFragment fragment = new PieChartFragment();
+		fragment.setDataSource(navigate);
+		fragment.setOnClick(this);
+
+		getActivity().getFragmentManager().beginTransaction()
+				.replace(R.id.container, fragment).commit();
+
 	}
 
 	private void flipCard() {
@@ -51,8 +68,9 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 
 		mShowingBack = true;
 
-		fragment = new BarChartFragment();
+		BaseChartFragment fragment = new BarChartFragment();
 		fragment.setDataSource(navigate);
+		fragment.setOnClick(this);
 		// Create and commit a new fragment transaction that adds the fragment
 		// for the back of
 		// the card, uses custom animations, and is part of the fragment
