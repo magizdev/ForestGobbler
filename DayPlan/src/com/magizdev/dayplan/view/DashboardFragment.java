@@ -2,6 +2,7 @@ package com.magizdev.dayplan.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +15,14 @@ import com.magizdev.dayplan.util.INavigate;
 public class DashboardFragment extends Fragment implements OnClickListener {
 	private INavigate navigate;
 	private boolean mShowingBack;
+	private ViewPager pager;
 
 	public void setDataSource(INavigate naviate) {
 		this.navigate = naviate;
+	}
+
+	public void setPager(ViewPager pager) {
+		this.pager = pager;
 	}
 
 	public DashboardFragment() {
@@ -31,14 +37,6 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 
 		Log.w("DashboardFragment", "onCreateView");
 		Log.w("DashboardFragment", navigate.CurrentTitle());
-		BaseChartFragment fragment = new PieChartFragment();
-		fragment.setDataSource(navigate);
-		fragment.setOnClick(this);
-
-		if (savedInstanceState == null) {
-			getActivity().getFragmentManager().beginTransaction()
-					.add(R.id.container, fragment).commit();
-		}
 
 		return rootView;
 	}
@@ -53,7 +51,7 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 		fragment.setOnClick(this);
 
 		getActivity().getFragmentManager().beginTransaction()
-				.replace(R.id.container, fragment).commit();
+				.add(R.id.container, fragment).commit();
 
 	}
 
@@ -106,7 +104,17 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		flipCard();
+		if (v.getId() == R.id.flipButton) {
+			flipCard();
+		} else if (v.getId() == R.id.btnLeft) {
+			int current = pager.getCurrentItem();
+			pager.setCurrentItem(current - 1, true);
+		} else if (v.getId() == R.id.btnRight) {
+			int current = pager.getCurrentItem();
+			if (current < pager.getChildCount() - 1) {
+				pager.setCurrentItem(current + 1, true);
+			}
+		}
 	}
 
 }

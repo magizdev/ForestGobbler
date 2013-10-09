@@ -4,6 +4,7 @@ import org.achartengine.GraphicalView;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.magizdev.dayplan.R;
@@ -24,12 +26,14 @@ public abstract class BaseChartFragment extends Fragment {
 	private GraphicalView graphicalView;
 	protected static int[] COLORS = new int[] { 0xffB2C938, 0xff3BA9B8,
 			0xffFF9910, 0xffC74C47, 0xff5B1A69, 0xffA83AAE, 0xffF981C5 };
+	private ViewGroup rootView;
+	private LinearLayout chartArea;
 
 	public void setDataSource(INavigate naviate) {
 		this.navigate = naviate;
 	}
-	
-	public void setOnClick(OnClickListener onClickListener){
+
+	public void setOnClick(OnClickListener onClickListener) {
 		this.onClickListener = onClickListener;
 	}
 
@@ -40,30 +44,50 @@ public abstract class BaseChartFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		ViewGroup rootView = (ViewGroup) inflater.inflate(
-				R.layout.fragment_dashboard, container, false);
+		rootView = (ViewGroup) inflater.inflate(R.layout.fragment_dashboard,
+				container, false);
+
+		ImageButton backButton = (ImageButton) rootView
+				.findViewById(R.id.btnLeft);
+		ImageButton forwardButton = (ImageButton) rootView
+				.findViewById(R.id.btnRight);
+
+		backButton.setOnClickListener(onClickListener);
+		forwardButton.setOnClickListener(onClickListener);
+
+		Spinner spinner = (Spinner) rootView.findViewById(R.id.spinner1);
 
 		Log.w("BaseChartFragment", "onCreateView");
-		ImageButton flipChart = (ImageButton)rootView.findViewById(R.id.flipButton);
+		ImageButton flipChart = (ImageButton) rootView
+				.findViewById(R.id.flipButton);
+		chartArea = (LinearLayout) rootView.findViewById(R.id.chartArea);
 		flipChart.setOnClickListener(onClickListener);
-		buildChart(rootView);
+		buildChart();
 
 		return rootView;
 	}
-	
+
 	@Override
-	public void onResume(){
+	public void onResume() {
 		super.onResume();
+		Log.w("BaseChartFragment", "onResume");
+		buildChart();
 		graphicalView.repaint();
 	}
 
-	private void buildChart(ViewGroup rootView) {
+	@Override
+	public void onStart() {
+		super.onStart();
+		buildChart();
+		Log.w("BaseChartFragement", "onStart");
+	}
+
+	private void buildChart() {
 		chartTitle = (TextView) rootView.findViewById(R.id.chartTitle);
 		chartTitle.setText(navigate.CurrentTitle());
 
-		LinearLayout chartArea = (LinearLayout) rootView
-				.findViewById(R.id.chartArea);
 		graphicalView = GetChart();
+		chartArea.removeAllViews();
 		chartArea.addView(graphicalView, new LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 	}
