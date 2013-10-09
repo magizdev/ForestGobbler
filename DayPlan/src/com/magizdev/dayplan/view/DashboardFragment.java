@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.util.INavigate;
@@ -34,6 +35,14 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 			Bundle savedInstanceState) {
 		ViewGroup rootView = (ViewGroup) inflater.inflate(
 				R.layout.fragment_report, container, false);
+
+		ImageButton backButton = (ImageButton) rootView
+				.findViewById(R.id.btnLeft);
+		ImageButton forwardButton = (ImageButton) rootView
+				.findViewById(R.id.btnRight);
+
+		backButton.setOnClickListener(this);
+		forwardButton.setOnClickListener(this);
 
 		Log.w("DashboardFragment", "onCreateView");
 		Log.w("DashboardFragment", navigate.CurrentTitle());

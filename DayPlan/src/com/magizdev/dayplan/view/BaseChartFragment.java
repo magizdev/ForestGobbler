@@ -44,16 +44,9 @@ public abstract class BaseChartFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		rootView = (ViewGroup) inflater.inflate(R.layout.fragment_dashboard,
+		rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chart,
 				container, false);
 
-		ImageButton backButton = (ImageButton) rootView
-				.findViewById(R.id.btnLeft);
-		ImageButton forwardButton = (ImageButton) rootView
-				.findViewById(R.id.btnRight);
-
-		backButton.setOnClickListener(onClickListener);
-		forwardButton.setOnClickListener(onClickListener);
 
 		Spinner spinner = (Spinner) rootView.findViewById(R.id.spinner1);
 
