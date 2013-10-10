@@ -53,13 +53,13 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 		Log.w("DashboardFragment", "onCreateView");
 		Log.w("DashboardFragment", navigate.CurrentTitle());
 
-		if (savedInstanceState == null) {
-			BaseChartFragment fragment = new PieChartFragment();
-			fragment.setDataSource(navigate);
-
-			getActivity().getFragmentManager().beginTransaction()
-					.add(R.id.container, fragment).commit();
-		}
+		// if (savedInstanceState == null) {
+		// BaseChartFragment fragment = new PieChartFragment();
+		// fragment.setDataSource(navigate);
+		//
+		// getActivity().getFragmentManager().beginTransaction()
+		// .add(R.id.container, fragment).commit();
+		// }
 
 		return rootView;
 	}
@@ -72,8 +72,10 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 		BaseChartFragment fragment = new PieChartFragment();
 		fragment.setDataSource(navigate);
 
-		getActivity().getFragmentManager().beginTransaction()
+		getChildFragmentManager().beginTransaction()
 				.replace(R.id.container, fragment).commit();
+		// getActivity().getFragmentManager().beginTransaction()
+		// .replace(R.id.container, fragment).commit();
 
 	}
 
@@ -83,12 +85,19 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 			BaseChartFragment fragment = new PieChartFragment();
 			fragment.setDataSource(navigate);
 
-			getActivity()
-					.getFragmentManager()
+			// getActivity()
+			// .getFragmentManager()
+			getChildFragmentManager()
 					.beginTransaction()
-					.setCustomAnimations(R.animator.flip_right_in,
+					.setCustomAnimations(
+							// android.R.animator.fade_in,
+							// android.R.animator.fade_out,
+							// android.R.animator.fade_in,
+							// android.R.animator.fade_out)
+							R.animator.flip_right_in,
 							R.animator.flip_right_out, R.animator.flip_left_in,
 							R.animator.flip_left_out)
+
 					.replace(R.id.container, fragment).commit();
 
 			return;
@@ -105,7 +114,8 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 		// the card, uses custom animations, and is part of the fragment
 		// manager's back stack.
 
-		getActivity().getFragmentManager().beginTransaction()
+		// getActivity().getFragmentManager().beginTransaction()
+		getChildFragmentManager().beginTransaction()
 
 		// Replace the default fragment animations with animator resources
 		// representing
@@ -113,9 +123,13 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 		// resources representing rotations when flipping back to the front
 		// (e.g. when
 		// the system Back button is pressed).
-				.setCustomAnimations(R.animator.flip_right_in,
-						R.animator.flip_right_out, R.animator.flip_left_in,
-						R.animator.flip_left_out)
+				.setCustomAnimations(
+						// android.R.animator.fade_in,
+						// android.R.animator.fade_out,
+						// android.R.animator.fade_in,
+						// android.R.animator.fade_out)
+						R.animator.flip_right_in, R.animator.flip_right_out,
+						R.animator.flip_left_in, R.animator.flip_left_out)
 
 				// Replace any fragments currently in the container view with a
 				// fragment

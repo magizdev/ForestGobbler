@@ -39,7 +39,7 @@ public class DashboardFragmentAdapter extends FragmentStatePagerAdapter {
 
 	@Override
 	public int getCount() {
-		return 10;
+		return 2;
 	}
 
 }
