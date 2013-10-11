@@ -13,13 +13,19 @@ import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
+import android.content.Context;
 import android.graphics.Paint.Align;
 import android.util.Log;
 
 import com.magizdev.dayplan.PieChartBuilder.PieChartData;
 import com.magizdev.dayplan.util.DayUtil;
+import com.magizdev.dayplan.util.INavigate;
 
-public class BarChartFragment extends BaseChartFragment {
+public class BarChartView extends BaseChartView {
+
+	public BarChartView(INavigate navigate, Context context) {
+		super(navigate, context);
+	}
 
 	private int seriesCount;
 	private HashMap<Integer, List<PieChartData>> chartData;
@@ -33,7 +39,7 @@ public class BarChartFragment extends BaseChartFragment {
 	protected GraphicalView GetChart() {
 		mBarDataset = buildBarDataset();
 		mBarRenderer = buildBarRenderer();
-		return ChartFactory.getBarChartView(this.getActivity(), mBarDataset,
+		return ChartFactory.getBarChartView(this.context, mBarDataset,
 				mBarRenderer, BarChart.Type.DEFAULT);
 	}
 

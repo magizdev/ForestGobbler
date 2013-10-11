@@ -58,10 +58,32 @@
             android:textSize="25dp" />
     </RelativeLayout>
 
-    <FrameLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-    </FrameLayout>
+    <ViewFlipper
+        android:id="@+id/viewFlipper"
+        android:layout_width="300dp"
+        android:layout_height="450dp"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:addStatesFromChildren="true"
+        android:gravity="center" >
+
+        <LinearLayout
+            android:id="@+id/pieChartArea"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/chart_bg"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/barChartArea"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/chart_bg"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+        </LinearLayout>
+    </ViewFlipper>
 
 </LinearLayout>

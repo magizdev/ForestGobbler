@@ -9,14 +9,17 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ViewAnimator;
 
 import com.magizdev.dayplan.R;
+import com.magizdev.dayplan.util.AnimationFactory;
+import com.magizdev.dayplan.util.AnimationFactory.FlipDirection;
 import com.magizdev.dayplan.util.INavigate;
 
 public class DashboardFragment extends Fragment implements OnClickListener {
 	private INavigate navigate;
-	private boolean mShowingBack;
 	private ViewPager pager;
 
 	public void setDataSource(INavigate naviate) {
@@ -45,112 +48,43 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 		ImageButton flipChart = (ImageButton) rootView
 				.findViewById(R.id.flipButton);
 
+		LinearLayout pieChartArea = (LinearLayout) rootView
+				.findViewById(R.id.pieChartArea);
+		LinearLayout barChartArea = (LinearLayout) rootView
+				.findViewById(R.id.barChartArea);
+
+		PieChartView pieChart = new PieChartView(navigate, this.getActivity());
+		pieChartArea.addView(pieChart.GetChart());
+
+		BarChartView barChart = new BarChartView(navigate, this.getActivity());
+		barChartArea.addView(barChart.GetChart());
+
+		final ViewAnimator viewAnimator = (ViewAnimator) rootView
+				.findViewById(R.id.viewFlipper);
+
 		backButton.setOnClickListener(this);
 		forwardButton.setOnClickListener(this);
 		chartTitle.setText(navigate.CurrentTitle());
-		flipChart.setOnClickListener(this);
+		flipChart.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// This is all you need to do to 3D flip
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+			}
+
+		});
 
 		Log.w("DashboardFragment", "onCreateView");
 		Log.w("DashboardFragment", navigate.CurrentTitle());
-
-		// if (savedInstanceState == null) {
-		// BaseChartFragment fragment = new PieChartFragment();
-		// fragment.setDataSource(navigate);
-		//
-		// getActivity().getFragmentManager().beginTransaction()
-		// .add(R.id.container, fragment).commit();
-		// }
 
 		return rootView;
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
-		Log.w("DashboardFragment", "onResume");
-		Log.w("DashboardFragment", navigate.CurrentTitle());
-		BaseChartFragment fragment = new PieChartFragment();
-		fragment.setDataSource(navigate);
-
-		getChildFragmentManager().beginTransaction()
-				.replace(R.id.container, fragment).commit();
-		// getActivity().getFragmentManager().beginTransaction()
-		// .replace(R.id.container, fragment).commit();
-
-	}
-
-	private void flipCard() {
-		if (mShowingBack) {
-			mShowingBack = false;
-			BaseChartFragment fragment = new PieChartFragment();
-			fragment.setDataSource(navigate);
-
-			// getActivity()
-			// .getFragmentManager()
-			getChildFragmentManager()
-					.beginTransaction()
-					.setCustomAnimations(
-							// android.R.animator.fade_in,
-							// android.R.animator.fade_out,
-							// android.R.animator.fade_in,
-							// android.R.animator.fade_out)
-							R.animator.flip_right_in,
-							R.animator.flip_right_out, R.animator.flip_left_in,
-							R.animator.flip_left_out)
-
-					.replace(R.id.container, fragment).commit();
-
-			return;
-		}
-
-		// Flip to the back.
-
-		mShowingBack = true;
-
-		BaseChartFragment fragment = new BarChartFragment();
-		fragment.setDataSource(navigate);
-		// Create and commit a new fragment transaction that adds the fragment
-		// for the back of
-		// the card, uses custom animations, and is part of the fragment
-		// manager's back stack.
-
-		// getActivity().getFragmentManager().beginTransaction()
-		getChildFragmentManager().beginTransaction()
-
-		// Replace the default fragment animations with animator resources
-		// representing
-		// rotations when switching to the back of the card, as well as animator
-		// resources representing rotations when flipping back to the front
-		// (e.g. when
-		// the system Back button is pressed).
-				.setCustomAnimations(
-						// android.R.animator.fade_in,
-						// android.R.animator.fade_out,
-						// android.R.animator.fade_in,
-						// android.R.animator.fade_out)
-						R.animator.flip_right_in, R.animator.flip_right_out,
-						R.animator.flip_left_in, R.animator.flip_left_out)
-
-				// Replace any fragments currently in the container view with a
-				// fragment
-				// representing the next page (indicated by the just-incremented
-				// currentPage
-				// variable).
-				.replace(R.id.container, fragment)
-
-				// Add this transaction to the back stack, allowing users to
-				// press Back
-				// to get to the front of the card.
-				.addToBackStack(null)
-
-				// Commit the transaction.
-				.commit();
-	}
-
-	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.flipButton) {
-			flipCard();
+			// flipCard();
 		} else if (v.getId() == R.id.btnLeft) {
 			int current = pager.getCurrentItem();
 			pager.setCurrentItem(current - 1, true);

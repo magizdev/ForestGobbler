@@ -6,9 +6,16 @@ import org.achartengine.model.CategorySeries;
 import org.achartengine.renderer.DefaultRenderer;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 
-import com.magizdev.dayplan.PieChartBuilder.PieChartData;
+import android.content.Context;
 
-public class PieChartFragment extends BaseChartFragment {
+import com.magizdev.dayplan.PieChartBuilder.PieChartData;
+import com.magizdev.dayplan.util.INavigate;
+
+public class PieChartView extends BaseChartView {
+	public PieChartView(INavigate navigate, Context context) {
+		super(navigate, context);
+	}
+
 	private DefaultRenderer mPieRenderer;
 	private CategorySeries mPieSeries;
 
@@ -31,7 +38,7 @@ public class PieChartFragment extends BaseChartFragment {
 
 		}
 
-		return ChartFactory.getPieChartView(this.getActivity(), mPieSeries,
+		return ChartFactory.getPieChartView(this.context, mPieSeries,
 				mPieRenderer);
 
 	}
