@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.magizdev.dayplan.R;
@@ -49,10 +47,11 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 				.findViewById(R.id.btnLeft);
 		ImageButton forwardButton = (ImageButton) rootView
 				.findViewById(R.id.btnRight);
-		TextView chartTitle = (TextView) rootView.findViewById(R.id.chartTitle);
 		ImageButton flipChart = (ImageButton) rootView
-				.findViewById(R.id.flipButton);
-		
+				.findViewById(R.id.flipButton1);
+		ImageButton flipChart2 = (ImageButton) rootView
+				.findViewById(R.id.flipButton2);
+
 		Spinner spinner = (Spinner) rootView.findViewById(R.id.spinner1);
 
 		ArrayAdapter<CharSequence> mAdapter = ArrayAdapter.createFromResource(
@@ -74,7 +73,6 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 
 		spinner.setOnItemSelectedListener(spinnerListener);
 
-
 		LinearLayout pieChartArea = (LinearLayout) rootView
 				.findViewById(R.id.pieChartArea);
 		LinearLayout barChartArea = (LinearLayout) rootView
@@ -91,7 +89,6 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 
 		backButton.setOnClickListener(this);
 		forwardButton.setOnClickListener(this);
-		chartTitle.setText(navigate.CurrentTitle());
 		flipChart.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -102,12 +99,19 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 
 		});
 
-		Log.w("DashboardFragment", "onCreateView");
-		Log.w("DashboardFragment", navigate.CurrentTitle());
+		flipChart2.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// This is all you need to do to 3D flip
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+			}
+
+		});
 
 		return rootView;
 	}
-	
+
 	public class myOnItemSelectedListener implements OnItemSelectedListener {
 
 		/*
@@ -154,14 +158,15 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 		public void onItemSelected(AdapterView<?> parent, View v, int pos,
 				long row) {
 
-//			SpinnerActivity.this.mPos = pos;
-//			SpinnerActivity.this.mSelection = parent.getItemAtPosition(pos)
-//					.toString();
-//			/*
-//			 * Set the value of the text field in the UI
-//			 */
-//			TextView resultText = (TextView) findViewById(R.id.SpinnerResult);
-//			resultText.setText(SpinnerActivity.this.mSelection);
+			// SpinnerActivity.this.mPos = pos;
+			// SpinnerActivity.this.mSelection = parent.getItemAtPosition(pos)
+			// .toString();
+			// /*
+			// * Set the value of the text field in the UI
+			// */
+			// TextView resultText = (TextView)
+			// findViewById(R.id.SpinnerResult);
+			// resultText.setText(SpinnerActivity.this.mSelection);
 		}
 
 		/**
@@ -180,9 +185,7 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.flipButton) {
-			// flipCard();
-		} else if (v.getId() == R.id.btnLeft) {
+		if (v.getId() == R.id.btnLeft) {
 			int current = pager.getCurrentItem();
 			pager.setCurrentItem(current - 1, true);
 		} else if (v.getId() == R.id.btnRight) {

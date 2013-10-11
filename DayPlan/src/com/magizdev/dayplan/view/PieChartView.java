@@ -27,6 +27,7 @@ public class PieChartView extends BaseChartView {
 		mPieRenderer.setDisplayValues(true);
 		mPieRenderer.setLegendTextSize(30);
 		mPieRenderer.setLabelsTextSize(30);
+		mPieRenderer.setChartTitle(navigate.CurrentTitle());
 
 		for (PieChartData pieChartData : navigate.GetPieChartData()) {
 			mPieSeries.add(pieChartData.backlogName, pieChartData.data);

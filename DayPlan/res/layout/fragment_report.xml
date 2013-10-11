@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#FFFAFAFA"
-    android:orientation="vertical" >
+    android:background="#FFFAFAFA" >
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -35,55 +34,62 @@
             android:src="@drawable/ic_menu_forward" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
-        <ImageButton
-            android:id="@+id/flipButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:background="#00000000"
-            android:src="@drawable/ic_menu_refresh" />
-
-        <TextView
-            android:id="@+id/chartTitle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/flipButton"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:textSize="25dp" />
-    </RelativeLayout>
-
     <ViewFlipper
         android:id="@+id/viewFlipper"
         android:layout_width="300dp"
-        android:layout_height="450dp"
+        android:layout_height="fill_parent"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:addStatesFromChildren="true"
         android:gravity="center" >
 
-        <LinearLayout
-            android:id="@+id/pieChartArea"
+        <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@drawable/chart_bg"
-            android:layout_weight="1"
-            android:orientation="horizontal" >
-        </LinearLayout>
+            android:layout_height="300dp"
+            android:layout_gravity="center" >
 
-        <LinearLayout
-            android:id="@+id/barChartArea"
+            <LinearLayout
+                android:id="@+id/pieChartArea"
+                android:layout_width="fill_parent"
+                android:layout_height="300dp"
+                android:background="@drawable/chart_bg"
+                android:orientation="horizontal" >
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/flipButton1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/flip" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@drawable/chart_bg"
-            android:layout_weight="1"
-            android:orientation="horizontal" >
-        </LinearLayout>
+            android:layout_height="300dp"
+            android:layout_gravity="center" >
+
+            <LinearLayout
+                android:id="@+id/barChartArea"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/chart_bg"
+                android:orientation="horizontal" >
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/flipButton2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="#00000000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/flip" />
+        </RelativeLayout>
     </ViewFlipper>
 
-</LinearLayout>
+</RelativeLayout>

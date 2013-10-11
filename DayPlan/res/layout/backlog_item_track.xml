@@ -21,7 +21,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_margin="5dp"
-        android:indeterminateDrawable="@drawable/customprogress" />
+        android:indeterminateDrawable="@drawable/ic_menu_refresh" />
 
     <TextView
         android:id="@+id/tVName1"

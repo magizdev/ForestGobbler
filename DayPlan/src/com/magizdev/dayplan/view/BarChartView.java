@@ -117,6 +117,7 @@ public class BarChartView extends BaseChartView {
 		renderer.setBackgroundColor(0x00FAFAFA);
 		renderer.setMarginsColor(0x00FAFAFA);
 		renderer.setLegendTextSize(15);
+		renderer.setChartTitle(navigate.CurrentTitle());
 		int length = COLORS.length;
 		for (int i = 0; i < seriesCount; i++) {
 			SimpleSeriesRenderer r = new SimpleSeriesRenderer();
