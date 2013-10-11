@@ -1,17 +1,16 @@
 package com.magizdev.dayplan;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageButton;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.magizdev.dayplan.util.INavigate;
-import com.magizdev.dayplan.util.WeekNavigate;
 import com.magizdev.dayplan.view.DashboardFragmentAdapter;
-import com.magizdev.dayplan.view.DepthPageTransformer;
 import com.magizdev.dayplan.view.ZoomOutPageTransformer;
 
 public class PieChartBuilder extends FragmentActivity {
@@ -24,7 +23,6 @@ public class PieChartBuilder extends FragmentActivity {
 		setContentView(R.layout.activity_dashboard);
 
 		pager = (ViewPager) findViewById(R.id.pager);
-		Spinner spinner = (Spinner) findViewById(R.id.spinner1);
 
 		DashboardFragmentAdapter pagerAdapter = new DashboardFragmentAdapter(
 				getSupportFragmentManager(), this, pager);
@@ -33,6 +31,8 @@ public class PieChartBuilder extends FragmentActivity {
 		pager.setOffscreenPageLimit(0);
 		pager.setCurrentItem(pagerAdapter.getCount() - 1);
 	}
+
+
 
 	public static class PieChartData {
 		public long biid;
