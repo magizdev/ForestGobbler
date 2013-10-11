@@ -4,6 +4,8 @@
     <string name="backlog_item_activity_label">待办事项</string>
     <string name="day_plan_activity_label">今天的任务</string>
     <string name="dashboard_activity_label">回顾</string>
+    <string name="action_daily">Daily</string>
+    <string name="action_weekly">Weekly</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="ok">OK</string>

@@ -24,6 +24,12 @@ import com.magizdev.dayplan.util.INavigate;
 public class DashboardFragment extends Fragment implements OnClickListener {
 	private INavigate navigate;
 	private ViewPager pager;
+	private OnItemSelectedListener spinListener;
+	private Spinner spinner;
+	
+	public void setSpinListener(OnItemSelectedListener spinListener){
+		this.spinListener = spinListener;
+	}
 
 	public void setDataSource(INavigate naviate) {
 		this.navigate = naviate;
@@ -52,7 +58,7 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 		ImageButton flipChart2 = (ImageButton) rootView
 				.findViewById(R.id.flipButton2);
 
-		Spinner spinner = (Spinner) rootView.findViewById(R.id.spinner1);
+		spinner = (Spinner) rootView.findViewById(R.id.spinner1);
 
 		ArrayAdapter<CharSequence> mAdapter = ArrayAdapter.createFromResource(
 				this.getActivity(), R.array.rangs,
@@ -64,14 +70,11 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 
 		spinner.setAdapter(mAdapter);
 
-		OnItemSelectedListener spinnerListener = new myOnItemSelectedListener(
-				this.getActivity(), mAdapter);
-
 		/*
 		 * Attach the listener to the Spinner.
 		 */
 
-		spinner.setOnItemSelectedListener(spinnerListener);
+//		spinner.setOnItemSelectedListener(spinListener);
 
 		LinearLayout pieChartArea = (LinearLayout) rootView
 				.findViewById(R.id.pieChartArea);

@@ -8,6 +8,8 @@
     <string name="save">Save</string>
     <string name="ok">OK</string>
     <string name="action_mark">Add</string>
+    <string name="action_daily">Daily</string>
+    <string name="action_weekly">Weekly</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_save">Save</string>
     <string name="backlog_completed">Completed</string>
