@@ -25,6 +25,7 @@ import com.magizdev.dayplan.util.DayUtil;
 import com.magizdev.dayplan.viewmodel.BacklogItemAdapter;
 import com.magizdev.dayplan.viewmodel.BacklogItemInfo;
 import com.magizdev.dayplan.viewmodel.StorageUtil;
+import com.magizdev.dayplan.viewmodel.DayTaskTimeInfo.TimeType;
 
 public class BacklogItemActivity extends Activity {
 	private DayTaskUtil dayTaskUtil;
@@ -51,6 +52,7 @@ public class BacklogItemActivity extends Activity {
 				BacklogItemAdapter adapter = (BacklogItemAdapter) listView
 						.getAdapter();
 				adapter.setShowAll(isChecked);
+				adapter.notifyDataSetChanged();
 			}
 		});
 
@@ -125,6 +127,7 @@ public class BacklogItemActivity extends Activity {
 	}
 
 	private void addTasks() {
+		List<Long> ids = dayTaskUtil.GetTasksByDate(DayUtil.Today());
 		dayTaskUtil.ClearTasksByDate(DayUtil.Today());
 		ListAdapter adapter = listView.getAdapter();
 		int count = adapter.getCount();
@@ -133,6 +136,11 @@ public class BacklogItemActivity extends Activity {
 					.getItem(i);
 			if (backlogItemInfo.Selected) {
 				dayTaskUtil.AddTask(backlogItemInfo.Id);
+			} else {
+				if (ids.contains(backlogItemInfo.Id)
+						&& dayTaskUtil.GetTaskState(backlogItemInfo.Id) == TimeType.Start) {
+					dayTaskUtil.StopTask(backlogItemInfo.Id);
+				}
 			}
 		}
 		finish();

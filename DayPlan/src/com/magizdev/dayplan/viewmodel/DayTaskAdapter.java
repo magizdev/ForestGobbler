@@ -40,6 +40,7 @@ public class DayTaskAdapter extends BaseAdapter {
 	public void refresh() {
 		String whereStrings = DayTaskTable.DATE + "=" + DayUtil.Today();
 		tasks = storageUtil.getCollection(whereStrings);
+		notifyDataSetChanged();
 	}
 
 	@Override
@@ -72,6 +73,7 @@ public class DayTaskAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final ViewHolder viewHolder;
+		DayTaskInfo taskInfo = tasks.get(position);
 
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
@@ -82,14 +84,13 @@ public class DayTaskAdapter extends BaseAdapter {
 					.findViewById(R.id.startButton);
 			viewHolder.progress = (ProgressBar) convertView
 					.findViewById(R.id.taskStatus);
-			DayTaskInfo taskInfo = tasks.get(position);
 			viewHolder.startButton.setTag(taskInfo);
 			convertView.setTag(viewHolder);
 			viewHolder.startButton.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					DayTaskInfo taskInfo = (DayTaskInfo)v.getTag();
+					DayTaskInfo taskInfo = (DayTaskInfo) v.getTag();
 					TimeType state = taskUtil.GetTaskState(taskInfo.BIID);
 					if (state == TimeType.Start) {
 						taskUtil.StopTask(taskInfo.BIID);
@@ -104,7 +105,6 @@ public class DayTaskAdapter extends BaseAdapter {
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
-		DayTaskInfo taskInfo = (DayTaskInfo) viewHolder.startButton.getTag();
 		viewHolder.name.setText(taskInfo.BIName);
 		final long biid = taskInfo.BIID;
 		TimeType state = taskUtil.GetTaskState(biid);
@@ -113,7 +113,6 @@ public class DayTaskAdapter extends BaseAdapter {
 		viewHolder.startButton.setImageResource(imageId);
 		int visibility = state == TimeType.Start ? View.VISIBLE : View.GONE;
 		viewHolder.progress.setVisibility(visibility);
-		
 
 		return convertView;
 	}

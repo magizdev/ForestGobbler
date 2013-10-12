@@ -28,7 +28,6 @@ public class DayPlanActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		adapter.refresh();
-		taskListView.invalidateViews();
 	}
 
 	@Override

@@ -1,6 +1,8 @@
 package com.magizdev.dayplan.util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -81,6 +83,31 @@ public class DayTaskTimeUtil {
 			}
 		}
 
+		for (long biid : dayTasksTime.keySet()) {
+			for (int dateid : dayTasksTime.get(biid).keySet()) {
+				if (dayTasksTime.get(biid).get(dateid) > 0) {
+					Date defaultEndTime = new Date();
+					if (dateid < DayUtil.Today()) {
+						Calendar calendar = DayUtil.toCalendar(DayUtil.Today());
+						calendar.set(Calendar.HOUR_OF_DAY, 20);
+						calendar.set(Calendar.MINUTE, 0);
+						defaultEndTime = calendar.getTime();
+					}
+
+					int defaultEndMSOfDay = DayUtil.msOfDay(defaultEndTime);
+					int defaultEffortForUnstopTask = defaultEndMSOfDay
+							- dayTasksTime.get(biid).get(dateid);
+					if (defaultEffortForUnstopTask > 0) {
+						int span = dayTasksEffort.get(biid) == null ? 0
+								: dayTasksEffort.get(biid);
+						dayTasksEffort.put(biid, span
+								+ defaultEffortForUnstopTask);
+					}
+				}
+
+			}
+		}
+
 		List<PieChartData> result = new ArrayList<PieChartBuilder.PieChartData>();
 		for (Long key : idToName.keySet()) {
 			result.add(new PieChartData(key, idToName.get(key), dayTasksEffort
@@ -136,12 +163,37 @@ public class DayTaskTimeUtil {
 			}
 		}
 
+		for (int dateid : dayTasksTime.keySet()) {
+			for (long biid : dayTasksTime.get(dateid).keySet()) {
+				if (dayTasksTime.get(dateid).get(biid) > 0) {
+					Date defaultEndTime = new Date();
+					if (dateid < DayUtil.Today()) {
+						Calendar calendar = DayUtil.toCalendar(DayUtil.Today());
+						calendar.set(Calendar.HOUR_OF_DAY, 20);
+						calendar.set(Calendar.MINUTE, 0);
+						defaultEndTime = calendar.getTime();
+					}
+
+					int defaultEndMSOfDay = DayUtil.msOfDay(defaultEndTime);
+					int defaultEffortForUnstopTask = defaultEndMSOfDay
+							- dayTasksTime.get(dateid).get(biid);
+					if (defaultEffortForUnstopTask > 0) {
+						int span = dayTasksEffort.get(dateid).get(biid);
+						dayTasksEffort.get(dateid).put(biid,
+								span + defaultEffortForUnstopTask);
+					}
+				}
+
+			}
+		}
+
 		HashMap<Integer, List<PieChartData>> result = new HashMap<Integer, List<PieChartBuilder.PieChartData>>();
 		for (Integer date : dayTasksEffort.keySet()) {
 			List<PieChartData> oneDaysRecord = new ArrayList<PieChartBuilder.PieChartData>();
 			for (Long biid : dayTasksEffort.get(date).keySet()) {
 				PieChartData oneRecord = new PieChartData(biid,
-						idToName.get(biid), dayTasksEffort.get(date).get(biid) / 1000);
+						idToName.get(biid),
+						dayTasksEffort.get(date).get(biid) / 1000);
 				oneDaysRecord.add(oneRecord);
 			}
 			result.put(date, oneDaysRecord);
