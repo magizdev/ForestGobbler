@@ -8,6 +8,7 @@
         android:targetSdkVersion="15" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -42,23 +43,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <receiver android:name=".AlarmReceiver" >
-        </receiver>
-
         <activity
             android:name="com.google.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
-        <activity
-            android:name="com.baidu.mobads.AppActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation" />
-        <meta-data
-            android:name="BaiduMobAd_DEBUG_TOKEN"
-            android:value="adview" />
-        <meta-data
-            android:name="AdView_CHANNEL"
-            android:value="GFAN" >
-        </meta-data>
     </application>
 
 </manifest>

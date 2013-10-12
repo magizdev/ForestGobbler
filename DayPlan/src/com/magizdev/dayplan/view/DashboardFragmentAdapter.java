@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.magizdev.dayplan.util.DayNavigate;
 import com.magizdev.dayplan.util.INavigate;
@@ -17,20 +16,17 @@ public class DashboardFragmentAdapter extends FragmentStatePagerAdapter {
 	private Context context;
 	private ViewPager pager;
 	private int navigateType;
-	private OnItemSelectedListener spinListener;
 
 	public DashboardFragmentAdapter(FragmentManager fm) {
 		super(fm);
 	}
 
 	public DashboardFragmentAdapter(FragmentManager fm, Context context,
-			ViewPager pager, int navigateType,
-			OnItemSelectedListener spinListener) {
+			ViewPager pager, int navigateType) {
 		super(fm);
 		this.context = context;
 		this.pager = pager;
 		this.navigateType = navigateType;
-		this.spinListener = spinListener;
 	}
 
 	@Override
@@ -44,7 +40,6 @@ public class DashboardFragmentAdapter extends FragmentStatePagerAdapter {
 		}
 		navigate.SetPostion(arg0 + 1 - getCount());
 		DashboardFragment fragment = new DashboardFragment();
-		fragment.setSpinListener(spinListener);
 		fragment.setPager(pager);
 		fragment.setDataSource(navigate);
 		return fragment;

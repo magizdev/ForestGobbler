@@ -17,9 +17,4 @@
     <string name="hint_desc">Description</string>
     <string name="hint_add_backlog_title">Add backlog</string>
 
-    <string-array name="rangs">
-        <item>Daily</item>
-        <item>Weekly</item>
-    </string-array>
-
 </resources>

@@ -14,6 +14,7 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.util.Log;
 
@@ -110,14 +111,16 @@ public class BarChartView extends BaseChartView {
 	private XYMultipleSeriesRenderer buildBarRenderer() {
 		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
 		renderer.setAxisTitleTextSize(16);
-		renderer.setChartTitleTextSize(20);
 		renderer.setLabelsTextSize(15);
 		renderer.setBarWidth(20);
 		renderer.setApplyBackgroundColor(true);
 		renderer.setBackgroundColor(0x00FAFAFA);
 		renderer.setMarginsColor(0x00FAFAFA);
+		renderer.setLabelsColor(Color.BLUE);
+		renderer.setAxesColor(Color.BLACK);
+		renderer.setXLabelsColor(Color.BLACK);
+		renderer.setYLabelsColor(0, Color.BLACK);
 		renderer.setLegendTextSize(15);
-		renderer.setChartTitle(navigate.CurrentTitle());
 		int length = COLORS.length;
 		for (int i = 0; i < seriesCount; i++) {
 			SimpleSeriesRenderer r = new SimpleSeriesRenderer();

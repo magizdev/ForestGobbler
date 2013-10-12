@@ -2,13 +2,13 @@
 
     <item
         android:id="@+id/action_daily"
-        android:icon="@drawable/ic_menu_mark"
-        android:showAsAction="never"
+        android:icon="@drawable/daily_report"
+        android:showAsAction="ifRoom"
         android:title="@string/action_daily"/>
     <item
         android:id="@+id/action_weekly"
-        android:icon="@drawable/ic_menu_view"
-        android:showAsAction="never"
+        android:icon="@drawable/weekly_report"
+        android:showAsAction="ifRoom"
         android:title="@string/action_weekly"/>
 
 </menu>

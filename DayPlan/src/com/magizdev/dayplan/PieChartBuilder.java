@@ -6,15 +6,15 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.LinearLayout;
 
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
 import com.magizdev.dayplan.view.DashboardFragmentAdapter;
 import com.magizdev.dayplan.view.ZoomOutPageTransformer;
 
-public class PieChartBuilder extends FragmentActivity implements
-		OnItemSelectedListener {
+public class PieChartBuilder extends FragmentActivity {
 
 	private ViewPager pager;
 
@@ -24,9 +24,16 @@ public class PieChartBuilder extends FragmentActivity implements
 		setContentView(R.layout.activity_dashboard);
 
 		pager = (ViewPager) findViewById(R.id.pager);
+		LinearLayout adContainer = (LinearLayout) this
+				.findViewById(R.id.adContainer);
+
+		AdView adView = new AdView(this, AdSize.BANNER, "a1520fa1c2a3c8f");
+		adContainer.addView(adView);
+		AdRequest adRequest = new AdRequest();
+		adView.loadAd(adRequest);
 
 		DashboardFragmentAdapter pagerAdapter = new DashboardFragmentAdapter(
-				getSupportFragmentManager(), this, pager, 1, this);
+				getSupportFragmentManager(), this, pager, 1);
 		pager.setAdapter(pagerAdapter);
 		pager.setPageTransformer(true, new ZoomOutPageTransformer());
 		pager.setCurrentItem(pagerAdapter.getCount() - 1);
@@ -59,14 +66,14 @@ public class PieChartBuilder extends FragmentActivity implements
 		switch (item.getItemId()) {
 		case R.id.action_daily:
 			pagerAdapter = new DashboardFragmentAdapter(
-					getSupportFragmentManager(), this, pager, 0, this);
+					getSupportFragmentManager(), this, pager, 1);
 			pager.setAdapter(pagerAdapter);
 			pager.setPageTransformer(true, new ZoomOutPageTransformer());
 			pager.setCurrentItem(pagerAdapter.getCount() - 1);
 			return true;
 		case R.id.action_weekly:
 			pagerAdapter = new DashboardFragmentAdapter(
-					getSupportFragmentManager(), this, pager, 1, this);
+					getSupportFragmentManager(), this, pager, 0);
 			pager.setAdapter(pagerAdapter);
 			pager.setPageTransformer(true, new ZoomOutPageTransformer());
 			pager.setCurrentItem(pagerAdapter.getCount() - 1);
@@ -74,29 +81,6 @@ public class PieChartBuilder extends FragmentActivity implements
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-
-	@Override
-	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-			long arg3) {
-		if (arg2 == 0) {
-			DashboardFragmentAdapter pagerAdapter = new DashboardFragmentAdapter(
-					getSupportFragmentManager(), this, pager, 0, this);
-			pager.setAdapter(pagerAdapter);
-			pager.setPageTransformer(true, new ZoomOutPageTransformer());
-			pager.setCurrentItem(pagerAdapter.getCount() - 1);
-		} else {
-			DashboardFragmentAdapter pagerAdapter = new DashboardFragmentAdapter(
-					getSupportFragmentManager(), this, pager, 1, this);
-			pager.setAdapter(pagerAdapter);
-			pager.setPageTransformer(true, new ZoomOutPageTransformer());
-			pager.setCurrentItem(pagerAdapter.getCount() - 1);
-		}
-	}
-
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-
 	}
 
 }

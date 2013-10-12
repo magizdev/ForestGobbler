@@ -1,19 +1,20 @@
 <resources>
 
     <string name="app_name">Time Tracker</string>
-    <string name="backlog_item_activity_label">待办事项</string>
-    <string name="day_plan_activity_label">今天的任务</string>
-    <string name="dashboard_activity_label">回顾</string>
-    <string name="action_daily">Daily</string>
-    <string name="action_weekly">Weekly</string>
+    <string name="backlog_item_activity_label">Backlog Items</string>
+    <string name="day_plan_activity_label">Tasks of Today</string>
+    <string name="dashboard_activity_label">Review</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="ok">OK</string>
     <string name="action_mark">Add</string>
-
-    <string-array name="rangs">
-        <item>按天回顾</item>
-        <item>按周回顾</item>
-    </string-array>
+    <string name="action_daily">Daily</string>
+    <string name="action_weekly">Weekly</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_save">Save</string>
+    <string name="backlog_completed">Completed</string>
+    <string name="hint_title">Title</string>
+    <string name="hint_desc">Description</string>
+    <string name="hint_add_backlog_title">Add backlog</string>
 
 </resources>

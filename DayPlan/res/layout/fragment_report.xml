@@ -17,13 +17,6 @@
             android:background="#00000000"
             android:src="@drawable/ic_menu_back" />
 
-        <Spinner
-            android:id="@+id/spinner1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center" />
-
         <ImageButton
             android:id="@+id/btnRight"
             android:layout_width="wrap_content"
@@ -32,6 +25,16 @@
             android:layout_centerVertical="true"
             android:background="#00000000"
             android:src="@drawable/ic_menu_forward" />
+
+        <TextView
+            android:id="@+id/reportTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@id/btnRight"
+            android:layout_toRightOf="@id/btnLeft" />
     </RelativeLayout>
 
     <ViewFlipper
