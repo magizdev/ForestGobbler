@@ -36,16 +36,6 @@
             android:singleLine="true" >
         </EditText>
 
-        <CheckBox
-            android:id="@+id/checkBoxShowAll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/editTextBacklog"
-            android:layout_marginRight="10dp"
-            android:text="Show Completed Items"
-            android:visibility="gone" />
-
         <Switch
             android:id="@+id/switchShowAll"
             android:layout_width="match_parent"
@@ -54,7 +44,7 @@
             android:layout_below="@id/editTextBacklog"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="Show Completed Items" />
+            android:text="@string/show_all_switch" />
     </RelativeLayout>
 
     <ListView

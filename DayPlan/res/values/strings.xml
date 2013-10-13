@@ -4,8 +4,6 @@
     <string name="backlog_item_activity_label">Backlog Items</string>
     <string name="day_plan_activity_label">Tasks of Today</string>
     <string name="dashboard_activity_label">Review</string>
-    <string name="cancel">Cancel</string>
-    <string name="save">Save</string>
     <string name="ok">OK</string>
     <string name="action_mark">Add</string>
     <string name="action_daily">Daily</string>
@@ -16,5 +14,15 @@
     <string name="hint_title">Title</string>
     <string name="hint_desc">Description</string>
     <string name="hint_add_backlog_title">Add backlog</string>
+    
+    <string name="built_in_task_commute">Commute</string>
+    <string name="built_in_task_personal">Personal</string>
+    <string name="built_in_task_work">Work</string>
+    <string name="built_in_task_family">Family</string>
+    <string name="built_in_task_rest">Rest</string>
+    <string name="built_in_task_social">Social</string>
+    <string name="built_in_task_idleness">Idleness</string>
+    
+    <string name="show_all_switch">Show Completed Items</string>
 
 </resources>

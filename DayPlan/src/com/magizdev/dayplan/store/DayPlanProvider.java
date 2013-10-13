@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -12,6 +13,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.store.DayPlanMetaData.BacklogItemTable;
 import com.magizdev.dayplan.store.DayPlanMetaData.DayTaskBurndownTable;
 import com.magizdev.dayplan.store.DayPlanMetaData.DayTaskTable;
@@ -43,9 +45,12 @@ public class DayPlanProvider extends ContentProvider {
 	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
+		private Context context;
+
 		public DatabaseHelper(Context context) {
 			super(context, DayPlanMetaData.DATABASE_NAME, null,
 					DayPlanMetaData.DATABASE_VERSION);
+			this.context = context;
 		}
 
 		@Override
@@ -55,7 +60,7 @@ public class DayPlanProvider extends ContentProvider {
 			db.execSQL("CREATE TABLE " + BacklogItemTable.TABLE_NAME + "("
 					+ BacklogItemTable._ID + " INTEGER PRIMARY KEY,"
 					+ BacklogItemTable.NAME + " TEXT," + BacklogItemTable.DESC
-					+ " TEXT," + BacklogItemTable.STATE + " INTEGER,"
+					+ " TEXT," + BacklogItemTable.STATE + " INTEGER default 0,"
 					+ BacklogItemTable.ESTIMATE + " INTEGER,"
 					+ BacklogItemTable.REMAIN_ESTIMATE + " INTEGER,"
 					+ BacklogItemTable.DUE_DATE + " INTEGER);");
@@ -73,13 +78,70 @@ public class DayPlanProvider extends ContentProvider {
 					+ DayTaskTimeTable.BIID + " INTEGER,"
 					+ DayTaskTimeTable.TIME + " INTEGER,"
 					+ DayTaskTimeTable.TIME_TYPE + " INTEGER);");
-			
+
 			// create day task effort table;
 			db.execSQL("CREATE TABLE " + DayTaskBurndownTable.TABLE_NAME + "("
 					+ DayTaskBurndownTable._ID + " INTEGER PRIMARY KEY,"
 					+ DayTaskBurndownTable.DATE + " INTEGER,"
 					+ DayTaskBurndownTable.BIID + " INTEGER,"
 					+ DayTaskBurndownTable.EFFORT + " INTEGER);");
+
+			// insert pre-defined backlogs;
+			db.execSQL("insert into "
+					+ BacklogItemTable.TABLE_NAME
+					+ "("
+					+ BacklogItemTable.NAME
+					+ ") values ('"
+					+ context.getResources().getString(
+							R.string.built_in_task_commute) + "');");
+
+			db.execSQL("insert into "
+					+ BacklogItemTable.TABLE_NAME
+					+ "("
+					+ BacklogItemTable.NAME
+					+ ") values ('"
+					+ context.getResources().getString(
+							R.string.built_in_task_family) + "');");
+
+			db.execSQL("insert into "
+					+ BacklogItemTable.TABLE_NAME
+					+ "("
+					+ BacklogItemTable.NAME
+					+ ") values ('"
+					+ context.getResources().getString(
+							R.string.built_in_task_idleness) + "');");
+
+			db.execSQL("insert into "
+					+ BacklogItemTable.TABLE_NAME
+					+ "("
+					+ BacklogItemTable.NAME
+					+ ") values ('"
+					+ context.getResources().getString(
+							R.string.built_in_task_personal) + "');");
+
+			db.execSQL("insert into "
+					+ BacklogItemTable.TABLE_NAME
+					+ "("
+					+ BacklogItemTable.NAME
+					+ ") values ('"
+					+ context.getResources().getString(
+							R.string.built_in_task_rest) + "');");
+
+			db.execSQL("insert into "
+					+ BacklogItemTable.TABLE_NAME
+					+ "("
+					+ BacklogItemTable.NAME
+					+ ") values ('"
+					+ context.getResources().getString(
+							R.string.built_in_task_social) + "');");
+
+			db.execSQL("insert into "
+					+ BacklogItemTable.TABLE_NAME
+					+ "("
+					+ BacklogItemTable.NAME
+					+ ") values ('"
+					+ context.getResources().getString(
+							R.string.built_in_task_work) + "');");
 		}
 
 		@Override
