@@ -44,7 +44,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="WeatherWidgetProvider" >
+        <receiver android:name=".widget.DayPlanWidgetProvider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -56,7 +56,7 @@
 
         <!-- The service serving the RemoteViews to the collection widget -->
         <service
-            android:name="WeatherWidgetService"
+            android:name=".widget.DayPlanWidgetService"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
