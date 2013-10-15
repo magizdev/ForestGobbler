@@ -95,6 +95,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		// extras.putString(WeatherWidgetProvider.EXTRA_DAY_ID, day);
 		// fillInIntent.putExtras(extras);
 		// rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
+		Log.w("b", "there");
 
 		return rv;
 	}
