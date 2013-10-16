@@ -2,9 +2,11 @@ package com.magizdev.dayplan;
 
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
@@ -22,12 +25,13 @@ import android.widget.Switch;
 
 import com.magizdev.dayplan.util.DayTaskUtil;
 import com.magizdev.dayplan.util.DayUtil;
+import com.magizdev.dayplan.util.InAppNavigation;
 import com.magizdev.dayplan.viewmodel.BacklogItemAdapter;
 import com.magizdev.dayplan.viewmodel.BacklogItemInfo;
-import com.magizdev.dayplan.viewmodel.StorageUtil;
 import com.magizdev.dayplan.viewmodel.DayTaskTimeInfo.TimeType;
+import com.magizdev.dayplan.viewmodel.StorageUtil;
 
-public class BacklogItemActivity extends Activity {
+public class BacklogItemActivity extends NavigationBaseActivity {
 	private DayTaskUtil dayTaskUtil;
 	private ListView listView;
 	private EditText backlog;
@@ -144,5 +148,10 @@ public class BacklogItemActivity extends Activity {
 			}
 		}
 		finish();
+	}
+
+	@Override
+	protected int getMyPostion() {
+		return 1;
 	}
 }

@@ -10,7 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-public class DayPlanActivity extends Activity {
+public class DayPlanActivity extends NavigationBaseActivity {
 	private ListView taskListView;
 	private DayTaskAdapter adapter;
 
@@ -54,6 +54,11 @@ public class DayPlanActivity extends Activity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	protected int getMyPostion() {
+		return 0;
 	}
 
 }
