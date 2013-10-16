@@ -1,5 +1,6 @@
 package com.magizdev.dayplan;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ public class BacklogEditActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_backlog_edit);
 		util = new StorageUtil<BacklogItemInfo>(this, new BacklogItemInfo());
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		txtTitle = (EditText) findViewById(R.id.txtTitle);
 		txtNote = (EditText) findViewById(R.id.txtNote);
 		completeCheckBox = (CheckBox) findViewById(R.id.checkBoxCompleted);

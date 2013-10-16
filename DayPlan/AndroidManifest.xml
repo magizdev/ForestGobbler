@@ -28,6 +28,9 @@
             android:name=".BacklogEditActivity"
             android:label="@string/backlog_item_activity_label"
             android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.magizdev.dayplan.BacklogItemActivity" />
         </activity>
         <activity
             android:name=".PieChartBuilder"

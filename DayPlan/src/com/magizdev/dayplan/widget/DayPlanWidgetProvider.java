@@ -105,7 +105,7 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 			sDataObserver = new WeatherDataProviderObserver(mgr, cn,
 					sWorkerQueue);
 			r.registerContentObserver(
-					DayPlanMetaData.DayTaskTimeTable.CONTENT_URI, true,
+					DayPlanMetaData.DayTaskTable.CONTENT_URI, true,
 					sDataObserver);
 		}
 	}
