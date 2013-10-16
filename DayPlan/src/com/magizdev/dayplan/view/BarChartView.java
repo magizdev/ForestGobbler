@@ -16,7 +16,6 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
-import android.util.Log;
 
 import com.magizdev.dayplan.PieChartBuilder.PieChartData;
 import com.magizdev.dayplan.util.DayUtil;
@@ -76,25 +75,22 @@ public class BarChartView extends BaseChartView {
 					endDate = date;
 				}
 			}
-			for (Integer date : chartData.keySet()) {
-				Log.w("a", date + "");
-				for (PieChartData data : chartData.get(date)) {
-					if (categoryMap.containsKey(data.biid)) {
-						categoryMap.get(data.biid).add(date - startDate + 1,
-								data.data);
-						Log.w("c", data.data + "");
-					} else {
-						XYSeries series = new XYSeries(data.backlogName);
-						for (Integer tmpDate = startDate; tmpDate <= endDate; tmpDate++) {
-							series.add(tmpDate - startDate + 1, 0);
-						}
-						Log.w("b", data.data + "");
-						series.add(date - startDate + 1, data.data);
-						categoryMap.put(data.biid, series);
-						seriesCount++;
-					}
 
-					maxY = data.data > maxY ? data.data : maxY;
+			for (Integer date = startDate; date <= endDate; date++) {
+				if (chartData.containsKey(date)) {
+					for (PieChartData data : chartData.get(date)) {
+						if (categoryMap.containsKey(data.biid)) {
+							categoryMap.get(data.biid).add(
+									date - startDate + 1, data.data);
+						} else {
+							XYSeries series = new XYSeries(data.backlogName);
+							series.add(date - startDate + 1, data.data);
+							categoryMap.put(data.biid, series);
+							seriesCount++;
+						}
+
+						maxY = data.data > maxY ? data.data : maxY;
+					}
 				}
 			}
 			maxY *= 1.2;
