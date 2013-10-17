@@ -29,10 +29,12 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
+import com.magizdev.dayplan.BacklogItemActivity;
 import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.store.DayPlanMetaData;
+import com.magizdev.dayplan.util.DayTaskUtil;
+import com.magizdev.dayplan.viewmodel.DayTaskTimeInfo.TimeType;
 
 /**
  * Our data observer just notifies an update for all weather widgets when it
@@ -67,16 +69,15 @@ class WeatherDataProviderObserver extends ContentObserver {
  */
 public class DayPlanWidgetProvider extends AppWidgetProvider {
 	public static String CLICK_ACTION = "com.magizdev.dayplan.widget.CLICK";
+	public static String EMPTY_VIEW_CLICK_ACTION = "com.magizdev.dayplan.widget.EMPTY_VIEW_CLICK";
 	public static String REFRESH_ACTION = "com.magizdev.dayplan.widget.REFRESH";
-	public static String EXTRA_DAY_ID = "com.magizdev.dayplan.widget.day";
+	public static String EXTRA_BI_ID = "com.magizdev.dayplan.widget.biid";
 
 	private static HandlerThread sWorkerThread;
 	private static Handler sWorkerQueue;
 	private static WeatherDataProviderObserver sDataObserver;
-	private static final int sMaxDegrees = 96;
 
 	private boolean mIsLargeLayout = true;
-	private int mHeaderWeatherState = 0;
 
 	public DayPlanWidgetProvider() {
 		// Start the worker thread
@@ -104,26 +105,16 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 					DayPlanWidgetProvider.class);
 			sDataObserver = new WeatherDataProviderObserver(mgr, cn,
 					sWorkerQueue);
-			r.registerContentObserver(
-					DayPlanMetaData.DayTaskTable.CONTENT_URI, true,
-					sDataObserver);
+			r.registerContentObserver(DayPlanMetaData.DayTaskTable.CONTENT_URI,
+					true, sDataObserver);
 		}
 	}
 
 	@Override
 	public void onReceive(Context ctx, Intent intent) {
 		final String action = intent.getAction();
+		final Context context = ctx;
 		if (action.equals(REFRESH_ACTION)) {
-			// BroadcastReceivers have a limited amount of time to do work, so
-			// for this sample, we
-			// are triggering an update of the data on another thread. In
-			// practice, this update
-			// // can be triggered from a background service, or perhaps as a
-			// result
-			// of user actions
-			// // inside the main application.
-			Log.w("a", "refresh");
-			final Context context = ctx;
 			sWorkerQueue.removeMessages(0);
 			sWorkerQueue.post(new Runnable() {
 				@Override
@@ -145,11 +136,31 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 			final int appWidgetId = intent.getIntExtra(
 					AppWidgetManager.EXTRA_APPWIDGET_ID,
 					AppWidgetManager.INVALID_APPWIDGET_ID);
-			final String day = intent.getStringExtra(EXTRA_DAY_ID);
-			final String formatStr = ctx.getResources().getString(
-					R.string.toast_format_string);
-			Toast.makeText(ctx, String.format(formatStr, day),
-					Toast.LENGTH_SHORT).show();
+			final Long biid = intent.getLongExtra(EXTRA_BI_ID, 0L);
+			DayTaskUtil util = new DayTaskUtil(ctx);
+			TimeType state = util.GetTaskState(biid);
+			if (state == TimeType.Start) {
+				util.StopTask(biid);
+			} else {
+				util.StartTask(biid);
+			}
+			sWorkerQueue.removeMessages(0);
+			sWorkerQueue.post(new Runnable() {
+				@Override
+				public void run() {
+					final AppWidgetManager mgr = AppWidgetManager
+							.getInstance(context);
+					final ComponentName cn = new ComponentName(context,
+							DayPlanWidgetProvider.class);
+					mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn),
+							R.id.weather_list);
+				}
+			});
+		} else if (action.equals(EMPTY_VIEW_CLICK_ACTION)) {
+			Log.w("d", "here");
+			Intent chooseTaskIntent = new Intent(ctx, BacklogItemActivity.class);
+			chooseTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			ctx.startActivity(chooseTaskIntent);
 		}
 
 		super.onReceive(ctx, intent);
@@ -172,6 +183,15 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 		// must be a sibling
 		// view of the collection view.
 		rv.setEmptyView(R.id.weather_list, R.id.empty_view);
+		// Bind the click intent for the refresh button on the widget
+		final Intent emptyViewClickIntent = new Intent(context,
+				DayPlanWidgetProvider.class);
+		emptyViewClickIntent
+				.setAction(DayPlanWidgetProvider.EMPTY_VIEW_CLICK_ACTION);
+		final PendingIntent emptyViewClickPendingIntent = PendingIntent
+				.getBroadcast(context, 0, emptyViewClickIntent,
+						PendingIntent.FLAG_UPDATE_CURRENT);
+		rv.setOnClickPendingIntent(R.id.empty_view, emptyViewClickPendingIntent);
 
 		// Bind a click listener template for the contents of the weather list.
 		// Note that we

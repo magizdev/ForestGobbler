@@ -16,21 +16,27 @@
 
 package com.magizdev.dayplan.widget;
 
+import java.util.HashMap;
 import java.util.List;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.magizdev.dayplan.PieChartBuilder.PieChartData;
 import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.store.DayPlanMetaData.DayTaskTable;
+import com.magizdev.dayplan.util.DayTaskTimeUtil;
+import com.magizdev.dayplan.util.DayTaskUtil;
 import com.magizdev.dayplan.util.DayUtil;
 import com.magizdev.dayplan.viewmodel.DayTaskInfo;
-import com.magizdev.dayplan.viewmodel.DayTaskInfo.TaskState;
+import com.magizdev.dayplan.viewmodel.DayTaskTimeInfo;
+import com.magizdev.dayplan.viewmodel.DayTaskTimeInfo.TimeType;
 import com.magizdev.dayplan.viewmodel.StorageUtil;
 
 /**
@@ -51,11 +57,14 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	private Context mContext;
 	private List<DayTaskInfo> allTasks;
 	private int mAppWidgetId;
+	private HashMap<Long, Integer> taskTimeHash;
+	private DayTaskUtil taskUtil;
 
 	public StackRemoteViewsFactory(Context context, Intent intent) {
 		mContext = context;
 		mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 				AppWidgetManager.INVALID_APPWIDGET_ID);
+		taskUtil = new DayTaskUtil(context);
 	}
 
 	public void onCreate() {
@@ -79,22 +88,23 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 		final int itemId = R.layout.widget_item;
 		RemoteViews rv = new RemoteViews(mContext.getPackageName(), itemId);
+		TimeType state = taskUtil.GetTaskState(taskInfo.BIID);
 		rv.setTextViewText(R.id.tVName1_remote, taskInfo.BIName);
-		rv.setImageViewResource(
-				R.id.startButton_remote,
-				taskInfo.State == TaskState.Running ? android.R.drawable.ic_media_pause
+		rv.setTextViewText(R.id.taskTimeTextView_remote,
+				formatTime(taskInfo.BIID));
+		rv.setImageViewResource(R.id.startButton_remote,
+				state == TimeType.Start ? android.R.drawable.ic_media_pause
 						: android.R.drawable.ic_media_play);
 
 		rv.setViewVisibility(R.id.taskStatus_remote,
-				taskInfo.State == TaskState.Running ? View.VISIBLE
-						: View.INVISIBLE);
+				state == TimeType.Start ? View.VISIBLE : View.INVISIBLE);
 		// Set the click intent so that we can handle it and show a toast
 		// message
-		// final Intent fillInIntent = new Intent();
-		// final Bundle extras = new Bundle();
-		// extras.putString(WeatherWidgetProvider.EXTRA_DAY_ID, day);
-		// fillInIntent.putExtras(extras);
-		// rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
+		final Intent fillInIntent = new Intent();
+		final Bundle extras = new Bundle();
+		extras.putLong(DayPlanWidgetProvider.EXTRA_BI_ID, taskInfo.BIID);
+		fillInIntent.putExtras(extras);
+		rv.setOnClickFillInIntent(R.id.startButton_remote, fillInIntent);
 		Log.w("b", "there");
 
 		return rv;
@@ -125,5 +135,29 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				mContext, blank);
 		String whereStrings = DayTaskTable.DATE + "=" + DayUtil.Today();
 		allTasks = storageUtil.getCollection(whereStrings);
+
+		StorageUtil<DayTaskTimeInfo> timeUtil = new StorageUtil<DayTaskTimeInfo>(
+				mContext, new DayTaskTimeInfo());
+		List<DayTaskTimeInfo> times = timeUtil.getCollection(whereStrings);
+		List<PieChartData> taskTimes = DayTaskTimeUtil.compute(times);
+		taskTimeHash = new HashMap<Long, Integer>();
+		for (PieChartData taskTime : taskTimes) {
+			taskTimeHash.put(taskTime.biid, taskTime.data);
+		}
+	}
+
+	private String formatTime(long biid) {
+		if (taskTimeHash.containsKey(biid)) {
+			String timeString = "";
+			int time = taskTimeHash.get(biid);
+			if (time / 60 > 0) {
+				timeString = time / 60 + "h" + time % 60 + "m";
+			} else {
+				timeString = time % 60 + "m";
+			}
+			return timeString;
+		} else {
+			return "0m";
+		}
 	}
 }
