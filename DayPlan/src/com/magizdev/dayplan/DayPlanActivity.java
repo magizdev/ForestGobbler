@@ -1,18 +1,25 @@
 package com.magizdev.dayplan;
 
-import com.magizdev.dayplan.viewmodel.DayTaskAdapter;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.magizdev.dayplan.viewmodel.DayTaskAdapter;
+
 public class DayPlanActivity extends NavigationBaseActivity {
 	private ListView taskListView;
 	private DayTaskAdapter adapter;
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			adapter.refresh();
+		}
+	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +35,13 @@ public class DayPlanActivity extends NavigationBaseActivity {
 	public void onResume() {
 		super.onResume();
 		adapter.refresh();
+		handler.sendEmptyMessageDelayed(0, 60000);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		handler.removeMessages(0);
 	}
 
 	@Override

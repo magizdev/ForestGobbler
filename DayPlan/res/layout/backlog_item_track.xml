@@ -39,4 +39,17 @@
         android:text=""
         android:textSize="25dp" />
 
+    <TextView
+        android:id="@+id/taskTimeTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@id/tVName1"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:text=""
+        android:textSize="15dp" />
+
 </RelativeLayout>

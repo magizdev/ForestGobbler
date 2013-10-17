@@ -9,11 +9,12 @@ import com.magizdev.dayplan.util.InAppNavigation;
 
 public abstract class NavigationBaseActivity extends Activity {
 	private InAppNavigation navigation;
+	private ActionBar actionBar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ActionBar actionBar = getActionBar();
+		actionBar = getActionBar();
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
@@ -24,13 +25,12 @@ public abstract class NavigationBaseActivity extends Activity {
 		navigation = new InAppNavigation(this);
 		actionBar.setListNavigationCallbacks(mAdapter, navigation);
 		navigation.setEnable(false);
-		actionBar.setSelectedNavigationItem(getMyPostion());
-
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		actionBar.setSelectedNavigationItem(getMyPostion());
 		navigation.setEnable(true);
 	}
 	
