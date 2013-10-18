@@ -60,7 +60,7 @@ class WeatherDataProviderObserver extends ContentObserver {
 		// cursor for the new data.
 		mAppWidgetManager.notifyAppWidgetViewDataChanged(
 				mAppWidgetManager.getAppWidgetIds(mComponentName),
-				R.id.weather_list);
+				R.id.task_list);
 	}
 }
 
@@ -124,7 +124,7 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 					final ComponentName cn = new ComponentName(context,
 							DayPlanWidgetProvider.class);
 					mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn),
-							R.id.weather_list);
+							R.id.task_list);
 				}
 			});
 
@@ -153,7 +153,7 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 					final ComponentName cn = new ComponentName(context,
 							DayPlanWidgetProvider.class);
 					mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn),
-							R.id.weather_list);
+							R.id.task_list);
 				}
 			});
 		} else if (action.equals(EMPTY_VIEW_CLICK_ACTION)) {
@@ -177,12 +177,12 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 		rv = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-		rv.setRemoteAdapter(appWidgetId, R.id.weather_list, intent);
+		rv.setRemoteAdapter(appWidgetId, R.id.task_list, intent);
 
 		// Set the empty view to be displayed if the collection is empty. It
 		// must be a sibling
 		// view of the collection view.
-		rv.setEmptyView(R.id.weather_list, R.id.empty_view);
+		rv.setEmptyView(R.id.task_list, R.id.empty_view);
 		// Bind the click intent for the refresh button on the widget
 		final Intent emptyViewClickIntent = new Intent(context,
 				DayPlanWidgetProvider.class);
@@ -207,7 +207,7 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 				.toUri(Intent.URI_INTENT_SCHEME)));
 		final PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(
 				context, 0, onClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		rv.setPendingIntentTemplate(R.id.weather_list, onClickPendingIntent);
+		rv.setPendingIntentTemplate(R.id.task_list, onClickPendingIntent);
 
 		// Bind the click intent for the refresh button on the widget
 		final Intent refreshIntent = new Intent(context,

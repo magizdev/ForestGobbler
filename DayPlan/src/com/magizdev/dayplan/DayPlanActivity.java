@@ -27,6 +27,7 @@ public class DayPlanActivity extends NavigationBaseActivity {
 		setContentView(R.layout.activity_day_plan);
 
 		taskListView = (ListView) findViewById(R.id.listViewDayPlan);
+		taskListView.setBackgroundResource(R.drawable.widget_bg);
 		adapter = new DayTaskAdapter(this);
 		taskListView.setAdapter(adapter);
 	}
