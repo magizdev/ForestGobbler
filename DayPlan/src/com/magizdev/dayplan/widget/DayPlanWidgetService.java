@@ -82,8 +82,6 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 	public RemoteViews getViewAt(int position) {
 		// Get the data for this position from the content provider
-		Log.w("b", "here");
-		Log.w("b", position + "");
 		DayTaskInfo taskInfo = allTasks.get(position);
 
 		final int itemId = R.layout.widget_item;
@@ -105,7 +103,6 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		extras.putLong(DayPlanWidgetProvider.EXTRA_BI_ID, taskInfo.BIID);
 		fillInIntent.putExtras(extras);
 		rv.setOnClickFillInIntent(R.id.startButton_remote, fillInIntent);
-		Log.w("b", "there");
 
 		return rv;
 	}
@@ -151,7 +148,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			String timeString = "";
 			int time = taskTimeHash.get(biid);
 			if (time / 60 > 0) {
-				timeString = time / 60 + "h" + time % 60 + "m";
+				timeString = time / 60 + "h " + time % 60 + "m";
 			} else {
 				timeString = time % 60 + "m";
 			}
