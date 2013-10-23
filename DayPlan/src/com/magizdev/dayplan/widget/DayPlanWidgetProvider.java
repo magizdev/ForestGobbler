@@ -27,10 +27,10 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.magizdev.dayplan.BacklogItemActivity;
+import com.magizdev.dayplan.PieChartBuilder;
 import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.store.DayPlanMetaData;
 import com.magizdev.dayplan.util.DayTaskUtil;
@@ -71,6 +71,7 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 	public static String CLICK_ACTION = "com.magizdev.dayplan.widget.CLICK";
 	public static String EMPTY_VIEW_CLICK_ACTION = "com.magizdev.dayplan.widget.EMPTY_VIEW_CLICK";
 	public static String REFRESH_ACTION = "com.magizdev.dayplan.widget.REFRESH";
+	public static String REPORT_ACTION = "com.magizdev.dayplan.widget.REPORT";
 	public static String EXTRA_BI_ID = "com.magizdev.dayplan.widget.biid";
 
 	private static HandlerThread sWorkerThread;
@@ -157,8 +158,11 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 				}
 			});
 		} else if (action.equals(EMPTY_VIEW_CLICK_ACTION)) {
-			Log.w("d", "here");
 			Intent chooseTaskIntent = new Intent(ctx, BacklogItemActivity.class);
+			chooseTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			ctx.startActivity(chooseTaskIntent);
+		} else if (action.equals(REPORT_ACTION)) {
+			Intent chooseTaskIntent = new Intent(ctx, PieChartBuilder.class);
 			chooseTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			ctx.startActivity(chooseTaskIntent);
 		}
@@ -216,6 +220,14 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 		final PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(
 				context, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		rv.setOnClickPendingIntent(R.id.refresh, refreshPendingIntent);
+
+		// Bind the click intent for the refresh button on the widget
+		final Intent reportIntent = new Intent(context,
+				DayPlanWidgetProvider.class);
+		reportIntent.setAction(DayPlanWidgetProvider.REPORT_ACTION);
+		final PendingIntent reportPendingIntent = PendingIntent.getBroadcast(
+				context, 0, reportIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		rv.setOnClickPendingIntent(R.id.report, reportPendingIntent);
 
 		return rv;
 	}

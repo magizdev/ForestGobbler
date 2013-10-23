@@ -32,15 +32,30 @@
             android:visibility="gone" />
     </FrameLayout>
 
-    <Button
-        android:id="@+id/refresh"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="12dp"
-        android:text="@string/refresh"
-        android:textAllCaps="true"
-        android:textColor="#232323"
-        android:textSize="14sp" />
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/refresh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="#00000000"
+            android:src="@drawable/ic_menu_refresh"
+            android:padding="12dp" />
+
+        <ImageButton
+            android:id="@+id/report"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="#00000000"
+            android:src="@drawable/ic_menu_report_image"
+            android:padding="12dp" />
+    </LinearLayout>
 
 </LinearLayout>
