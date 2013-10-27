@@ -167,19 +167,17 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 			chooseTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			ctx.startActivity(chooseTaskIntent);
 		}
-		
-//		AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-//		
-//		// Bind the click intent for the refresh button on the widget
-//		final Intent refreshIntent = new Intent(ctx,
-//				DayPlanWidgetProvider.class);
-//		refreshIntent.setAction(DayPlanWidgetProvider.REFRESH_ACTION);
-//		final PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(
-//				ctx, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//		alarmManager.cancel(refreshPendingIntent);
-//		alarmManager.set(AlarmManager.RTC, 60000, refreshPendingIntent);
 
 		super.onReceive(ctx, intent);
+		AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+		
+		// Bind the click intent for the refresh button on the widget
+		final Intent refreshIntent = new Intent(ctx,
+				DayPlanWidgetProvider.class);
+		refreshIntent.setAction(DayPlanWidgetProvider.REFRESH_ACTION);
+		final PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(
+				ctx, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		alarmManager.set(AlarmManager.RTC, 60000, refreshPendingIntent);
 	}
 
 	private RemoteViews buildLayout(Context context, int appWidgetId,

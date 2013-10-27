@@ -16,18 +16,26 @@ public class StorageUtil<T extends IStoreableItem> {
 	public StorageUtil(Context context, T data) {
 		this.context = context;
 		this.data = data;
-		
+
 	}
 
 	public List<T> getCollection(String selection) {
 		ContentResolver cr = context.getContentResolver();
 		Uri uri = data.contentUri();
 		Cursor cursor = cr.query(uri, null, selection, null, null);
-		List<IStoreableItem> results = data.fromCursor(cursor);
 		List<T> typedResult = new ArrayList<T>();
-		for (IStoreableItem item : results) {
-			typedResult.add((T) item);
+		try {
+			List<IStoreableItem> results = data.fromCursor(cursor);
+
+			for (IStoreableItem item : results) {
+				typedResult.add((T) item);
+			}
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
 		}
+
 		return typedResult;
 	}
 
@@ -38,7 +46,7 @@ public class StorageUtil<T extends IStoreableItem> {
 		T returnValue = null;
 		try {
 			List<IStoreableItem> results = data.fromCursor(cursor);
-			returnValue = (T)results.get(0);
+			returnValue = (T) results.get(0);
 
 		} finally {
 			if (cursor != null) {
