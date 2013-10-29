@@ -281,6 +281,14 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 		Log.w("test", "ondisable");
 		AlarmManager alarmManager = (AlarmManager) context
 				.getSystemService(Context.ALARM_SERVICE);
+		if (refreshPendingIntent == null) {
+			Log.w("test", "re-create");
+			final Intent refreshIntent = new Intent(context,
+					DayPlanWidgetProvider.class);
+			refreshIntent.setAction(DayPlanWidgetProvider.AUTO_REFRESH_ACTION);
+			refreshPendingIntent = PendingIntent.getBroadcast(context, 0,
+					refreshIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		}
 		alarmManager.cancel(refreshPendingIntent);
 		super.onDisabled(context);
 	}
