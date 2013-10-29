@@ -28,6 +28,7 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.magizdev.dayplan.BacklogItemActivity;
@@ -72,6 +73,7 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 	public static String CLICK_ACTION = "com.magizdev.dayplan.widget.CLICK";
 	public static String EMPTY_VIEW_CLICK_ACTION = "com.magizdev.dayplan.widget.EMPTY_VIEW_CLICK";
 	public static String REFRESH_ACTION = "com.magizdev.dayplan.widget.REFRESH";
+	public static String AUTO_REFRESH_ACTION = "com.magizdev.dayplan.widget.AUTO_REFRESH";
 	public static String REPORT_ACTION = "com.magizdev.dayplan.widget.REPORT";
 	public static String EXTRA_BI_ID = "com.magizdev.dayplan.widget.biid";
 
@@ -80,6 +82,7 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 	private static WeatherDataProviderObserver sDataObserver;
 
 	private boolean mIsLargeLayout = true;
+	private PendingIntent refreshPendingIntent;
 
 	public DayPlanWidgetProvider() {
 		// Start the worker thread
@@ -166,18 +169,24 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 			Intent chooseTaskIntent = new Intent(ctx, PieChartBuilder.class);
 			chooseTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			ctx.startActivity(chooseTaskIntent);
+		} else if (action.equals(AUTO_REFRESH_ACTION)) {
+			Log.w("test", "auto refresh");
+
+			sDataObserver.dispatchChange(true);
 		}
 
 		super.onReceive(ctx, intent);
-		AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-		
-		// Bind the click intent for the refresh button on the widget
-		final Intent refreshIntent = new Intent(ctx,
-				DayPlanWidgetProvider.class);
-		refreshIntent.setAction(DayPlanWidgetProvider.REFRESH_ACTION);
-		final PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(
-				ctx, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		alarmManager.set(AlarmManager.RTC, 60000, refreshPendingIntent);
+		// AlarmManager alarmManager = (AlarmManager)
+		// ctx.getSystemService(Context.ALARM_SERVICE);
+		//
+		// // Bind the click intent for the refresh button on the widget
+		// final Intent refreshIntent = new Intent(ctx,
+		// DayPlanWidgetProvider.class);
+		// refreshIntent.setAction(DayPlanWidgetProvider.REFRESH_ACTION);
+		// final PendingIntent refreshPendingIntent =
+		// PendingIntent.getBroadcast(
+		// ctx, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		// alarmManager.set(AlarmManager.RTC, 60000, refreshPendingIntent);
 	}
 
 	private RemoteViews buildLayout(Context context, int appWidgetId,
@@ -251,6 +260,28 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 					mIsLargeLayout);
 			appWidgetManager.updateAppWidget(appWidgetIds[i], layout);
 		}
+
+		AlarmManager alarmManager = (AlarmManager) context
+				.getSystemService(Context.ALARM_SERVICE);
+		if (refreshPendingIntent == null) {
+			final Intent refreshIntent = new Intent(context,
+					DayPlanWidgetProvider.class);
+			refreshIntent.setAction(DayPlanWidgetProvider.AUTO_REFRESH_ACTION);
+			refreshPendingIntent = PendingIntent.getBroadcast(context, 0,
+					refreshIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		}
+		Log.w("test", "enable");
+		alarmManager.setRepeating(AlarmManager.RTC, 60000, 90000,
+				refreshPendingIntent);
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
+	}
+
+	@Override
+	public void onDisabled(Context context) {
+		Log.w("test", "ondisable");
+		AlarmManager alarmManager = (AlarmManager) context
+				.getSystemService(Context.ALARM_SERVICE);
+		alarmManager.cancel(refreshPendingIntent);
+		super.onDisabled(context);
 	}
 }
