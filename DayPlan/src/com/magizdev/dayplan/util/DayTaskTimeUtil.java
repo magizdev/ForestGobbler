@@ -109,7 +109,7 @@ public class DayTaskTimeUtil {
 		}
 
 		List<PieChartData> result = new ArrayList<PieChartBuilder.PieChartData>();
-		for (Long key : idToName.keySet()) {
+		for (Long key : dayTasksEffort.keySet()) {
 			result.add(new PieChartData(key, idToName.get(key), dayTasksEffort
 					.get(key) / 1000 / 60));
 		}
