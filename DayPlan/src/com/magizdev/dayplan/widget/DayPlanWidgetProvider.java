@@ -28,7 +28,6 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.magizdev.dayplan.BacklogItemActivity;
@@ -170,23 +169,18 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 			chooseTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			ctx.startActivity(chooseTaskIntent);
 		} else if (action.equals(AUTO_REFRESH_ACTION)) {
-			Log.w("test", "auto refresh");
-
+			if (sDataObserver == null) {
+				final AppWidgetManager mgr = AppWidgetManager
+						.getInstance(context);
+				final ComponentName cn = new ComponentName(context,
+						DayPlanWidgetProvider.class);
+				sDataObserver = new WeatherDataProviderObserver(mgr, cn,
+						sWorkerQueue);
+			}
 			sDataObserver.dispatchChange(true);
 		}
 
 		super.onReceive(ctx, intent);
-		// AlarmManager alarmManager = (AlarmManager)
-		// ctx.getSystemService(Context.ALARM_SERVICE);
-		//
-		// // Bind the click intent for the refresh button on the widget
-		// final Intent refreshIntent = new Intent(ctx,
-		// DayPlanWidgetProvider.class);
-		// refreshIntent.setAction(DayPlanWidgetProvider.REFRESH_ACTION);
-		// final PendingIntent refreshPendingIntent =
-		// PendingIntent.getBroadcast(
-		// ctx, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		// alarmManager.set(AlarmManager.RTC, 60000, refreshPendingIntent);
 	}
 
 	private RemoteViews buildLayout(Context context, int appWidgetId,
@@ -270,7 +264,6 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 			refreshPendingIntent = PendingIntent.getBroadcast(context, 0,
 					refreshIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		}
-		Log.w("test", "enable");
 		alarmManager.setRepeating(AlarmManager.RTC, 60000, 90000,
 				refreshPendingIntent);
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
@@ -278,11 +271,9 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 
 	@Override
 	public void onDisabled(Context context) {
-		Log.w("test", "ondisable");
 		AlarmManager alarmManager = (AlarmManager) context
 				.getSystemService(Context.ALARM_SERVICE);
 		if (refreshPendingIntent == null) {
-			Log.w("test", "re-create");
 			final Intent refreshIntent = new Intent(context,
 					DayPlanWidgetProvider.class);
 			refreshIntent.setAction(DayPlanWidgetProvider.AUTO_REFRESH_ACTION);

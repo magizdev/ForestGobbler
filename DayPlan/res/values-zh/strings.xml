@@ -24,5 +24,13 @@
     <string name="built_in_task_idleness">空闲</string>
     
     <string name="show_all_switch">显示已完成任务</string>
+    <string-array name="Pages">
+        <item>今日安排</item>
+        <item>全部任务</item>
+        <item>查看报告</item>
+    </string-array>
 
+    <string name="empty_view_text">今日无任务，点击选择任务。</string>
+    <string name="refresh">刷新</string>
+    <string name="report">报告</string>
 </resources>

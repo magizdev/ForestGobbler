@@ -44,7 +44,7 @@ public class PieChartBuilder extends FragmentActivity {
 		navigation.setEnable(false);
 		actionBar.setSelectedNavigationItem(2);
 
-		AdView adView = new AdView(this, AdSize.BANNER, "a1520fa1c2a3c8f");
+		AdView adView = new AdView(this, AdSize.BANNER, "a152770fe669b6c");
 		adContainer.addView(adView);
 		AdRequest adRequest = new AdRequest();
 		adView.loadAd(adRequest);
