@@ -20,7 +20,8 @@
 
     <application
         android:icon="@drawable/icon"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:name=".kiip.KiipApp" >
         <activity
             android:name=".WelActivity"
             android:configChanges="keyboardHidden|orientation"

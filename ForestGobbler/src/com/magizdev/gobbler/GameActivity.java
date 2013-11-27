@@ -1,6 +1,7 @@
 package com.magizdev.gobbler;
 
-import android.app.Activity;
+import me.kiip.sdk.Kiip;
+import me.kiip.sdk.Poptart;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,18 +17,16 @@ import android.widget.TextView;
 
 import com.google.ads.AdView;
 import com.kyview.AdViewLayout;
-import com.kyview.AdViewTargeting;
-import com.kyview.AdViewTargeting.RunMode;
-import com.kyview.AdViewTargeting.UpdateMode;
 import com.magizdev.common.lib.Score;
 import com.magizdev.common.view.ScoreBoard;
+import com.magizdev.gobbler.kiip.KiipActivityBase;
 import com.magizdev.gobbler.view.GameView;
 import com.magizdev.gobbler.view.OnScoreListener;
 import com.magizdev.gobbler.view.OnStateListener;
 import com.magizdev.gobbler.view.OnTimerListener;
 import com.magizdev.gobbler.view.OnToolsChangeListener;
 
-public class GameActivity extends Activity implements OnClickListener,
+public class GameActivity extends KiipActivityBase implements OnClickListener,
 		OnTimerListener, OnStateListener, OnToolsChangeListener,
 		OnScoreListener {
 
@@ -152,7 +151,20 @@ public class GameActivity extends Activity implements OnClickListener,
 	public void OnStateChanged(int StateMode) {
 		switch (StateMode) {
 		case GameView.WIN:
-			handler.sendEmptyMessage(0);
+			// handler.sendEmptyMessage(0);
+			Kiip.getInstance().saveMoment("Win", new Kiip.Callback() {
+
+				@Override
+				public void onFinished(Kiip arg0, Poptart arg1) {
+					onPoptart(arg1);
+				}
+
+				@Override
+				public void onFailed(Kiip arg0, Exception arg1) {
+					// TODO Auto-generated method stub
+
+				}
+			});
 			break;
 		case GameView.LOSE:
 			handler.sendEmptyMessage(1);
