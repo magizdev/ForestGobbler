@@ -3,13 +3,18 @@ package com.magizdev.gobbler;
 import me.kiip.sdk.Kiip;
 import me.kiip.sdk.Poptart;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -103,6 +108,16 @@ public class GameActivity extends KiipActivityBase implements OnClickListener,
 			gameView.startPlay(GameView.ENDLESS_MODE);
 			progress.setMax(10);
 		}
+
+		Button testBtn = (Button) findViewById(R.id.testBtn);
+		testBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				gameView.setMode(GameView.WIN);
+
+			}
+		});
 	}
 
 	@Override
@@ -151,20 +166,26 @@ public class GameActivity extends KiipActivityBase implements OnClickListener,
 	public void OnStateChanged(int StateMode) {
 		switch (StateMode) {
 		case GameView.WIN:
-			// handler.sendEmptyMessage(0);
-			Kiip.getInstance().saveMoment("Win", new Kiip.Callback() {
+			SharedPreferences preferences = PreferenceManager
+					.getDefaultSharedPreferences(this);
+			int todayHighScore = preferences.getInt("highscore", 0);
+			if (score.getScore() > todayHighScore) {
+				Editor editor = preferences.edit();
+				editor.putInt("highscore", score.getScore());
+				editor.commit();
+				Kiip.getInstance().saveMoment("highscore", new Kiip.Callback() {
 
-				@Override
-				public void onFinished(Kiip arg0, Poptart arg1) {
-					onPoptart(arg1);
-				}
+					@Override
+					public void onFinished(Kiip arg0, Poptart arg1) {
+						onPoptart(arg1);
+					}
 
-				@Override
-				public void onFailed(Kiip arg0, Exception arg1) {
-					// TODO Auto-generated method stub
-
-				}
-			});
+					@Override
+					public void onFailed(Kiip arg0, Exception arg1) {
+					}
+				});
+			}
+			handler.sendEmptyMessage(0);
 			break;
 		case GameView.LOSE:
 			handler.sendEmptyMessage(1);

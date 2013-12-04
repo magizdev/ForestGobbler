@@ -1,16 +1,22 @@
 package com.magizdev.gobbler;
 
-import com.magizdev.common.util.DisplayOnce;
-import com.magizdev.common.util.IDisplayOnce;
+import java.util.Calendar;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+
+import com.magizdev.common.util.DisplayOnce;
+import com.magizdev.common.util.IDisplayOnce;
 
 public class WelActivity extends Activity implements OnClickListener, IDisplayOnce {
 
@@ -46,6 +52,19 @@ public class WelActivity extends Activity implements OnClickListener, IDisplayOn
 		player = MediaPlayer.create(this, R.raw.bg);
 		player.setLooping(true);
 		player.start();
+		
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		Date today = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(today);
+		int dayofyear = calendar.get(Calendar.DAY_OF_YEAR);
+		int lastplay = preferences.getInt("lastplay", 0);
+		if(lastplay != dayofyear){
+			Editor editor = preferences.edit();
+			editor.putInt("lastplay", dayofyear);
+			editor.putInt("highscore", 0);
+			editor.commit();
+		}
 	}
 
 	@Override
