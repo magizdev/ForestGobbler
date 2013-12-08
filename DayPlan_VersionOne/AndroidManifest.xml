@@ -15,17 +15,17 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <provider
-            android:name=".store.DayPlanProvider"
-            android:authorities="com.magizdev.dayplan" />
+            android:name="com.magizdev.dayplan.versionone.store.DayPlanProvider"
+            android:authorities="com.magizdev.dayplan.versionone" />
 
         <activity
-            android:name=".BacklogItemActivity"
+            android:name=".versionone.BacklogItemActivity"
             android:label="@string/backlog_item_activity_label"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".BacklogEditActivity"
+            android:name=".versionone.BacklogEditActivity"
             android:label="@string/backlog_item_activity_label"
             android:screenOrientation="portrait" >
             <meta-data
@@ -33,13 +33,13 @@
                 android:value="com.magizdev.dayplan.BacklogItemActivity" />
         </activity>
         <activity
-            android:name=".PieChartBuilder"
+            android:name=".versionone.PieChartBuilder"
             android:label="@string/dashboard_activity_label"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".DayPlanActivity"
+            android:name=".versionone.DayPlanActivity"
             android:label="@string/day_plan_activity_label"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
@@ -50,7 +50,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".widget.DayPlanWidgetProvider" >
+        <receiver android:name="com.magizdev.dayplan.versionone.widget.DayPlanWidgetProvider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -59,12 +59,12 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widgetinfo" />
         </receiver>
-        <receiver android:name=".WidgetClickReceiver" >
+        <receiver android:name=".versionone.WidgetClickReceiver" >
         </receiver>
 
         <!-- The service serving the RemoteViews to the collection widget -->
         <service
-            android:name=".widget.DayPlanWidgetService"
+            android:name="com.magizdev.dayplan.versionone.widget.DayPlanWidgetService"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
