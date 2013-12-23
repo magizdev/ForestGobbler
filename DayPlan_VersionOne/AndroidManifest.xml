@@ -19,7 +19,7 @@
             android:authorities="com.magizdev.dayplan.versionone" />
 
         <activity
-            android:name=".versionone.BacklogItemActivity"
+            android:name=".versionone.LoginActivity"
             android:label="@string/backlog_item_activity_label"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >

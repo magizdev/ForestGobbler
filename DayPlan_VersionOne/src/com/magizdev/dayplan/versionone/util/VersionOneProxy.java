@@ -1,6 +1,8 @@
 package com.magizdev.dayplan.versionone.util;
 
-public class VersionOneProxy {
+import android.os.AsyncTask;
+
+public class VersionOneProxy{
 	String serverUrl;
 	String userName;
 	String password;

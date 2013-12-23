@@ -6,11 +6,38 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 public class DayPlanMetaData {
-	public static final String AUTHORITY = "com.magizdev.dayplan";
+	public static final String AUTHORITY = "com.magizdev.dayplan.versionone";
 	public static final String DATABASE_NAME = "dayplan.db";
 	public static final int DATABASE_VERSION = 1;
 
 	private DayPlanMetaData() {
+	}
+	
+	public static final class VersionOneServerTable implements BaseColumns{
+		private VersionOneServerTable(){
+			
+		}
+		
+		public static final String TABLE_NAME = "versionOneServer";
+		public static final Uri CONTENT_URI = Uri.parse("content://"
+				+ AUTHORITY + "/versiononeservers");
+		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.magizdev.dayplan.versionone.server";
+		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.magizdev.dayplan.versionone.server";
+		public static final String DEFAULT_SORT_ORDER = "url";
+
+		public static final String URL = "url";
+		public static final String USERNAME = "username";
+		public static final String ISCURRENT = "iscurrent";
+		
+		public static HashMap<String, String> projectionMap;
+
+		static {
+			projectionMap = new HashMap<String, String>();
+			projectionMap.put(VersionOneServerTable._ID, VersionOneServerTable._ID);
+			projectionMap.put(VersionOneServerTable.URL, VersionOneServerTable.URL);
+			projectionMap.put(VersionOneServerTable.USERNAME, VersionOneServerTable.USERNAME);
+			projectionMap.put(VersionOneServerTable.ISCURRENT, VersionOneServerTable.ISCURRENT);
+		} 
 	}
 
 	public static final class BacklogItemTable implements BaseColumns {
@@ -20,8 +47,8 @@ public class DayPlanMetaData {
 		public static final String TABLE_NAME = "backlog";
 		public static final Uri CONTENT_URI = Uri.parse("content://"
 				+ AUTHORITY + "/backlogs");
-		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.magizdev.dayplan.backlogitem";
-		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.magizdev.dayplan.backlogitem";
+		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.magizdev.dayplan.versionone.backlogitem";
+		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.magizdev.dayplan.versionone.backlogitem";
 		public static final String DEFAULT_SORT_ORDER = "name";
 
 		public static final String NAME = "name";
@@ -30,6 +57,7 @@ public class DayPlanMetaData {
 		public static final String ESTIMATE = "estimate";
 		public static final String REMAIN_ESTIMATE = "remain_estimate";
 		public static final String DUE_DATE = "due_date";
+		public static final String SERVERID = "server_id";
 		public static final int STATE_ACTIVE = 0;
 		public static final int STATE_COMPLETE = 1;
 		
@@ -41,6 +69,7 @@ public class DayPlanMetaData {
 			projectionMap.put(BacklogItemTable.NAME, BacklogItemTable.NAME);
 			projectionMap.put(BacklogItemTable.DESC, BacklogItemTable.DESC);
 			projectionMap.put(BacklogItemTable.STATE, BacklogItemTable.STATE);
+			projectionMap.put(BacklogItemTable.SERVERID, BacklogItemTable.SERVERID);
 		}
 	}
 
@@ -51,8 +80,8 @@ public class DayPlanMetaData {
 		public static final String TABLE_NAME = "daytask";
 		public static final Uri CONTENT_URI = Uri.parse("content://"
 				+ AUTHORITY + "/daytasks");
-		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.magizdev.dayplan.daytask";
-		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.magizdev.dayplan.daytask";
+		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.magizdev.dayplan.versionone.daytask";
+		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.magizdev.dayplan.versionone.daytask";
 		public static final String DEFAULT_SORT_ORDER = "date";
 
 		public static final String DATE = "date";
@@ -81,8 +110,8 @@ public class DayPlanMetaData {
 		public static final Uri CONTENT_URI = Uri.parse("content://"
 				+ AUTHORITY + "/daytasktime");
 
-		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.magizdev.dayplan.daytasktime";
-		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.magizdev.dayplan.daytasktime";
+		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.magizdev.dayplan.versionone.daytasktime";
+		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.magizdev.dayplan.versionone.daytasktime";
 		public static final String DEFAULT_SORT_ORDER = "time DESC";
 
 		public static final String DATE = "date";
@@ -114,8 +143,8 @@ public class DayPlanMetaData {
 		public static final Uri CONTENT_URI = Uri.parse("content://"
 				+ AUTHORITY + "/daytaskburndown");
 
-		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.magizdev.dayplan.daytaskburndown";
-		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.magizdev.dayplan.daytaskburndown";
+		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.magizdev.dayplan.versionone.daytaskburndown";
+		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.magizdev.dayplan.versionone.daytaskburndown";
 		public static final String DEFAULT_SORT_ORDER = "time DESC";
 
 		public static final String DATE = "date";

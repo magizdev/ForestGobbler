@@ -18,6 +18,7 @@ import com.magizdev.dayplan.versionone.store.DayPlanMetaData.BacklogItemTable;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskBurndownTable;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTable;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTimeTable;
+import com.magizdev.dayplan.versionone.store.DayPlanMetaData.VersionOneServerTable;
 
 public class DayPlanProvider extends ContentProvider {
 
@@ -55,6 +56,11 @@ public class DayPlanProvider extends ContentProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
+			// create version one server table;
+			db.execSQL("CREATE TABLE " + VersionOneServerTable.TABLE_NAME + "("
+					+ VersionOneServerTable._ID + " INTEGER PRIMARY KEY,"
+					+ VersionOneServerTable.URL + " TEXT," + VersionOneServerTable.USERNAME
+					+ " TEXT);");
 
 			// create backlog item table;
 			db.execSQL("CREATE TABLE " + BacklogItemTable.TABLE_NAME + "("
@@ -63,6 +69,7 @@ public class DayPlanProvider extends ContentProvider {
 					+ " TEXT," + BacklogItemTable.STATE + " INTEGER default 0,"
 					+ BacklogItemTable.ESTIMATE + " INTEGER,"
 					+ BacklogItemTable.REMAIN_ESTIMATE + " INTEGER,"
+					+ BacklogItemTable.SERVERID + " INTEGER,"
 					+ BacklogItemTable.DUE_DATE + " INTEGER);");
 
 			// create day task table;
@@ -86,62 +93,6 @@ public class DayPlanProvider extends ContentProvider {
 					+ DayTaskBurndownTable.BIID + " INTEGER,"
 					+ DayTaskBurndownTable.EFFORT + " INTEGER);");
 
-			// insert pre-defined backlogs;
-			db.execSQL("insert into "
-					+ BacklogItemTable.TABLE_NAME
-					+ "("
-					+ BacklogItemTable.NAME
-					+ ") values ('"
-					+ context.getResources().getString(
-							R.string.built_in_task_commute) + "');");
-
-			db.execSQL("insert into "
-					+ BacklogItemTable.TABLE_NAME
-					+ "("
-					+ BacklogItemTable.NAME
-					+ ") values ('"
-					+ context.getResources().getString(
-							R.string.built_in_task_family) + "');");
-
-			db.execSQL("insert into "
-					+ BacklogItemTable.TABLE_NAME
-					+ "("
-					+ BacklogItemTable.NAME
-					+ ") values ('"
-					+ context.getResources().getString(
-							R.string.built_in_task_idleness) + "');");
-
-			db.execSQL("insert into "
-					+ BacklogItemTable.TABLE_NAME
-					+ "("
-					+ BacklogItemTable.NAME
-					+ ") values ('"
-					+ context.getResources().getString(
-							R.string.built_in_task_personal) + "');");
-
-			db.execSQL("insert into "
-					+ BacklogItemTable.TABLE_NAME
-					+ "("
-					+ BacklogItemTable.NAME
-					+ ") values ('"
-					+ context.getResources().getString(
-							R.string.built_in_task_rest) + "');");
-
-			db.execSQL("insert into "
-					+ BacklogItemTable.TABLE_NAME
-					+ "("
-					+ BacklogItemTable.NAME
-					+ ") values ('"
-					+ context.getResources().getString(
-							R.string.built_in_task_social) + "');");
-
-			db.execSQL("insert into "
-					+ BacklogItemTable.TABLE_NAME
-					+ "("
-					+ BacklogItemTable.NAME
-					+ ") values ('"
-					+ context.getResources().getString(
-							R.string.built_in_task_work) + "');");
 		}
 
 		@Override

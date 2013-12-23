@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="fill_horizontal"
+    android:fillViewport="true" >
+
+    <ImageView
+        android:id="@+id/v1logo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/versionone_logo" />
+
+    <TextView
+        android:id="@+id/currentServer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/v1logo" />
+
+    <ListView
+        android:id="@+id/productList"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/currentServer" >
+    </ListView>
+
+    <LinearLayout
+        android:id="@+id/loginPart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp" >
+
+        <EditText
+            android:id="@+id/v1host"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_bg"
+            android:hint="Server URL"
+            android:inputType="text"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/loginedituid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_bg"
+            android:hint="Username"
+            android:inputType="text"
+            android:maxLength="10"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/editpswrd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_bg"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:maxLength="10"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/btnlogin"
+            android:layout_width="match_parent"
+            android:layout_height="60px"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_bg"
+            android:text="LOGIN"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>
