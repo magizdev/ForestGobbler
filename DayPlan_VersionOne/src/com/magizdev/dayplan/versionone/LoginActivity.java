@@ -56,7 +56,6 @@ public class LoginActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		adapter.refresh();
 	}
 
 	@Override
