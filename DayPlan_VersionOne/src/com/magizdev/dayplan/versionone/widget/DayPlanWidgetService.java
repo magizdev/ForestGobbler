@@ -23,21 +23,20 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.magizdev.dayplan.R;
-import com.magizdev.dayplan.versionone.PieChartBuilder.PieChartData;
+import com.magizdev.dayplan.versionone.ChartFragment.PieChartData;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTable;
 import com.magizdev.dayplan.versionone.util.DayTaskTimeUtil;
 import com.magizdev.dayplan.versionone.util.DayTaskUtil;
 import com.magizdev.dayplan.versionone.util.DayUtil;
 import com.magizdev.dayplan.versionone.viewmodel.DayTaskInfo;
 import com.magizdev.dayplan.versionone.viewmodel.DayTaskTimeInfo;
-import com.magizdev.dayplan.versionone.viewmodel.StorageUtil;
 import com.magizdev.dayplan.versionone.viewmodel.DayTaskTimeInfo.TimeType;
+import com.magizdev.dayplan.versionone.viewmodel.StorageUtil;
 
 /**
  * This is the service that provides the factory to be bound to the collection

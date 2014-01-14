@@ -3,12 +3,16 @@ package com.magizdev.dayplan.versionone;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.versionone.viewmodel.DayTaskAdapter;
 
-public class DayPlanActivity extends NavigationBaseActivity {
+public class DayPlanFragment extends Fragment {
 	private ListView taskListView;
 	private DayTaskAdapter adapter;
 	private Handler handler = new Handler() {
@@ -17,16 +21,20 @@ public class DayPlanActivity extends NavigationBaseActivity {
 			adapter.refresh();
 		}
 	};
+	
+	public DayPlanFragment(){}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_day_plan);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 
-		taskListView = (ListView) findViewById(R.id.listViewDayPlan);
+		View rootView = inflater.inflate(R.layout.activity_day_plan, container, false);
+
+		taskListView = (ListView) rootView.findViewById(R.id.listViewDayPlan);
 		taskListView.setBackgroundResource(R.drawable.widget_bg);
-		adapter = new DayTaskAdapter(this);
+		adapter = new DayTaskAdapter(getActivity());
 		taskListView.setAdapter(adapter);
+		return rootView;
 	}
 
 	@Override
@@ -67,10 +75,5 @@ public class DayPlanActivity extends NavigationBaseActivity {
 //			return super.onOptionsItemSelected(item);
 //		}
 //	}
-
-	@Override
-	protected int getMyPostion() {
-		return 0;
-	}
 
 }

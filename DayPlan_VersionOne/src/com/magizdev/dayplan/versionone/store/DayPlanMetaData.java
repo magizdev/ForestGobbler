@@ -27,6 +27,7 @@ public class DayPlanMetaData {
 
 		public static final String URL = "url";
 		public static final String USERNAME = "username";
+		public static final String TOKEN = "token";
 		public static final String ISCURRENT = "iscurrent";
 		
 		public static HashMap<String, String> projectionMap;
@@ -36,6 +37,7 @@ public class DayPlanMetaData {
 			projectionMap.put(VersionOneServerTable._ID, VersionOneServerTable._ID);
 			projectionMap.put(VersionOneServerTable.URL, VersionOneServerTable.URL);
 			projectionMap.put(VersionOneServerTable.USERNAME, VersionOneServerTable.USERNAME);
+			projectionMap.put(VersionOneServerTable.TOKEN, VersionOneServerTable.TOKEN);
 			projectionMap.put(VersionOneServerTable.ISCURRENT, VersionOneServerTable.ISCURRENT);
 		} 
 	}

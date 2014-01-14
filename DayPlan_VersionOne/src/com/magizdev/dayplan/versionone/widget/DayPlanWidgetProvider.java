@@ -31,8 +31,7 @@ import android.os.HandlerThread;
 import android.widget.RemoteViews;
 
 import com.magizdev.dayplan.R;
-import com.magizdev.dayplan.versionone.BacklogItemActivity;
-import com.magizdev.dayplan.versionone.PieChartBuilder;
+import com.magizdev.dayplan.versionone.DrawerActivity;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData;
 import com.magizdev.dayplan.versionone.util.DayTaskUtil;
 import com.magizdev.dayplan.versionone.viewmodel.DayTaskTimeInfo.TimeType;
@@ -161,11 +160,11 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 				}
 			});
 		} else if (action.equals(EMPTY_VIEW_CLICK_ACTION)) {
-			Intent chooseTaskIntent = new Intent(ctx, BacklogItemActivity.class);
+			Intent chooseTaskIntent = new Intent(ctx, DrawerActivity.class);
 			chooseTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			ctx.startActivity(chooseTaskIntent);
 		} else if (action.equals(REPORT_ACTION)) {
-			Intent chooseTaskIntent = new Intent(ctx, PieChartBuilder.class);
+			Intent chooseTaskIntent = new Intent(ctx, DrawerActivity.class);
 			chooseTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			ctx.startActivity(chooseTaskIntent);
 		} else if (action.equals(AUTO_REFRESH_ACTION)) {

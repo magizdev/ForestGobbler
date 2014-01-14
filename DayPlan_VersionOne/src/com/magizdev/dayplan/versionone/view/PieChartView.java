@@ -9,7 +9,7 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.magizdev.dayplan.versionone.PieChartBuilder.PieChartData;
+import com.magizdev.dayplan.versionone.ChartFragment.PieChartData;
 import com.magizdev.dayplan.versionone.util.INavigate;
 
 public class PieChartView extends BaseChartView {

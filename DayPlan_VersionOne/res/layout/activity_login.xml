@@ -12,18 +12,36 @@
         android:layout_marginTop="20dp"
         android:src="@drawable/versionone_logo" />
 
-    <TextView
-        android:id="@+id/currentServer"
+    <LinearLayout
+        android:id="@+id/currentServerArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/v1logo" />
+        android:layout_below="@id/v1logo"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/currentServer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/currentProduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/logOffBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Log off" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/productList"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/currentServer" >
+        android:layout_below="@id/currentServerArea"
+        android:visibility="gone" >
     </ListView>
 
     <LinearLayout

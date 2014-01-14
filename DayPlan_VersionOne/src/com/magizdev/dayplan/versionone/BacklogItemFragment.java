@@ -2,19 +2,15 @@ package com.magizdev.dayplan.versionone;
 
 import java.util.List;
 
-import android.app.ActionBar;
-import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
@@ -26,28 +22,29 @@ import android.widget.Switch;
 import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.versionone.util.DayTaskUtil;
 import com.magizdev.dayplan.versionone.util.DayUtil;
-import com.magizdev.dayplan.versionone.util.InAppNavigation;
 import com.magizdev.dayplan.versionone.viewmodel.BacklogItemAdapter;
 import com.magizdev.dayplan.versionone.viewmodel.BacklogItemInfo;
-import com.magizdev.dayplan.versionone.viewmodel.StorageUtil;
 import com.magizdev.dayplan.versionone.viewmodel.DayTaskTimeInfo.TimeType;
+import com.magizdev.dayplan.versionone.viewmodel.StorageUtil;
 
-public class BacklogItemActivity extends NavigationBaseActivity {
+public class BacklogItemFragment extends Fragment {
 	private DayTaskUtil dayTaskUtil;
 	private ListView listView;
 	private EditText backlog;
 	private StorageUtil<BacklogItemInfo> storageUtil;
 	private BacklogItemAdapter adapter;
+	
+	public BacklogItemFragment(){}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_backlog_item);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.activity_backlog_item, container, false);
 
-		listView = (ListView) findViewById(R.id.listViewBacklog);
-		backlog = (EditText) findViewById(R.id.editTextBacklog);
-		ImageButton addButton = (ImageButton) findViewById(R.id.btnAddBacklog);
-		Switch showAll = (Switch) findViewById(R.id.switchShowAll);
+		listView = (ListView) rootView.findViewById(R.id.listViewBacklog);
+		backlog = (EditText) rootView.findViewById(R.id.editTextBacklog);
+		ImageButton addButton = (ImageButton) rootView.findViewById(R.id.btnAddBacklog);
+		Switch showAll = (Switch) rootView.findViewById(R.id.switchShowAll);
 		showAll.setChecked(false);
 		showAll.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -61,8 +58,8 @@ public class BacklogItemActivity extends NavigationBaseActivity {
 			}
 		});
 
-		dayTaskUtil = new DayTaskUtil(this);
-		storageUtil = new StorageUtil<BacklogItemInfo>(this,
+		dayTaskUtil = new DayTaskUtil(getActivity());
+		storageUtil = new StorageUtil<BacklogItemInfo>(getActivity(),
 				new BacklogItemInfo());
 		addButton.setOnClickListener(new OnClickListener() {
 
@@ -87,13 +84,15 @@ public class BacklogItemActivity extends NavigationBaseActivity {
 						.getItemId(arg2);
 				if (backlogId > -1) {
 					Intent editTaskIntent = new Intent(
-							BacklogItemActivity.this, BacklogEditActivity.class);
+							getActivity(), BacklogEditActivity.class);
 					editTaskIntent.putExtra("backlogId", backlogId);
 
 					startActivityForResult(editTaskIntent, 1);
 				}
 			}
 		});
+		
+		return rootView;
 	}
 
 	@Override
@@ -105,31 +104,12 @@ public class BacklogItemActivity extends NavigationBaseActivity {
 		if (adapter != null) {
 			adapter.setSelected(selectedBacklogs);
 		} else {
-			adapter = new BacklogItemAdapter(this, selectedBacklogs);
+			adapter = new BacklogItemAdapter(getActivity(), selectedBacklogs);
 			listView.setAdapter(adapter);
 		}
 		listView.invalidate();
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.activity_backlog_item, menu);
-
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle presses on the action bar items
-		switch (item.getItemId()) {
-		case R.id.action_pickup:
-			addTasks();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
 
 	private void addTasks() {
 		List<Long> ids = dayTaskUtil.GetTasksByDate(DayUtil.Today());
@@ -148,11 +128,6 @@ public class BacklogItemActivity extends NavigationBaseActivity {
 				}
 			}
 		}
-		finish();
-	}
-
-	@Override
-	protected int getMyPostion() {
-		return 1;
+		getActivity().finish();
 	}
 }

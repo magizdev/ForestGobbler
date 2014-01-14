@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.magizdev.dayplan.R;
-import com.magizdev.dayplan.versionone.PieChartBuilder.PieChartData;
+import com.magizdev.dayplan.versionone.ChartFragment.PieChartData;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTable;
 import com.magizdev.dayplan.versionone.util.DayTaskTimeUtil;
 import com.magizdev.dayplan.versionone.util.DayTaskUtil;
