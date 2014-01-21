@@ -1,0 +1,50 @@
+<resources>
+
+    <string name="app_name">宝宝日记</string>
+    <string name="backlog_item_activity_label">Backlog Items</string>
+    <string name="day_plan_activity_label">Tasks of Today</string>
+    <string name="dashboard_activity_label">Review</string>
+    <string name="ok">OK</string>
+    <string name="action_mark">Add</string>
+    <string name="action_daily">Daily</string>
+    <string name="action_weekly">Weekly</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_save">Save</string>
+    <string name="backlog_completed">Completed</string>
+    <string name="hint_title">Title</string>
+    <string name="hint_desc">Description</string>
+    <string name="hint_add_backlog_title">Add backlog</string>
+    <string name="built_in_task_commute">Commute</string>
+    <string name="built_in_task_personal">Personal</string>
+    <string name="built_in_task_work">Work</string>
+    <string name="built_in_task_family">Family</string>
+    <string name="built_in_task_rest">Rest</string>
+    <string name="built_in_task_social">Social</string>
+    <string name="built_in_task_idleness">Idleness</string>
+    <string name="show_all_switch">Show Completed Items</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="action_websearch">Web search</string>
+    <string name="app_not_available">Sorry, there\'s no web browser available</string>
+
+    <string-array name="Pages">
+        <item>记录今天</item>
+        <item>查看过去</item>
+        <itme>宝宝档案</itme>
+    </string-array>
+    <string-array name="ReportTypes">
+        <item>Daily Report</item>
+        <item>Weekly Report</item>
+    </string-array>
+
+    <string name="empty_view_text">No task today, click to choose tasks for today.</string>
+    <string name="refresh">Refresh</string>
+    <string name="report">Report</string>
+    <string name="weinai">喂奶</string>
+    <string name="shuijiao">睡觉</string>
+    <string name="xiaobian">小便</string>
+    <string name="dabian">大便</string>
+    <string name="kaishi">开始</string>
+    <string name="jieshu">结束</string>
+
+</resources>

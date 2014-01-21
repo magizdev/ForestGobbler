@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_daily"
+        android:icon="@drawable/daily_report"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_daily"/>
+    <item
+        android:id="@+id/action_weekly"
+        android:icon="@drawable/weekly_report"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_weekly"/>
+
+</menu>

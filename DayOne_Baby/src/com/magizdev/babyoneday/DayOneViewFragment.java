@@ -1,0 +1,161 @@
+package com.magizdev.babyoneday;
+
+import java.util.Calendar;
+import java.util.Date;
+
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.Fragment;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.ListView;
+
+import com.magizdev.babyoneday.util.DayTaskUtil;
+import com.magizdev.babyoneday.viewmodel.DayOneAdapter;
+import com.magizdev.babyoneday.viewmodel.DayTaskTimeInfo.TimeType;
+
+public class DayOneViewFragment extends Fragment implements OnClickListener,
+		OnDateSetListener {
+	private ListView taskListView;
+	private DayOneAdapter adapter;
+	private DayTaskUtil taskUtil;
+	private Button btnWeiNai;
+	private Button btnShuiJiao;
+	private Button btnXiaoBian;
+	private Button btnDaBian;
+	private long weinaiId = 1;
+	private long shuijiaoId = 2;
+	private long xiaobianId = 3;
+	private long dabianId = 4;
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			adapter.refresh();
+		}
+	};
+
+	public DayOneViewFragment() {
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		View rootView = inflater.inflate(R.layout.activity_day_view, container,
+				false);
+
+		taskListView = (ListView) rootView.findViewById(R.id.listViewDayView);
+		taskListView.setBackgroundResource(R.drawable.widget_bg);
+		adapter = new DayOneAdapter(getActivity());
+		taskListView.setAdapter(adapter);
+
+		Button btnDatePicker = (Button) rootView
+				.findViewById(R.id.datePickerBtn);
+		Date today = new Date();
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(today);
+		btnDatePicker.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				DatePickerDialog dialog = new DatePickerDialog(getActivity(),
+						DayOneViewFragment.this, calendar.get(Calendar.YEAR),
+						calendar.get(Calendar.MONTH), calendar
+								.get(Calendar.DAY_OF_MONTH));
+				dialog.show();
+			}
+		});
+		return rootView;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		adapter.refresh();
+		// handler.sendEmptyMessageDelayed(0, 60000);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		// handler.removeMessages(0);
+	}
+
+	@Override
+	public void onClick(View v) {
+		TimeType timeType;
+		switch (v.getId()) {
+		case R.id.btnWeiNai:
+			timeType = taskUtil.GetTaskState(weinaiId);
+			if (timeType == TimeType.Stop) {
+				taskUtil.StartTask(weinaiId);
+			} else {
+				taskUtil.StopTask(weinaiId);
+			}
+			break;
+		case R.id.btnShuiJiao:
+			timeType = taskUtil.GetTaskState(shuijiaoId);
+			if (timeType == TimeType.Stop) {
+				taskUtil.StartTask(shuijiaoId);
+			} else {
+				taskUtil.StopTask(shuijiaoId);
+			}
+			break;
+		case R.id.btnXiaoBian:
+			taskUtil.TickTask(xiaobianId);
+			break;
+		case R.id.btnDaBian:
+			taskUtil.TickTask(dabianId);
+			break;
+		default:
+			break;
+		}
+		adapter.refresh();
+
+		taskListView.setSelection(adapter.getCount() - 1);
+	}
+
+	@Override
+	public void onDateSet(DatePicker view, int year, int monthOfYear,
+			int dayOfMonth) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.YEAR, year);
+		calendar.set(Calendar.MONTH, monthOfYear);
+		calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+		adapter.refresh(calendar.getTime());
+	}
+
+	// @Override
+	// public boolean onCreateOptionsMenu(Menu menu) {
+	// MenuInflater inflater = getMenuInflater();
+	// inflater.inflate(R.menu.activity_day_plan, menu);
+	//
+	// return super.onCreateOptionsMenu(menu);
+	// }
+	//
+	// @Override
+	// public boolean onOptionsItemSelected(MenuItem item) {
+	// // Handle presses on the action bar items
+	// Intent intent = new Intent();
+	// switch (item.getItemId()) {
+	// case R.id.action_mark:
+	// intent.setClass(this, BacklogItemActivity.class);
+	// startActivity(intent);
+	// return true;
+	// case R.id.action_report:
+	// intent.setClass(this, PieChartBuilder.class);
+	// startActivity(intent);
+	// return true;
+	// default:
+	// return super.onOptionsItemSelected(item);
+	// }
+	// }
+
+}
