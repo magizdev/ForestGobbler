@@ -19,7 +19,7 @@ public class DayPlanMetaData {
 
 		public static final String TABLE_NAME = "activityType";
 		public static final Uri CONTENT_URI = Uri.parse("content://"
-				+ AUTHORITY + "/activityType");
+				+ AUTHORITY + "/activityTypes");
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.magizdev.babydayone.activityType";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.magizdev.babydayone.activityType";
 		public static final String DEFAULT_SORT_ORDER = "name";
@@ -28,6 +28,8 @@ public class DayPlanMetaData {
 		public static final String TIME_TYPE = "time_type";
 		public static final String REMIND_INTERVAL = "remind_interval";
 		public static final String REMIND_DURATION = "remind_duration";
+		public static final String REMIND_INTERVAL_ENABLE = "remind_interval_enable";
+		public static final String REMIND_DURATION_ENABLE = "remind_duration_enable";
 		public static final int TIME_TYPE_DURATION = 0;
 		public static final int TIME_TYPE_ONCE = 1;
 
@@ -48,11 +50,11 @@ public class DayPlanMetaData {
 
 		public static final String TABLE_NAME = "activity";
 		public static final Uri CONTENT_URI = Uri.parse("content://"
-				+ AUTHORITY + "/activity");
+				+ AUTHORITY + "/activities");
 
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.magizdev.babydayone.activity";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.magizdev.babydayone.activity";
-		public static final String DEFAULT_SORT_ORDER = "time DESC";
+		public static final String DEFAULT_SORT_ORDER = "start_time DESC";
 
 		public static final String DATE = "date";
 		public static final String ACTIVITY_TYPE_ID = "activity_type_id";

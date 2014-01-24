@@ -53,7 +53,11 @@ public class DayPlanProvider extends ContentProvider {
 					+ ActivityTypeTable.NAME + " TEXT,"
 					+ ActivityTypeTable.TIME_TYPE + " INTEGER,"
 					+ ActivityTypeTable.REMIND_DURATION + " INTEGER default 0,"
-					+ ActivityTypeTable.REMIND_INTERVAL + " INTEGER default 0)");
+					+ ActivityTypeTable.REMIND_DURATION_ENABLE
+					+ " INTEGER default 0," + ActivityTypeTable.REMIND_INTERVAL
+					+ " INTEGER default 0,"
+					+ ActivityTypeTable.REMIND_INTERVAL_ENABLE
+					+ " INTEGER default 0)");
 
 			// create activity table;
 			db.execSQL("CREATE TABLE " + ActivityTable.TABLE_NAME + "("
@@ -62,30 +66,40 @@ public class DayPlanProvider extends ContentProvider {
 					+ ActivityTable.ACTIVITY_TYPE_ID + " INTEGER,"
 					+ ActivityTable.START_TIME + " INTEGER,"
 					+ ActivityTable.NOTE + " TEXT," + ActivityTable.DATA
-					+ " INTEGER," + ActivityTable.END_TIME + " INTEGER);");
+					+ " REAL," + ActivityTable.END_TIME + " INTEGER);");
 
-			db.execSQL("insert into " + ActivityTypeTable.TABLE_NAME + "("
-					+ ActivityTypeTable.NAME + ") values ('"
-					+ context.getResources().getString(R.string.weinai) + "');");
-
-			db.execSQL("insert into " + ActivityTypeTable.TABLE_NAME + "("
-					+ ActivityTypeTable.NAME + ") values ('"
-					+ context.getResources().getString(R.string.shuijiao)
-					+ "');");
-
-			db.execSQL("insert into " + ActivityTypeTable.TABLE_NAME + "("
-					+ ActivityTypeTable.NAME + ") values ('"
-					+ context.getResources().getString(R.string.xiaobian)
-					+ "');");
-
-			db.execSQL("insert into " + ActivityTypeTable.TABLE_NAME + "("
-					+ ActivityTypeTable.NAME + ") values ('"
-					+ context.getResources().getString(R.string.dabian) + "');");
-
+			initBuiltInData(db);
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		}
+
+		private void initBuiltInData(SQLiteDatabase db) {
+			insertBuiltInData(db, R.string.built_in_task_weinai);
+			insertBuiltInData(db, R.string.built_in_task_shuijiao);
+			insertBuiltInData(db, R.string.built_in_task_xiaobian);
+			insertBuiltInData(db, R.string.built_in_task_dabian);
+			insertBuiltInData(db, R.string.built_in_task_naifen);
+			insertBuiltInData(db, R.string.built_in_task_tiwen);
+			insertBuiltInData(db, R.string.built_in_task_shengao);
+			insertBuiltInData(db, R.string.built_in_task_tizhong);
+			insertBuiltInData(db, R.string.built_in_task_jiyi);
+
+		}
+
+		private void insertBuiltInData(SQLiteDatabase db, int resourceId) {
+			String data = context.getResources().getString(resourceId);
+			db.execSQL("insert into " + ActivityTypeTable.TABLE_NAME + "("
+					+ ActivityTypeTable.NAME + ","
+					+ ActivityTypeTable.TIME_TYPE + ","
+					+ ActivityTypeTable.REMIND_DURATION + ","
+					+ ActivityTypeTable.REMIND_INTERVAL + ","
+					+ ActivityTypeTable.REMIND_DURATION_ENABLE + ","
+					+ ActivityTypeTable.REMIND_INTERVAL_ENABLE + ") values ('"
+					+ data.split(",")[0] + "'," + data.split(",")[1] + ","
+					+ data.split(",")[2] + "," + data.split(",")[3] + ","
+					+ data.split(",")[4] + "," + data.split(",")[5] + ")");
 		}
 	}
 

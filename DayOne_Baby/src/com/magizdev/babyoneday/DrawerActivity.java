@@ -145,13 +145,12 @@ public class DrawerActivity extends FragmentActivity {
 			supportFragmentManager.beginTransaction().hide(chart).commit();
 		}
 		if (chartFragment == null) {
-			chartFragment = new ChartFragment();
 		}
 		if (dayPlanFragment == null) {
 			dayPlanFragment = new DayPlanFragment();
 		}
 		if (backlogItemFragment == null) {
-			backlogItemFragment = new BacklogItemFragment();
+			
 		}
 		if(dayOneViewFragment == null){
 			dayOneViewFragment = new DayOneViewFragment();

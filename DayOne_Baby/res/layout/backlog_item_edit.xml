@@ -2,37 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:paddingLeft="20dp"
-    android:paddingRight="20dp" >
+    android:paddingRight="20dp"
+    android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/activityData"
+        <EditText
+            android:id="@+id/activityDataEdit"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
+            android:background="@android:drawable/edit_text"
             android:ellipsize="end"
             android:gravity="center_vertical"
+            android:inputType="numberDecimal"
             android:singleLine="true"
+            android:text="Data"
             android:textSize="25dp" />
 
         <TextView
             android:id="@+id/activityName"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_centerVertical="true"
             android:layout_marginBottom="15dp"
-            android:layout_marginRight="15dp"
             android:layout_marginTop="15dp"
-            android:layout_toLeftOf="@id/activityData"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@id/activityDataEdit"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:singleLine="true"
@@ -40,6 +42,7 @@
             android:textSize="25dp" />
 
         <LinearLayout
+            android:id="@+id/linearLayout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -69,11 +72,47 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/activityNote"
+    <EditText
+        android:id="@+id/activityNoteEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
+        android:background="@android:drawable/edit_text"
         android:text="Note" />
+
+    <LinearLayout
+        android:id="@+id/buttonsArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/activityDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="#FF2332"
+            android:text="@string/delete" />
+
+        <Button
+            android:id="@+id/activityCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="#808080"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/activitySave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="#3FFF14"
+            android:text="@string/save" />
+    </LinearLayout>
 
 </LinearLayout>

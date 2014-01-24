@@ -7,8 +7,6 @@ import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,29 +15,14 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
 
-import com.magizdev.babyoneday.util.DayTaskUtil;
+import com.magizdev.babyoneday.util.ActivityUtil;
 import com.magizdev.babyoneday.viewmodel.DayOneAdapter;
-import com.magizdev.babyoneday.viewmodel.DayTaskTimeInfo.TimeType;
 
-public class DayOneViewFragment extends Fragment implements OnClickListener,
-		OnDateSetListener {
+public class DayOneViewFragment extends Fragment implements OnDateSetListener {
 	private ListView taskListView;
 	private DayOneAdapter adapter;
-	private DayTaskUtil taskUtil;
-	private Button btnWeiNai;
-	private Button btnShuiJiao;
-	private Button btnXiaoBian;
-	private Button btnDaBian;
-	private long weinaiId = 1;
-	private long shuijiaoId = 2;
-	private long xiaobianId = 3;
-	private long dabianId = 4;
-	private Handler handler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			adapter.refresh();
-		}
-	};
+	private ActivityUtil taskUtil;
+	private Button btnDatePicker;
 
 	public DayOneViewFragment() {
 	}
@@ -56,11 +39,13 @@ public class DayOneViewFragment extends Fragment implements OnClickListener,
 		adapter = new DayOneAdapter(getActivity());
 		taskListView.setAdapter(adapter);
 
-		Button btnDatePicker = (Button) rootView
-				.findViewById(R.id.datePickerBtn);
+		btnDatePicker = (Button) rootView.findViewById(R.id.datePickerBtn);
 		Date today = new Date();
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(today);
+		btnDatePicker.setText(calendar.get(Calendar.YEAR) + "/"
+				+ (calendar.get(Calendar.MONTH) + 1) + "/"
+				+ calendar.get(Calendar.DAY_OF_MONTH));
 		btnDatePicker.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -89,46 +74,14 @@ public class DayOneViewFragment extends Fragment implements OnClickListener,
 	}
 
 	@Override
-	public void onClick(View v) {
-		TimeType timeType;
-		switch (v.getId()) {
-		case R.id.btnWeiNai:
-			timeType = taskUtil.GetTaskState(weinaiId);
-			if (timeType == TimeType.Stop) {
-				taskUtil.StartTask(weinaiId);
-			} else {
-				taskUtil.StopTask(weinaiId);
-			}
-			break;
-		case R.id.btnShuiJiao:
-			timeType = taskUtil.GetTaskState(shuijiaoId);
-			if (timeType == TimeType.Stop) {
-				taskUtil.StartTask(shuijiaoId);
-			} else {
-				taskUtil.StopTask(shuijiaoId);
-			}
-			break;
-		case R.id.btnXiaoBian:
-			taskUtil.TickTask(xiaobianId);
-			break;
-		case R.id.btnDaBian:
-			taskUtil.TickTask(dabianId);
-			break;
-		default:
-			break;
-		}
-		adapter.refresh();
-
-		taskListView.setSelection(adapter.getCount() - 1);
-	}
-
-	@Override
 	public void onDateSet(DatePicker view, int year, int monthOfYear,
 			int dayOfMonth) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.YEAR, year);
 		calendar.set(Calendar.MONTH, monthOfYear);
 		calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+		btnDatePicker
+				.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
 		adapter.refresh(calendar.getTime());
 	}
 

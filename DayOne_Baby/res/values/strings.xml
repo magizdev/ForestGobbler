@@ -14,23 +14,28 @@
     <string name="hint_title">Title</string>
     <string name="hint_desc">Description</string>
     <string name="hint_add_backlog_title">Add backlog</string>
-    <string name="built_in_task_commute">Commute</string>
-    <string name="built_in_task_personal">Personal</string>
-    <string name="built_in_task_work">Work</string>
-    <string name="built_in_task_family">Family</string>
-    <string name="built_in_task_rest">Rest</string>
-    <string name="built_in_task_social">Social</string>
-    <string name="built_in_task_idleness">Idleness</string>
+    <string name="built_in_task_weinai">母乳,0,30,120,1,0</string>
+    <string name="built_in_task_naifen">奶粉,1,0,0,0,0</string>
+    <string name="built_in_task_shuijiao">睡觉,0,120,0,0,0</string>
+    <string name="built_in_task_xiaobian">小便,1,0,120,0,1</string>
+    <string name="built_in_task_dabian">大便,1,0,180,0,1</string>
+    <string name="built_in_task_tiwen">测体温,1,3,0,1,0</string>
+    <string name="built_in_task_shengao">量身高,1,0,180,0,1</string>
+    <string name="built_in_task_tizhong">体重,1,0,180,0,1</string>
+    <string name="built_in_task_jiyi">美好记忆,1,0,0,0,0</string>
     <string name="show_all_switch">Show Completed Items</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_websearch">Web search</string>
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
+    <string name="delete">删除</string>
+    <string name="cancel">取消</string>
+    <string name="save">保存</string>
 
     <string-array name="Pages">
         <item>记录今天</item>
         <item>查看过去</item>
-        <itme>宝宝档案</itme>
+        <item>宝宝档案</item>
     </string-array>
     <string-array name="ReportTypes">
         <item>Daily Report</item>
@@ -40,11 +45,6 @@
     <string name="empty_view_text">No task today, click to choose tasks for today.</string>
     <string name="refresh">Refresh</string>
     <string name="report">Report</string>
-    <string name="weinai">喂奶</string>
-    <string name="shuijiao">睡觉</string>
-    <string name="xiaobian">小便</string>
-    <string name="dabian">大便</string>
-    <string name="kaishi">开始</string>
-    <string name="jieshu">结束</string>
+
 
 </resources>

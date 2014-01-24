@@ -5,42 +5,82 @@
     android:focusable="true"
     android:focusableInTouchMode="true" >
 
-    <LinearLayout
+    <HorizontalScrollView
         android:id="@+id/activityArea"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal" >
+        android:layout_alignParentBottom="true" >
 
-        <ImageButton
-            android:id="@+id/btnWeiNai"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:src="@drawable/ic_action_weinai"
-            android:text="@string/weinai" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal" >
 
-        <ImageButton
-            android:id="@+id/btnShuiJiao"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:src="@drawable/ic_action_shuijiao"
-            android:text="@string/shuijiao" />
+            <ImageButton
+                android:id="@+id/btnWeiNai"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/muru" />
 
-        <ImageButton
-            android:id="@+id/btnXiaoBian"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:src="@drawable/ic_action_xiaobian"
-            android:text="@string/xiaobian" />
+            <ImageButton
+                android:id="@+id/btnShuiJiao"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_action_shuijiao" />
 
-        <ImageButton
-            android:id="@+id/btnDaBian"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:src="@drawable/ic_action_dabian"
-            android:text="@string/dabian" />
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/btnXiaoBian"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_action_xiaobian" />
+
+            <ImageButton
+                android:id="@+id/btnDaBian"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_action_dabian" />
+
+            <ImageButton
+                android:id="@+id/btnNaiFen"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_action_weinai" />
+
+            <ImageButton
+                android:id="@+id/btnShenGao"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ruler256" />
+
+            <ImageButton
+                android:id="@+id/btnTiZhong"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/th" />
+
+            <ImageButton
+                android:id="@+id/btnTiWen"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_action_thermometer" />
+
+            <ImageButton
+                android:id="@+id/btnShiKe"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_action_diary" />
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <ListView
         android:id="@+id/listViewDayPlan"

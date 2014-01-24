@@ -8,26 +8,36 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import com.magizdev.babyoneday.util.DayTaskUtil;
+import com.magizdev.babyoneday.util.ActivityUtil;
 import com.magizdev.babyoneday.viewmodel.DayOneAdapter;
-import com.magizdev.babyoneday.viewmodel.DayTaskTimeInfo.TimeType;
 
 public class DayPlanFragment extends Fragment implements OnClickListener {
 	private ListView taskListView;
 	private DayOneAdapter adapter;
-	private DayTaskUtil taskUtil;
+	private ActivityUtil taskUtil;
 	private ImageButton btnWeiNai;
 	private ImageButton btnShuiJiao;
 	private ImageButton btnXiaoBian;
 	private ImageButton btnDaBian;
+	private ImageButton btnNaiFen;
+	private ImageButton btnTiWen;
+	private ImageButton btnShenGao;
+	private ImageButton btnTiZhong;
+	private ImageButton btnJiYi;
 	private long weinaiId = 1;
 	private long shuijiaoId = 2;
 	private long xiaobianId = 3;
 	private long dabianId = 4;
+	private long naifenId = 5;
+	private long tiwenId = 6;
+	private long shengaoId = 7;
+	private long tizhongId = 8;
+	private long jiyiId = 9;
 	private Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -49,12 +59,17 @@ public class DayPlanFragment extends Fragment implements OnClickListener {
 		taskListView.setBackgroundResource(R.drawable.widget_bg);
 		adapter = new DayOneAdapter(getActivity());
 		taskListView.setAdapter(adapter);
-		taskUtil = new DayTaskUtil(getActivity());
+		taskUtil = new ActivityUtil(getActivity());
 
 		btnWeiNai = (ImageButton) rootView.findViewById(R.id.btnWeiNai);
 		btnShuiJiao = (ImageButton) rootView.findViewById(R.id.btnShuiJiao);
 		btnXiaoBian = (ImageButton) rootView.findViewById(R.id.btnXiaoBian);
 		btnDaBian = (ImageButton) rootView.findViewById(R.id.btnDaBian);
+		btnNaiFen = (ImageButton) rootView.findViewById(R.id.btnNaiFen);
+		btnTiWen = (ImageButton) rootView.findViewById(R.id.btnTiWen);
+		btnShenGao = (ImageButton) rootView.findViewById(R.id.btnShenGao);
+		btnTiZhong = (ImageButton) rootView.findViewById(R.id.btnTiZhong);
+		btnJiYi = (ImageButton) rootView.findViewById(R.id.btnShiKe);
 
 		btnWeiNai.setOnClickListener(this);
 
@@ -63,6 +78,21 @@ public class DayPlanFragment extends Fragment implements OnClickListener {
 		btnXiaoBian.setOnClickListener(this);
 
 		btnDaBian.setOnClickListener(this);
+
+		btnNaiFen.setOnClickListener(this);
+		btnTiWen.setOnClickListener(this);
+		btnShenGao.setOnClickListener(this);
+		btnTiZhong.setOnClickListener(this);
+		btnJiYi.setOnClickListener(this);
+		taskListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				adapter.setEditMode(arg2);
+				return false;
+			}
+		});
 		return rootView;
 	}
 
@@ -81,29 +111,41 @@ public class DayPlanFragment extends Fragment implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		TimeType timeType;
 		switch (v.getId()) {
 		case R.id.btnWeiNai:
-			timeType = taskUtil.GetTaskState(weinaiId);
-			if (timeType == TimeType.Stop) {
-				taskUtil.StartTask(weinaiId);
+			if (taskUtil.IsActivityWaitingForStop(weinaiId)) {
+				taskUtil.StopActivity(weinaiId);
 			} else {
-				taskUtil.StopTask(weinaiId);
+				taskUtil.StartActivity(weinaiId);
 			}
 			break;
 		case R.id.btnShuiJiao:
-			timeType = taskUtil.GetTaskState(shuijiaoId);
-			if (timeType == TimeType.Stop) {
-				taskUtil.StartTask(shuijiaoId);
+			if (taskUtil.IsActivityWaitingForStop(shuijiaoId)) {
+				taskUtil.StopActivity(shuijiaoId);
 			} else {
-				taskUtil.StopTask(shuijiaoId);
+				taskUtil.StartActivity(shuijiaoId);
 			}
 			break;
 		case R.id.btnXiaoBian:
-			taskUtil.TickTask(xiaobianId);
+			taskUtil.StartActivity(xiaobianId);
 			break;
 		case R.id.btnDaBian:
-			taskUtil.TickTask(dabianId);
+			taskUtil.StartActivity(dabianId);
+			break;
+		case R.id.btnNaiFen:
+			taskUtil.StartActivity(naifenId);
+			break;
+		case R.id.btnTiWen:
+			taskUtil.StartActivity(tiwenId);
+			break;
+		case R.id.btnShenGao:
+			taskUtil.StartActivity(shengaoId);
+			break;
+		case R.id.btnTiZhong:
+			taskUtil.StartActivity(tizhongId);
+			break;
+		case R.id.btnShiKe:
+			taskUtil.StartActivity(jiyiId);
 			break;
 		default:
 			break;
