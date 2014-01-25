@@ -16,7 +16,7 @@ import android.widget.ListView;
 import com.magizdev.babyoneday.util.ActivityUtil;
 import com.magizdev.babyoneday.viewmodel.DayOneAdapter;
 
-public class DayPlanFragment extends Fragment implements OnClickListener {
+public class DayOneRecordFragment extends Fragment implements OnClickListener {
 	private ListView taskListView;
 	private DayOneAdapter adapter;
 	private ActivityUtil taskUtil;
@@ -45,7 +45,7 @@ public class DayPlanFragment extends Fragment implements OnClickListener {
 		}
 	};
 
-	public DayPlanFragment() {
+	public DayOneRecordFragment() {
 	}
 
 	@Override

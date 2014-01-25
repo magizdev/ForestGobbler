@@ -1,114 +1,90 @@
 package com.magizdev.babyoneday;
 
-import java.util.Calendar;
-import java.util.Date;
-
-import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.ListView;
+import android.widget.FrameLayout;
+import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
+import android.widget.TabHost.TabSpec;
 
-import com.magizdev.babyoneday.util.ActivityUtil;
-import com.magizdev.babyoneday.viewmodel.DayOneAdapter;
-
-public class DayOneViewFragment extends Fragment implements OnDateSetListener {
-	private ListView taskListView;
-	private DayOneAdapter adapter;
-	private ActivityUtil taskUtil;
-	private Button btnDatePicker;
-
-	public DayOneViewFragment() {
-	}
+public class DayOneViewFragment extends Fragment {
+	private final static String STOPWATCH_TAB = "stopwatch";
+	private final static String TIMER_TAB = "timer";
+	private TabHost tabHost;
+	private View rootView;
+	private FragmentManager fragmentManager;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
-		View rootView = inflater.inflate(R.layout.activity_day_view, container,
+		rootView = inflater.inflate(R.layout.activity_day_view, container,
 				false);
 
-		taskListView = (ListView) rootView.findViewById(R.id.listViewDayView);
-		taskListView.setBackgroundResource(R.drawable.widget_bg);
-		adapter = new DayOneAdapter(getActivity());
-		taskListView.setAdapter(adapter);
+		tabHost = (TabHost) rootView.findViewById(android.R.id.tabhost);
+		tabHost.setup();
 
-		btnDatePicker = (Button) rootView.findViewById(R.id.datePickerBtn);
-		Date today = new Date();
-		final Calendar calendar = Calendar.getInstance();
-		calendar.setTime(today);
-		btnDatePicker.setText(calendar.get(Calendar.YEAR) + "/"
-				+ (calendar.get(Calendar.MONTH) + 1) + "/"
-				+ calendar.get(Calendar.DAY_OF_MONTH));
-		btnDatePicker.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				DatePickerDialog dialog = new DatePickerDialog(getActivity(),
-						DayOneViewFragment.this, calendar.get(Calendar.YEAR),
-						calendar.get(Calendar.MONTH), calendar
-								.get(Calendar.DAY_OF_MONTH));
-				dialog.show();
-			}
-		});
+		FrameLayout contentFrame = (FrameLayout) rootView
+				.findViewById(android.R.id.tabcontent);
+		fragmentManager = getActivity()
+				.getFragmentManager();
+		//
+		// TabSpec timer = tabHost.newTabSpec(TIMER_TAB);
+		// timer.
+		// Intent timerIntent = new Intent(this, TimerActivity.class);
+		// timer.setContent(timerIntent);
+		// timer.setIndicator("",
+		// getResources().getDrawable(R.drawable.ic_hourglass));
+		// tabHost.addTab(timer);
+		setupTabs();
 		return rootView;
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
-		adapter.refresh();
-		// handler.sendEmptyMessageDelayed(0, 60000);
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		setRetainInstance(true);
+
+		tabHost.setOnTabChangedListener(new OnTabChangeListener() {
+
+			@Override
+			public void onTabChanged(String tabId) {
+				fragmentManager
+						.beginTransaction()
+						.replace(android.R.id.tabcontent,
+								new RawDataViewFragment()).commit();
+			}
+		});
+		tabHost.setCurrentTab(0);
+		// manually start loading stuff in the first tab
+		updateTab("test", R.id.rawDataView);
 	}
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		// handler.removeMessages(0);
+	private void setupTabs() {
+		tabHost.setup(); // you must call this before adding your tabs!
+		tabHost.addTab(newTab("raw_data", R.string.action_cancel,
+				R.id.rawDataView));
+		tabHost.addTab(newTab("ti_wen", R.string.action_cancel,
+				R.id.shenGaoView));
 	}
 
-	@Override
-	public void onDateSet(DatePicker view, int year, int monthOfYear,
-			int dayOfMonth) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.YEAR, year);
-		calendar.set(Calendar.MONTH, monthOfYear);
-		calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-		btnDatePicker
-				.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
-		adapter.refresh(calendar.getTime());
+	private TabSpec newTab(String tag, int labelId, int tabContentId) {
+
+		TabSpec tabSpec = tabHost.newTabSpec(tag);
+		tabSpec.setIndicator("test");
+		tabSpec.setContent(tabContentId);
+		return tabSpec;
 	}
 
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// MenuInflater inflater = getMenuInflater();
-	// inflater.inflate(R.menu.activity_day_plan, menu);
-	//
-	// return super.onCreateOptionsMenu(menu);
-	// }
-	//
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// // Handle presses on the action bar items
-	// Intent intent = new Intent();
-	// switch (item.getItemId()) {
-	// case R.id.action_mark:
-	// intent.setClass(this, BacklogItemActivity.class);
-	// startActivity(intent);
-	// return true;
-	// case R.id.action_report:
-	// intent.setClass(this, PieChartBuilder.class);
-	// startActivity(intent);
-	// return true;
-	// default:
-	// return super.onOptionsItemSelected(item);
-	// }
-	// }
-
+	private void updateTab(String tabId, int placeholder) {
+		FragmentManager fm = getFragmentManager();
+		if (fm.findFragmentByTag(tabId) == null) {
+			fm.beginTransaction()
+					.replace(placeholder, new RawDataViewFragment(), tabId)
+					.commit();
+		}
+	}
 }

@@ -147,7 +147,7 @@ public class DrawerActivity extends FragmentActivity {
 		if (chartFragment == null) {
 		}
 		if (dayPlanFragment == null) {
-			dayPlanFragment = new DayPlanFragment();
+			dayPlanFragment = new DayOneRecordFragment();
 		}
 		if (backlogItemFragment == null) {
 			
