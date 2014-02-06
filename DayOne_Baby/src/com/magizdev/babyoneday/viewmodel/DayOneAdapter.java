@@ -103,7 +103,7 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 
 			viewHolder = new ViewHolder();
 			LayoutInflater inflater = LayoutInflater.from(context);
-			convertView = inflater.inflate(R.layout.backlog_item_edit, null);
+			convertView = inflater.inflate(R.layout.activity_item_edit, null);
 			viewHolder.name = (TextView) convertView
 					.findViewById(R.id.activityName);
 			viewHolder.startTime = (TextView) convertView
@@ -147,7 +147,7 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 		} else {
 			viewHolder = new ViewHolder();
 			LayoutInflater inflater = LayoutInflater.from(context);
-			convertView = inflater.inflate(R.layout.backlog_item_display, null);
+			convertView = inflater.inflate(R.layout.activity_item_display, null);
 			viewHolder.name = (TextView) convertView
 					.findViewById(R.id.activityName);
 			viewHolder.startTime = (TextView) convertView

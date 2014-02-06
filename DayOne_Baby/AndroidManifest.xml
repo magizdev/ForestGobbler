@@ -49,25 +49,6 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
-
-        <receiver android:name="com.magizdev.babyoneday.widget.DayPlanWidgetProvider" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <!-- This specifies the widget provider info -->
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widgetinfo" />
-        </receiver>
-        <receiver android:name=".WidgetClickReceiver" >
-        </receiver>
-
-        <!-- The service serving the RemoteViews to the collection widget -->
-        <service
-            android:name="com.magizdev.babyoneday.widget.DayPlanWidgetService"
-            android:exported="false"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
-
         <activity
             android:name="com.google.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
