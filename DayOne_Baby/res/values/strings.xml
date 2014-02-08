@@ -23,11 +23,16 @@
     <string name="built_in_task_shengao">量身高,1,0,180,0,1</string>
     <string name="built_in_task_tizhong">体重,1,0,180,0,1</string>
     <string name="built_in_task_jiyi">美好记忆,1,0,0,0,0</string>
+    <string name="view_rawdata">每日活动</string>
+    <string name="view_shengao">身高曲线</string>
+    <string name="view_tizhong">体重曲线</string>
+    <string name="view_jiyi">美好记忆</string>
+    <string name="gender_boy">男宝宝</string>
+    <string name="gender_girl">女宝宝</string>
+    <string name="profile_birthday">生日</string>
     <string name="show_all_switch">Show Completed Items</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="action_websearch">Web search</string>
-    <string name="app_not_available">Sorry, there\'s no web browser available</string>
     <string name="delete">删除</string>
     <string name="cancel">取消</string>
     <string name="save">保存</string>
@@ -45,6 +50,5 @@
     <string name="empty_view_text">No task today, click to choose tasks for today.</string>
     <string name="refresh">Refresh</string>
     <string name="report">Report</string>
-
 
 </resources>

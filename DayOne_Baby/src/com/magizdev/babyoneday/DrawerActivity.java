@@ -23,10 +23,8 @@ public class DrawerActivity extends FragmentActivity {
 	private ActionBarDrawerToggle mDrawerToggle;
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
-	private android.support.v4.app.Fragment chartFragment;
-	private Fragment loginFragment;
-	private Fragment dayPlanFragment;
-	private Fragment backlogItemFragment;
+	private Fragment dayOnePlanFragment;
+	private Fragment profileFragment;
 	private Fragment dayOneViewFragment;
 	private int position;
 
@@ -134,31 +132,22 @@ public class DrawerActivity extends FragmentActivity {
 	/** Swaps fragments in the main content view */
 	private void selectItem(int position) {
 		FragmentManager fragmentManager = getFragmentManager();
-		android.support.v4.app.FragmentManager supportFragmentManager = getSupportFragmentManager();
-		android.support.v4.app.Fragment chart = getSupportFragmentManager()
-				.findFragmentByTag("chart");
-		Fragment other = fragmentManager.findFragmentByTag("other");
-		if (other != null) {
-			fragmentManager.beginTransaction().show(other).commit();
+		if (profileFragment == null) {
+			profileFragment = new DayOneProfileFragment();
 		}
-		if (chart != null) {
-			supportFragmentManager.beginTransaction().hide(chart).commit();
+		if (dayOnePlanFragment == null) {
+			dayOnePlanFragment = new DayOneRecordFragment();
 		}
-		if (chartFragment == null) {
+		if (profileFragment == null) {
+
 		}
-		if (dayPlanFragment == null) {
-			dayPlanFragment = new DayOneRecordFragment();
-		}
-		if (backlogItemFragment == null) {
-			
-		}
-		if(dayOneViewFragment == null){
+		if (dayOneViewFragment == null) {
 			dayOneViewFragment = new DayOneViewFragment();
 		}
 		switch (position) {
 		case 0:
 			fragmentManager.beginTransaction()
-					.replace(R.id.content_frame, dayPlanFragment, "other")
+					.replace(R.id.content_frame, dayOnePlanFragment, "other")
 					.commit();
 			break;
 		case 1:
@@ -167,22 +156,8 @@ public class DrawerActivity extends FragmentActivity {
 					.commit();
 			break;
 		case 2:
-			if (other != null) {
-				fragmentManager.beginTransaction().hide(other).commit();
-			}
-
-			if (chart != null) {
-				supportFragmentManager.beginTransaction().show(chart).commit();
-
-			} else {
-				supportFragmentManager.beginTransaction()
-						.replace(R.id.content_frame, chartFragment, "chart")
-						.commit();
-			}
-			break;
-		case 3:
 			fragmentManager.beginTransaction()
-					.replace(R.id.content_frame, loginFragment, "other")
+					.replace(R.id.content_frame, profileFragment, "other")
 					.commit();
 			break;
 		default:

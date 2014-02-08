@@ -12,8 +12,10 @@ import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 
 public class DayOneViewFragment extends Fragment {
-	private final static String STOPWATCH_TAB = "stopwatch";
-	private final static String TIMER_TAB = "timer";
+	private final static String TAB_RAWDATA = "view_rawdata";
+	private final static String TAB_SHENGAO = "view_shengao";
+	private final static String TAB_TIZHONG = "view_tizhong";
+	private final static String TAB_JIYI = "view_jiyi";
 	private TabHost tabHost;
 	private View rootView;
 	private FragmentManager fragmentManager;
@@ -29,16 +31,7 @@ public class DayOneViewFragment extends Fragment {
 
 		FrameLayout contentFrame = (FrameLayout) rootView
 				.findViewById(android.R.id.tabcontent);
-		fragmentManager = getActivity()
-				.getFragmentManager();
-		//
-		// TabSpec timer = tabHost.newTabSpec(TIMER_TAB);
-		// timer.
-		// Intent timerIntent = new Intent(this, TimerActivity.class);
-		// timer.setContent(timerIntent);
-		// timer.setIndicator("",
-		// getResources().getDrawable(R.drawable.ic_hourglass));
-		// tabHost.addTab(timer);
+		fragmentManager = getActivity().getFragmentManager();
 		setupTabs();
 		return rootView;
 	}
@@ -65,16 +58,19 @@ public class DayOneViewFragment extends Fragment {
 
 	private void setupTabs() {
 		tabHost.setup(); // you must call this before adding your tabs!
-		tabHost.addTab(newTab("raw_data", R.string.action_cancel,
+		tabHost.addTab(newTab(TAB_RAWDATA, R.string.view_rawdata,
 				R.id.rawDataView));
-		tabHost.addTab(newTab("ti_wen", R.string.action_cancel,
+		tabHost.addTab(newTab(TAB_SHENGAO, R.string.view_shengao,
 				R.id.shenGaoView));
+		tabHost.addTab(newTab(TAB_TIZHONG, R.string.view_tizhong,
+				R.id.shenGaoView));
+		tabHost.addTab(newTab(TAB_JIYI, R.string.view_jiyi, R.id.shenGaoView));
 	}
 
 	private TabSpec newTab(String tag, int labelId, int tabContentId) {
-
+		String label = getActivity().getResources().getString(labelId);
 		TabSpec tabSpec = tabHost.newTabSpec(tag);
-		tabSpec.setIndicator("test");
+		tabSpec.setIndicator(label);
 		tabSpec.setContent(tabContentId);
 		return tabSpec;
 	}
