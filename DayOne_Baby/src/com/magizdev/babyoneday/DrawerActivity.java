@@ -82,16 +82,16 @@ public class DrawerActivity extends FragmentActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		switch (position) {
-		case 1:
-			inflater.inflate(R.menu.activity_backlog_item, menu);
-			break;
-		case 2:
-			inflater.inflate(R.menu.activity_dashboard, menu);
-		default:
-			break;
-		}
+//		MenuInflater inflater = getMenuInflater();
+//		switch (position) {
+//		case 1:
+//			inflater.inflate(R.menu.activity_backlog_item, menu);
+//			break;
+//		case 2:
+//			inflater.inflate(R.menu.activity_dashboard, menu);
+//		default:
+//			break;
+//		}
 		return super.onCreateOptionsMenu(menu);
 	}
 

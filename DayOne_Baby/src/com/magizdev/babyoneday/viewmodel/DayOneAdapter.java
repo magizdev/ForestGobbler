@@ -4,9 +4,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import android.R.integer;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -144,10 +142,12 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 			viewHolder.name.setText(activityInfo.Name);
 			viewHolder.dataEdit.setText(activityInfo.Data + "");
 			viewHolder.noteEdit.setText(activityInfo.Note);
+
 		} else {
 			viewHolder = new ViewHolder();
 			LayoutInflater inflater = LayoutInflater.from(context);
-			convertView = inflater.inflate(R.layout.activity_item_display, null);
+			convertView = inflater
+					.inflate(R.layout.activity_item_display, null);
 			viewHolder.name = (TextView) convertView
 					.findViewById(R.id.activityName);
 			viewHolder.startTime = (TextView) convertView
@@ -180,7 +180,13 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 			if (activityInfo.Data > 0) {
 				viewHolder.data.setText(activityInfo.Data + "");
 			}
-			viewHolder.note.setText(activityInfo.Note);
+			if (activityInfo.Note.isEmpty()) {
+				viewHolder.note.setVisibility(View.GONE);
+			} else {
+				viewHolder.note.setVisibility(View.VISIBLE);
+				viewHolder.note.setText(activityInfo.Note);
+			}
+
 		}
 
 		return convertView;

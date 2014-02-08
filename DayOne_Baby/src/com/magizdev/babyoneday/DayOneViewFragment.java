@@ -78,12 +78,16 @@ public class DayOneViewFragment extends Fragment {
 			@Override
 			public void onTabChanged(String tabId) {
 				if (tabId == TAB_RAWDATA) {
+					tabHost.setCurrentTab(0);
 					updateTab(tabId, R.id.rawDataView);
 				} else if (tabId == TAB_SHENGAO) {
+					tabHost.setCurrentTab(1);
 					updateTab(tabId, R.id.shenGaoView);
 				} else if (tabId == TAB_TIZHONG) {
+					tabHost.setCurrentTab(2);
 					updateTab(tabId, R.id.tiZhongView);
 				} else if (tabId == TAB_JIYI) {
+					tabHost.setCurrentTab(3);
 					updateTab(tabId, R.id.shiKeView);
 				}
 			}
@@ -91,6 +95,14 @@ public class DayOneViewFragment extends Fragment {
 		tabHost.setCurrentTab(0);
 		// manually start loading stuff in the first tab
 		updateTab(TAB_RAWDATA, R.id.rawDataView);
+	}
+
+	@Override
+	public void onResume() {
+		// tabHost.setCurrentTab(0);
+		// updateTab(TAB_RAWDATA, R.id.rawDataView);
+		super.onResume();
+
 	}
 
 	private void setupTabs() {
@@ -113,7 +125,6 @@ public class DayOneViewFragment extends Fragment {
 	}
 
 	private void updateTab(String tabId, int placeholder) {
-		FragmentManager fm = getFragmentManager();
 		Fragment content = null;
 		switch (placeholder) {
 		case R.id.rawDataView:
@@ -131,7 +142,8 @@ public class DayOneViewFragment extends Fragment {
 		default:
 			break;
 		}
-		fm.beginTransaction().replace(placeholder, content, tabId).commit();
+		fragmentManager.beginTransaction().replace(placeholder, content)
+				.commit();
 
 	}
 }

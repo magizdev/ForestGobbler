@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name">宝宝日记</string>
-    <string name="backlog_item_activity_label">Backlog Items</string>
+    <string name="backlog_item_activity_label">宝宝日记</string>
     <string name="day_plan_activity_label">Tasks of Today</string>
     <string name="dashboard_activity_label">Review</string>
     <string name="ok">OK</string>
@@ -34,6 +34,9 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="delete">删除</string>
+    <string name="profile_name">宝宝姓名</string>
+    <string name="profile_tizhong">出生体重</string>
+    <string name="profile_shengao">出生身高</string>
     <string name="cancel">取消</string>
     <string name="save">保存</string>
 
