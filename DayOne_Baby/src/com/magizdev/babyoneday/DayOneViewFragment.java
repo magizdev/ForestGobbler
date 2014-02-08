@@ -19,6 +19,38 @@ public class DayOneViewFragment extends Fragment {
 	private TabHost tabHost;
 	private View rootView;
 	private FragmentManager fragmentManager;
+	private Fragment rawDataFragment;
+	private Fragment shenGaoFragment;
+	private Fragment tiZhongFragment;
+	private Fragment shiKeFragment;
+
+	private Fragment getRawDataFragment() {
+		if (rawDataFragment == null) {
+			rawDataFragment = new RawDataViewFragment();
+		}
+		return rawDataFragment;
+	}
+
+	private Fragment getShenGaoFragment() {
+		if (shenGaoFragment == null) {
+			shenGaoFragment = new DayOneProfileFragment();
+		}
+		return shenGaoFragment;
+	}
+
+	private Fragment getTiZhongFragment() {
+		if (tiZhongFragment == null) {
+
+		}
+		return tiZhongFragment;
+	}
+
+	private Fragment getShiKeFragment() {
+		if (shiKeFragment == null) {
+
+		}
+		return shiKeFragment;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,15 +77,20 @@ public class DayOneViewFragment extends Fragment {
 
 			@Override
 			public void onTabChanged(String tabId) {
-				fragmentManager
-						.beginTransaction()
-						.replace(android.R.id.tabcontent,
-								new RawDataViewFragment()).commit();
+				if (tabId == TAB_RAWDATA) {
+					updateTab(tabId, R.id.rawDataView);
+				} else if (tabId == TAB_SHENGAO) {
+					updateTab(tabId, R.id.shenGaoView);
+				} else if (tabId == TAB_TIZHONG) {
+					updateTab(tabId, R.id.tiZhongView);
+				} else if (tabId == TAB_JIYI) {
+					updateTab(tabId, R.id.shiKeView);
+				}
 			}
 		});
 		tabHost.setCurrentTab(0);
 		// manually start loading stuff in the first tab
-		updateTab("test", R.id.rawDataView);
+		updateTab(TAB_RAWDATA, R.id.rawDataView);
 	}
 
 	private void setupTabs() {
@@ -63,8 +100,8 @@ public class DayOneViewFragment extends Fragment {
 		tabHost.addTab(newTab(TAB_SHENGAO, R.string.view_shengao,
 				R.id.shenGaoView));
 		tabHost.addTab(newTab(TAB_TIZHONG, R.string.view_tizhong,
-				R.id.shenGaoView));
-		tabHost.addTab(newTab(TAB_JIYI, R.string.view_jiyi, R.id.shenGaoView));
+				R.id.tiZhongView));
+		tabHost.addTab(newTab(TAB_JIYI, R.string.view_jiyi, R.id.shiKeView));
 	}
 
 	private TabSpec newTab(String tag, int labelId, int tabContentId) {
@@ -77,10 +114,24 @@ public class DayOneViewFragment extends Fragment {
 
 	private void updateTab(String tabId, int placeholder) {
 		FragmentManager fm = getFragmentManager();
-		if (fm.findFragmentByTag(tabId) == null) {
-			fm.beginTransaction()
-					.replace(placeholder, new RawDataViewFragment(), tabId)
-					.commit();
+		Fragment content = null;
+		switch (placeholder) {
+		case R.id.rawDataView:
+			content = getRawDataFragment();
+			break;
+		case R.id.shenGaoView:
+			content = getShenGaoFragment();
+			break;
+		case R.id.tiZhongView:
+			content = getTiZhongFragment();
+			break;
+		case R.id.shiKeView:
+			content = getShiKeFragment();
+			break;
+		default:
+			break;
 		}
+		fm.beginTransaction().replace(placeholder, content, tabId).commit();
+
 	}
 }
