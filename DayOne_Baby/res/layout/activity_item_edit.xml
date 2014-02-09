@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="#FF2332"
+            android:background="#75FF2332"
             android:text="@string/delete" />
 
         <Button
@@ -101,7 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="#808080"
+            android:background="#75808080"
             android:text="@string/cancel" />
 
         <Button
@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="#3FFF14"
+            android:background="#753FFF14"
             android:text="@string/save" />
     </LinearLayout>
 

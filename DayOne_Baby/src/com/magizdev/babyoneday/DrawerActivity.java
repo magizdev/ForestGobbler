@@ -138,11 +138,8 @@ public class DrawerActivity extends FragmentActivity {
 		if (dayOnePlanFragment == null) {
 			dayOnePlanFragment = new DayOneRecordFragment();
 		}
-		if (profileFragment == null) {
-
-		}
 		if (dayOneViewFragment == null) {
-			dayOneViewFragment = new DayOneViewFragment();
+			dayOneViewFragment = new RawDataViewFragment();
 		}
 		switch (position) {
 		case 0:

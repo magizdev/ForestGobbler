@@ -3,6 +3,8 @@ package com.magizdev.babyoneday.util;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.R.string;
+
 public class DayUtil {
 	public static int toDate(Date date) {
 		Calendar calendar = Calendar.getInstance();
@@ -38,5 +40,11 @@ public class DayUtil {
 		calendar.set(Calendar.YEAR, year);
 		calendar.set(Calendar.DAY_OF_YEAR, dayinyear);
 		return calendar;
+	}
+	
+	public static String formatCalendar(Calendar calendar){
+		return calendar.get(Calendar.YEAR) + "/"
+				+ (calendar.get(Calendar.MONTH) + 1) + "/"
+				+ calendar.get(Calendar.DAY_OF_MONTH);
 	}
 }

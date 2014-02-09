@@ -130,10 +130,10 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 				viewHolder.endTime.setVisibility(View.VISIBLE);
 				viewHolder.startTime.setTextSize(15);
 				if (activityInfo.EndTime > 0) {
-					viewHolder.endTime.setText("-- "
+					viewHolder.endTime.setText("- "
 							+ formatTime(activityInfo.EndTime));
 				} else {
-					viewHolder.endTime.setText("--");
+					viewHolder.endTime.setText("-");
 				}
 			} else {
 				viewHolder.endTime.setVisibility(View.GONE);
@@ -167,10 +167,10 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 				viewHolder.endTime.setVisibility(View.VISIBLE);
 				viewHolder.startTime.setTextSize(15);
 				if (activityInfo.EndTime > 0) {
-					viewHolder.endTime.setText("-- "
+					viewHolder.endTime.setText("- "
 							+ formatTime(activityInfo.EndTime));
 				} else {
-					viewHolder.endTime.setText("--");
+					viewHolder.endTime.setText("-");
 				}
 			} else {
 				viewHolder.endTime.setVisibility(View.GONE);
@@ -203,7 +203,7 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 			timeString = time / 1000 / 60 / 60 + ":"
 					+ String.format("%02d", time / 1000 / 60 % 60);
 		} else {
-			timeString = "00:" + String.format("%2d", time / 1000 / 60 % 60);
+			timeString = "00:" + String.format("%02d", time / 1000 / 60 % 60);
 		}
 
 		return timeString;

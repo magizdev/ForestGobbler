@@ -39,6 +39,7 @@ public class ActivityUtil {
 				+ ActivityTable.ACTIVITY_TYPE_ID + "=" + activityTypeId + ")");
 		ActivityInfo activityInfo = activities.get(0);
 		activityInfo.EndTime = DayUtil.msOfDay(now);
+		activityInfo.Data = (activityInfo.EndTime - activityInfo.StartTime) / 60000;
 		timeStorageUtil.update(activityInfo.ID, activityInfo);
 	}
 
