@@ -1,5 +1,6 @@
 package com.magizdev.dayplan.versionone;
 
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
@@ -30,6 +31,7 @@ public class DrawerActivity extends FragmentActivity {
 	private Fragment dayPlanFragment;
 	private Fragment backlogItemFragment;
 	private int position;
+	private DrawerAdapter adapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,8 +50,8 @@ public class DrawerActivity extends FragmentActivity {
 				GravityCompat.START);
 		// set up the drawer's list view with items and click listener
 
-		mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-				R.layout.product_item, R.id.productName, mPageTitles));
+		adapter = new DrawerAdapter(this);
+		mDrawerList.setAdapter(adapter);
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 		// enable ActionBar app icon to behave as action to toggle nav drawer
@@ -71,6 +73,9 @@ public class DrawerActivity extends FragmentActivity {
 			}
 
 			public void onDrawerOpened(View drawerView) {
+				getActionBar().setDisplayShowTitleEnabled(true);
+				getActionBar().setNavigationMode(
+						ActionBar.NAVIGATION_MODE_STANDARD);
 				getActionBar().setTitle(mDrawerTitle);
 				invalidateOptionsMenu(); // creates call to
 											// onPrepareOptionsMenu()
@@ -87,6 +92,9 @@ public class DrawerActivity extends FragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		switch (position) {
+		case 0:
+			menu.clear();
+			break;
 		case 1:
 			inflater.inflate(R.menu.activity_backlog_item, menu);
 			break;
@@ -117,7 +125,10 @@ public class DrawerActivity extends FragmentActivity {
 		}
 		// Handle action buttons
 		switch (item.getItemId()) {
-
+		case R.id.action_pickup:
+			((BacklogItemFragment) backlogItemFragment).addTasks();
+			selectItem(0);
+			invalidateOptionsMenu();
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -192,6 +203,7 @@ public class DrawerActivity extends FragmentActivity {
 		}
 
 		mDrawerList.setItemChecked(position, true);
+		adapter.select(position);
 		setTitle(mPageTitles[position]);
 		this.position = position;
 		mDrawerLayout.closeDrawer(mDrawerList);

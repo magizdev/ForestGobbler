@@ -20,7 +20,6 @@ import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTable;
 import com.magizdev.dayplan.versionone.util.DayTaskTimeUtil;
 import com.magizdev.dayplan.versionone.util.DayTaskUtil;
 import com.magizdev.dayplan.versionone.util.DayUtil;
-import com.magizdev.dayplan.versionone.viewmodel.DayTaskTimeInfo.TimeType;
 
 public class DayTaskAdapter extends BaseAdapter {
 	Context context;
@@ -36,12 +35,13 @@ public class DayTaskAdapter extends BaseAdapter {
 		DayTaskInfo blank = new DayTaskInfo();
 		storageUtil = new StorageUtil<DayTaskInfo>(context, blank);
 		String whereStrings = DayTaskTable.DATE + "=" + DayUtil.Today();
-		tasks = storageUtil.getCollection(whereStrings);
+		tasks = storageUtil.getCollection(whereStrings, null);
 		taskUtil = new DayTaskUtil(context);
 
 		timeUtil = new StorageUtil<DayTaskTimeInfo>(context,
 				new DayTaskTimeInfo());
-		List<DayTaskTimeInfo> times = timeUtil.getCollection(whereStrings);
+		List<DayTaskTimeInfo> times = timeUtil
+				.getCollection(whereStrings, null);
 		taskTimes = DayTaskTimeUtil.compute(times);
 		taskTimeHash = new HashMap<Long, Integer>();
 		for (PieChartData taskTime : taskTimes) {
@@ -54,9 +54,10 @@ public class DayTaskAdapter extends BaseAdapter {
 
 	public void refresh() {
 		String whereStrings = DayTaskTable.DATE + "=" + DayUtil.Today();
-		tasks = storageUtil.getCollection(whereStrings);
+		tasks = storageUtil.getCollection(whereStrings, null);
 
-		List<DayTaskTimeInfo> times = timeUtil.getCollection(whereStrings);
+		List<DayTaskTimeInfo> times = timeUtil
+				.getCollection(whereStrings, null);
 		taskTimes = DayTaskTimeUtil.compute(times);
 		taskTimeHash = new HashMap<Long, Integer>();
 		for (PieChartData taskTime : taskTimes) {
@@ -115,8 +116,9 @@ public class DayTaskAdapter extends BaseAdapter {
 				@Override
 				public void onClick(View v) {
 					DayTaskInfo taskInfo = (DayTaskInfo) v.getTag();
-					TimeType state = taskUtil.GetTaskState(taskInfo.BIID);
-					if (state == TimeType.Start) {
+					boolean waitStop = taskUtil
+							.IsTaskWaitingForStop(taskInfo.BIID);
+					if (waitStop) {
 						taskUtil.StopTask(taskInfo.BIID);
 						refresh();
 					} else {
@@ -131,17 +133,17 @@ public class DayTaskAdapter extends BaseAdapter {
 		}
 		viewHolder.name.setText(taskInfo.BIName);
 		if (taskTimeHash.containsKey(taskInfo.BIID)) {
-			viewHolder.time
-					.setText(formatTime(taskTimeHash.get(taskInfo.BIID)));
+			viewHolder.time.setText(DayUtil.formatTime(taskTimeHash
+					.get(taskInfo.BIID)));
 		} else {
-			viewHolder.time.setText("0");
+			viewHolder.time.setText("00:00");
 		}
 		final long biid = taskInfo.BIID;
-		TimeType state = taskUtil.GetTaskState(biid);
-		int imageId = state == TimeType.Start ? android.R.drawable.ic_media_pause
+		boolean waitStop = taskUtil.IsTaskWaitingForStop(biid);
+		int imageId = waitStop ? android.R.drawable.ic_media_pause
 				: android.R.drawable.ic_media_play;
 		viewHolder.startButton.setImageResource(imageId);
-		int visibility = state == TimeType.Start ? View.VISIBLE : View.GONE;
+		int visibility = waitStop ? View.VISIBLE : View.GONE;
 		viewHolder.progress.setVisibility(visibility);
 
 		return convertView;
@@ -150,17 +152,6 @@ public class DayTaskAdapter extends BaseAdapter {
 	@Override
 	public int getItemViewType(int position) {
 		return 0;
-	}
-
-	private String formatTime(int time) {
-		String timeString = "";
-		if (time / 60 > 0) {
-			timeString = time / 60 + "h" + time % 60 + "m";
-		} else {
-			timeString = time % 60 + "m";
-		}
-
-		return timeString;
 	}
 
 	@Override

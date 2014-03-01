@@ -35,7 +35,6 @@ import com.magizdev.dayplan.versionone.util.DayTaskUtil;
 import com.magizdev.dayplan.versionone.util.DayUtil;
 import com.magizdev.dayplan.versionone.viewmodel.DayTaskInfo;
 import com.magizdev.dayplan.versionone.viewmodel.DayTaskTimeInfo;
-import com.magizdev.dayplan.versionone.viewmodel.DayTaskTimeInfo.TimeType;
 import com.magizdev.dayplan.versionone.viewmodel.StorageUtil;
 
 /**
@@ -85,16 +84,16 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 		final int itemId = R.layout.widget_item;
 		RemoteViews rv = new RemoteViews(mContext.getPackageName(), itemId);
-		TimeType state = taskUtil.GetTaskState(taskInfo.BIID);
+		boolean waitStop = taskUtil.IsTaskWaitingForStop(taskInfo.BIID);
 		rv.setTextViewText(R.id.tVName1_remote, taskInfo.BIName);
 		rv.setTextViewText(R.id.taskTimeTextView_remote,
 				formatTime(taskInfo.BIID));
 		rv.setImageViewResource(R.id.startButton_remote,
-				state == TimeType.Start ? android.R.drawable.ic_media_pause
+				waitStop ? android.R.drawable.ic_media_pause
 						: android.R.drawable.ic_media_play);
 
 		rv.setViewVisibility(R.id.taskStatus_remote,
-				state == TimeType.Start ? View.VISIBLE : View.INVISIBLE);
+				waitStop ? View.VISIBLE : View.INVISIBLE);
 		// Set the click intent so that we can handle it and show a toast
 		// message
 		final Intent fillInIntent = new Intent();
@@ -130,11 +129,11 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		StorageUtil<DayTaskInfo> storageUtil = new StorageUtil<DayTaskInfo>(
 				mContext, blank);
 		String whereStrings = DayTaskTable.DATE + "=" + DayUtil.Today();
-		allTasks = storageUtil.getCollection(whereStrings);
+		allTasks = storageUtil.getCollection(whereStrings, null);
 
 		StorageUtil<DayTaskTimeInfo> timeUtil = new StorageUtil<DayTaskTimeInfo>(
 				mContext, new DayTaskTimeInfo());
-		List<DayTaskTimeInfo> times = timeUtil.getCollection(whereStrings);
+		List<DayTaskTimeInfo> times = timeUtil.getCollection(whereStrings, null);
 		List<PieChartData> taskTimes = DayTaskTimeUtil.compute(times);
 		taskTimeHash = new HashMap<Long, Integer>();
 		for (PieChartData taskTime : taskTimes) {

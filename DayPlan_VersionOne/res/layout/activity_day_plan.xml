@@ -8,8 +8,14 @@
     <ListView
         android:id="@+id/listViewDayPlan"
         android:layout_width="match_parent"
-        android:background="@drawable/widget_bg"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:background="@drawable/widget_bg" >
     </ListView>
+
+    <TextView
+        android:id="@+id/listViewDayPlanEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Choose Tasks for Today" />
 
 </RelativeLayout>

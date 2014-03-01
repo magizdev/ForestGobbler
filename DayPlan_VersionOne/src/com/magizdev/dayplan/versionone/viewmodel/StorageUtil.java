@@ -19,10 +19,10 @@ public class StorageUtil<T extends IStoreableItem> {
 
 	}
 
-	public List<T> getCollection(String selection) {
+	public List<T> getCollection(String selection, String sortOrder) {
 		ContentResolver cr = context.getContentResolver();
 		Uri uri = data.contentUri();
-		Cursor cursor = cr.query(uri, null, selection, null, null);
+		Cursor cursor = cr.query(uri, null, selection, null, sortOrder);
 		List<T> typedResult = new ArrayList<T>();
 		try {
 			List<IStoreableItem> results = data.fromCursor(cursor);

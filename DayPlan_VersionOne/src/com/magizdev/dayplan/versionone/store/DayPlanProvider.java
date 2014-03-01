@@ -5,7 +5,6 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -13,9 +12,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.BacklogItemTable;
-import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskBurndownTable;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTable;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTimeTable;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.VersionOneServerTable;
@@ -67,8 +64,7 @@ public class DayPlanProvider extends ContentProvider {
 					+ BacklogItemTable._ID + " INTEGER PRIMARY KEY,"
 					+ BacklogItemTable.NAME + " TEXT," + BacklogItemTable.DESC
 					+ " TEXT," + BacklogItemTable.STATE + " INTEGER default 0,"
-					+ BacklogItemTable.ESTIMATE + " INTEGER,"
-					+ BacklogItemTable.REMAIN_ESTIMATE + " INTEGER,"
+					+ BacklogItemTable.ESTIMATE + " FLOAT,"
 					+ BacklogItemTable.SERVERID + " INTEGER,"
 					+ BacklogItemTable.DUE_DATE + " INTEGER);");
 
@@ -76,22 +72,18 @@ public class DayPlanProvider extends ContentProvider {
 			db.execSQL("CREATE TABLE " + DayTaskTable.TABLE_NAME + "("
 					+ DayTaskTable._ID + " INTEGER PRIMARY KEY,"
 					+ DayTaskTable.DATE + " INTEGER," + DayTaskTable.BIID
-					+ " INTEGER," + DayTaskTable.STATE + " INTEGER);");
+					+ " INTEGER,"
+					+ DayTaskTable.EFFORT + " FLOAT,"
+					+ DayTaskTable.REMAIN_ESTIMATE + " FLOAT,"
+					+ DayTaskTable.STATE + " INTEGER);");
 
 			// create day task time table;
 			db.execSQL("CREATE TABLE " + DayTaskTimeTable.TABLE_NAME + "("
 					+ DayTaskTimeTable._ID + " INTEGER PRIMARY KEY,"
 					+ DayTaskTimeTable.DATE + " INTEGER,"
 					+ DayTaskTimeTable.BIID + " INTEGER,"
-					+ DayTaskTimeTable.TIME + " INTEGER,"
-					+ DayTaskTimeTable.TIME_TYPE + " INTEGER);");
-
-			// create day task effort table;
-			db.execSQL("CREATE TABLE " + DayTaskBurndownTable.TABLE_NAME + "("
-					+ DayTaskBurndownTable._ID + " INTEGER PRIMARY KEY,"
-					+ DayTaskBurndownTable.DATE + " INTEGER,"
-					+ DayTaskBurndownTable.BIID + " INTEGER,"
-					+ DayTaskBurndownTable.EFFORT + " INTEGER);");
+					+ DayTaskTimeTable.START_TIME + " INTEGER,"
+					+ DayTaskTimeTable.END_TIME + " INTEGER);");
 
 		}
 

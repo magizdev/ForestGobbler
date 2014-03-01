@@ -37,4 +37,8 @@ public class Profile {
 		editor.putInt("birthday", birthday);
 		editor.commit();
 	}
+
+	public int getDays() {
+		return DayUtil.toDate(new Date()) - birthday;
+	}
 }

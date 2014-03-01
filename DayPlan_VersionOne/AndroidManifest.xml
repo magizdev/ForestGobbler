@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme" >
         <provider
             android:name="com.magizdev.dayplan.versionone.store.DayPlanProvider"
-            android:authorities="com.magizdev.dayplan.versionone" />
+            android:authorities="com.magizdev.dayplan" />
 
         <activity
             android:name=".versionone.LoginActivity"

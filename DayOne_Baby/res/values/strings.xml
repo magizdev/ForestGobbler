@@ -19,10 +19,20 @@
     <string name="built_in_task_shuijiao">睡觉,0,120,0,0,0</string>
     <string name="built_in_task_xiaobian">小便,1,0,120,0,1</string>
     <string name="built_in_task_dabian">大便,1,0,180,0,1</string>
-    <string name="built_in_task_tiwen">测体温,1,3,0,1,0</string>
-    <string name="built_in_task_shengao">量身高,1,0,180,0,1</string>
+    <string name="built_in_task_tiwen">体温,1,3,0,1,0</string>
+    <string name="built_in_task_shengao">身高,1,0,180,0,1</string>
     <string name="built_in_task_tizhong">体重,1,0,180,0,1</string>
-    <string name="built_in_task_jiyi">美好记忆,1,0,0,0,0</string>
+    <string name="built_in_task_jiyi">回忆,1,0,0,0,0</string>
+    
+    <string name="task_weinai">母乳</string>
+    <string name="task_naifen">奶粉</string>
+    <string name="task_shuijiao">睡觉</string>
+    <string name="task_xiaobian">小便</string>
+    <string name="task_dabian">大便</string>
+    <string name="task_tiwen">体温</string>
+    <string name="task_shengao">身高</string>
+    <string name="task_tizhong">体重</string>
+    <string name="task_jiyi">回忆</string>
     <string name="view_rawdata">每日活动</string>
     <string name="view_shengao">身高曲线</string>
     <string name="view_tizhong">体重曲线</string>

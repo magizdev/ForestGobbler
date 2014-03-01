@@ -19,41 +19,41 @@
             android:layout_centerHorizontal="true"
             android:orientation="horizontal" >
 
-            <ImageButton
+            <Button
                 android:id="@+id/btnWeiNai"
                 android:layout_width="match_parent"
                 android:layout_height="75dp"
                 android:background="#00000000"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/muru" />
+                android:text="@string/task_weinai" />
 
-            <ImageButton
+            <Button
                 android:id="@+id/btnShuiJiao"
                 android:layout_width="match_parent"
                 android:layout_height="75dp"
                 android:background="#00000000"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_action_shuijiao" />
+                android:text="@string/task_shuijiao"/>
 
-            <ImageButton
+            <Button
                 android:id="@+id/btnXiaoBian"
                 android:layout_width="match_parent"
                 android:background="#00000000"
                 android:layout_height="75dp"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_action_xiaobian" />
+                android:text="@string/task_xiaobian" />
 
-            <ImageButton
+            <Button
                 android:id="@+id/btnDaBian"
                 android:layout_width="match_parent"
                 android:background="#00000000"
                 android:layout_height="75dp"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_action_dabian" />
+                android:text="@string/task_dabian"/>
         </LinearLayout>
 
         <LinearLayout
@@ -62,50 +62,50 @@
             android:layout_centerHorizontal="true"
             android:orientation="horizontal" >
 
-            <ImageButton
+            <Button
                 android:id="@+id/btnNaiFen"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="#00000000"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_action_weinai" />
+                android:text="@string/task_naifen" />
 
-            <ImageButton
+            <Button
                 android:id="@+id/btnShenGao"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="#00000000"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ruler256" />
+                android:text="@string/task_shengao"/>"
 
-            <ImageButton
+            <Button
                 android:id="@+id/btnTiZhong"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="#00000000"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/th" />
+                android:text="@string/task_tizhong"/>
 
-            <ImageButton
+            <Button
                 android:id="@+id/btnTiWen"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="#00000000"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_action_thermometer" />
+                android:text="@string/task_tiwen"/>
 
-            <ImageButton
+            <Button
                 android:id="@+id/btnShiKe"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="#00000000"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_action_diary" />
+                android:text="@string/task_jiyi" />
         </LinearLayout>
     </LinearLayout>
 

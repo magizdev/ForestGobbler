@@ -33,7 +33,7 @@ public class BacklogItemAdapter extends BaseAdapter {
 		this.selectedIds = selectedIds;
 		storageUtil = new StorageUtil<BacklogItemInfo>(context, blank);
 		condition = conditionActiveOnly;
-		backlogs = storageUtil.getCollection(condition);
+		backlogs = storageUtil.getCollection(condition, null);
 		for (int i = 0; i < backlogs.size(); i++) {
 			BacklogItemInfo backlogItemInfo = backlogs.get(i);
 			if (selectedIds.contains(backlogItemInfo.Id)) {
@@ -61,7 +61,7 @@ public class BacklogItemAdapter extends BaseAdapter {
 	}
 
 	public void refresh() {
-		backlogs = storageUtil.getCollection(condition);
+		backlogs = storageUtil.getCollection(condition, null);
 		for (int i = 0; i < backlogs.size(); i++) {
 			BacklogItemInfo backlogItemInfo = backlogs.get(i);
 			if (selectedIds.contains(backlogItemInfo.Id)) {
@@ -158,7 +158,7 @@ public class BacklogItemAdapter extends BaseAdapter {
 		return true;
 	}
 
-	public class ViewHolder {
+	class ViewHolder {
 		public TextView name;
 		public CheckBox checkBox;
 		// public Button deleteBtn;

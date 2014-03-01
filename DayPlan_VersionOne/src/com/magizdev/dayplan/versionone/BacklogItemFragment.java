@@ -24,7 +24,6 @@ import com.magizdev.dayplan.versionone.util.DayTaskUtil;
 import com.magizdev.dayplan.versionone.util.DayUtil;
 import com.magizdev.dayplan.versionone.viewmodel.BacklogItemAdapter;
 import com.magizdev.dayplan.versionone.viewmodel.BacklogItemInfo;
-import com.magizdev.dayplan.versionone.viewmodel.DayTaskTimeInfo.TimeType;
 import com.magizdev.dayplan.versionone.viewmodel.StorageUtil;
 
 public class BacklogItemFragment extends Fragment {
@@ -33,17 +32,20 @@ public class BacklogItemFragment extends Fragment {
 	private EditText backlog;
 	private StorageUtil<BacklogItemInfo> storageUtil;
 	private BacklogItemAdapter adapter;
-	
-	public BacklogItemFragment(){}
+
+	public BacklogItemFragment() {
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.activity_backlog_item, container, false);
+		View rootView = inflater.inflate(R.layout.activity_backlog_item,
+				container, false);
 
 		listView = (ListView) rootView.findViewById(R.id.listViewBacklog);
 		backlog = (EditText) rootView.findViewById(R.id.editTextBacklog);
-		ImageButton addButton = (ImageButton) rootView.findViewById(R.id.btnAddBacklog);
+		ImageButton addButton = (ImageButton) rootView
+				.findViewById(R.id.btnAddBacklog);
 		Switch showAll = (Switch) rootView.findViewById(R.id.switchShowAll);
 		showAll.setChecked(false);
 		showAll.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -67,7 +69,7 @@ public class BacklogItemFragment extends Fragment {
 			public void onClick(View arg0) {
 				if (backlog.getText().toString().length() > 0) {
 					BacklogItemInfo newItem = new BacklogItemInfo(-1, backlog
-							.getText().toString(), null, false);
+							.getText().toString(), null, false, 0, 0);
 					storageUtil.add(newItem);
 					adapter.refresh();
 					adapter.notifyDataSetChanged();
@@ -83,15 +85,15 @@ public class BacklogItemFragment extends Fragment {
 				long backlogId = ((BacklogItemAdapter) listView.getAdapter())
 						.getItemId(arg2);
 				if (backlogId > -1) {
-					Intent editTaskIntent = new Intent(
-							getActivity(), BacklogEditActivity.class);
+					Intent editTaskIntent = new Intent(getActivity(),
+							BacklogEditActivity.class);
 					editTaskIntent.putExtra("backlogId", backlogId);
 
 					startActivityForResult(editTaskIntent, 1);
 				}
 			}
 		});
-		
+
 		return rootView;
 	}
 
@@ -110,8 +112,7 @@ public class BacklogItemFragment extends Fragment {
 		listView.invalidate();
 	}
 
-
-	private void addTasks() {
+	public void addTasks() {
 		List<Long> ids = dayTaskUtil.GetTasksByDate(DayUtil.Today());
 		dayTaskUtil.ClearTasksByDate(DayUtil.Today());
 		ListAdapter adapter = listView.getAdapter();
@@ -123,11 +124,10 @@ public class BacklogItemFragment extends Fragment {
 				dayTaskUtil.AddTask(backlogItemInfo.Id);
 			} else {
 				if (ids.contains(backlogItemInfo.Id)
-						&& dayTaskUtil.GetTaskState(backlogItemInfo.Id) == TimeType.Start) {
+						&& dayTaskUtil.IsTaskWaitingForStop(backlogItemInfo.Id)) {
 					dayTaskUtil.StopTask(backlogItemInfo.Id);
 				}
 			}
 		}
-		getActivity().finish();
 	}
 }

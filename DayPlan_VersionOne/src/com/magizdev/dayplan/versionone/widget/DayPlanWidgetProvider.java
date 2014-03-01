@@ -34,7 +34,6 @@ import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.versionone.DrawerActivity;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData;
 import com.magizdev.dayplan.versionone.util.DayTaskUtil;
-import com.magizdev.dayplan.versionone.viewmodel.DayTaskTimeInfo.TimeType;
 
 /**
  * Our data observer just notifies an update for all weather widgets when it
@@ -141,8 +140,8 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 					AppWidgetManager.INVALID_APPWIDGET_ID);
 			final Long biid = intent.getLongExtra(EXTRA_BI_ID, 0L);
 			DayTaskUtil util = new DayTaskUtil(ctx);
-			TimeType state = util.GetTaskState(biid);
-			if (state == TimeType.Start) {
+			boolean waitStop = util.IsTaskWaitingForStop(biid);
+			if (waitStop) {
 				util.StopTask(biid);
 			} else {
 				util.StartTask(biid);

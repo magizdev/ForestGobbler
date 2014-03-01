@@ -24,12 +24,12 @@ public class DayTaskTimeUtil {
 
 	public List<DayTaskTimeInfo> GetByDate(int date) {
 		return timeStorageUtil.getCollection("(" + DayTaskTimeTable.DATE + "="
-				+ date + ")");
+				+ date + ")", null);
 	}
 
 	public List<DayTaskTimeInfo> GetByBacklog(long backlogId) {
 		return timeStorageUtil.getCollection("(" + DayTaskTimeTable.BIID + "="
-				+ backlogId + ")");
+				+ backlogId + ")", null);
 	}
 
 	public List<DayTaskTimeInfo> GetByDateRange(int startDate, int endDate) {
@@ -38,7 +38,7 @@ public class DayTaskTimeUtil {
 		} else {
 			return timeStorageUtil.getCollection("(" + DayTaskTimeTable.DATE
 					+ ">=" + startDate + " and " + DayTaskTimeTable.DATE + "<"
-					+ endDate + ")");
+					+ endDate + ")", null);
 		}
 	}
 
@@ -59,9 +59,9 @@ public class DayTaskTimeUtil {
 				if (dayTasksTime.get(current.BIID).containsKey(current.Date)) {
 					if (dayTasksTime.get(current.BIID).get(current.Date) == 0) {
 						dayTasksTime.get(current.BIID).put(current.Date,
-								current.Time);
+								current.StartTime);
 					} else {
-						span = current.Time
+						span = current.StartTime
 								- dayTasksTime.get(current.BIID).get(
 										current.Date);
 						dayTasksTime.get(current.BIID).put(current.Date, 0);
@@ -74,11 +74,11 @@ public class DayTaskTimeUtil {
 					}
 				} else {
 					dayTasksTime.get(current.BIID).put(current.Date,
-							current.Time);
+							current.StartTime);
 				}
 			} else {
 				HashMap<Integer, Integer> first = new HashMap<Integer, Integer>();
-				first.put(current.Date, current.Time);
+				first.put(current.Date, current.StartTime);
 				dayTasksTime.put(current.BIID, first);
 			}
 		}
@@ -135,9 +135,9 @@ public class DayTaskTimeUtil {
 				if (dayTasksTime.get(current.Date).containsKey(current.BIID)) {
 					if (dayTasksTime.get(current.Date).get(current.BIID) == 0) {
 						dayTasksTime.get(current.Date).put(current.BIID,
-								current.Time);
+								current.StartTime);
 					} else {
-						span = current.Time
+						span = current.StartTime
 								- dayTasksTime.get(current.Date).get(
 										current.BIID);
 						dayTasksTime.get(current.Date).put(current.BIID, 0);
@@ -149,12 +149,12 @@ public class DayTaskTimeUtil {
 					}
 				} else {
 					dayTasksTime.get(current.Date).put(current.BIID,
-							current.Time);
+							current.StartTime);
 					dayTasksEffort.get(current.Date).put(current.BIID, 0);
 				}
 			} else {
 				HashMap<Long, Integer> first = new HashMap<Long, Integer>();
-				first.put(current.BIID, current.Time);
+				first.put(current.BIID, current.StartTime);
 				dayTasksTime.put(current.Date, first);
 
 				HashMap<Long, Integer> second = new HashMap<Long, Integer>();

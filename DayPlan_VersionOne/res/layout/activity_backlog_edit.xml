@@ -1,16 +1,18 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
-    android:focusableInTouchMode="true" >
+    android:focusableInTouchMode="true"
+    android:padding="5dp"
+    android:layout_margin="10dp"
+    android:background="@drawable/chart_bg"
+    android:orientation="vertical" >
 
     <EditText
         android:id="@+id/txtTitle"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_margin="4dp"
         android:background="@android:drawable/edit_text"
         android:ellipsize="end"
@@ -21,34 +23,90 @@
     </EditText>
 
     <LinearLayout
-        android:id="@+id/comboCheckbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/txtTitle"
+        android:layout_margin="3dp"
+        android:background="@android:drawable/edit_text"
         android:gravity="right"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/backlog_completed" />
+            android:orientation="horizontal" >
 
-        <CheckBox
-            android:id="@+id/checkBoxCompleted"
-            android:layout_width="wrap_content"
+            <CheckBox
+                android:id="@+id/checkBoxEstimate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/backlog_estimate" />
+
+            <EditText
+                android:id="@+id/estimate"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:background="@android:drawable/edit_text"
+                android:layout_marginLeft="20dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:inputType="numberDecimal"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="@string/backlog_estimate_unit" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/txtTitle"
-            android:text="" />
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+            <CheckBox
+                android:id="@+id/checkBoxDueDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/backlog_due_date" />
+
+            <Button
+                android:id="@+id/dueDate"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/button_bg"
+                android:text="2014-2-16" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/comboCheckbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+            <CheckBox
+                android:id="@+id/checkBoxCompleted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/backlog_completed" />
+        </LinearLayout>
     </LinearLayout>
 
     <EditText
         android:id="@+id/txtNote"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/comboCheckbox"
-        android:layout_centerHorizontal="true"
         android:layout_margin="4dp"
         android:background="@android:drawable/edit_text"
         android:ems="10"
@@ -57,4 +115,4 @@
         android:inputType="textMultiLine" >
     </EditText>
 
-</RelativeLayout>
+</LinearLayout>

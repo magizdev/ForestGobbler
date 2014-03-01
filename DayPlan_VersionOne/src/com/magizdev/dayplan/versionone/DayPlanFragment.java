@@ -32,6 +32,8 @@ public class DayPlanFragment extends Fragment {
 
 		taskListView = (ListView) rootView.findViewById(R.id.listViewDayPlan);
 		taskListView.setBackgroundResource(R.drawable.widget_bg);
+		View emptyView = rootView.findViewById(R.id.listViewDayPlanEmpty);
+		taskListView.setEmptyView(emptyView);
 		adapter = new DayTaskAdapter(getActivity());
 		taskListView.setAdapter(adapter);
 		return rootView;
