@@ -4,8 +4,10 @@ import java.util.List;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -26,14 +28,19 @@ import com.magizdev.dayplan.versionone.viewmodel.BacklogItemAdapter;
 import com.magizdev.dayplan.versionone.viewmodel.BacklogItemInfo;
 import com.magizdev.dayplan.versionone.viewmodel.StorageUtil;
 
-public class BacklogItemFragment extends Fragment {
+public class BacklogItemFragment extends MenuFragment {
 	private DayTaskUtil dayTaskUtil;
 	private ListView listView;
 	private EditText backlog;
 	private StorageUtil<BacklogItemInfo> storageUtil;
 	private BacklogItemAdapter adapter;
+	private IJumpable jumpable;
 
 	public BacklogItemFragment() {
+	}
+
+	public void setJumpable(IJumpable jumpable) {
+		this.jumpable = jumpable;
 	}
 
 	@Override
@@ -129,5 +136,24 @@ public class BacklogItemFragment extends Fragment {
 				}
 			}
 		}
+	}
+
+	@Override
+	public int optionMenuResource() {
+		return R.menu.activity_backlog_item;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_pickup:
+			addTasks();
+			jumpable.jumpTo(0);
+			break;
+
+		default:
+			break;
+		}
+		return false;
 	}
 }

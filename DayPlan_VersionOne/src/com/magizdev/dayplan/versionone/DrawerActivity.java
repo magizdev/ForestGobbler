@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
@@ -19,17 +20,18 @@ import android.widget.ListView;
 
 import com.magizdev.dayplan.R;
 
-public class DrawerActivity extends FragmentActivity {
+public class DrawerActivity extends FragmentActivity implements IJumpable {
 	private String[] mPageTitles;
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
-	private android.support.v4.app.Fragment chartFragment;
-	private Fragment loginFragment;
-	private Fragment dayPlanFragment;
-	private Fragment backlogItemFragment;
+	private MenuFragment chartFragment;
+	private MenuFragment loginFragment;
+	private MenuFragment dayPlanFragment;
+	private MenuFragment backlogItemFragment;
+	private MenuFragment currentFragment;
 	private int position;
 	private DrawerAdapter adapter;
 
@@ -90,18 +92,8 @@ public class DrawerActivity extends FragmentActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		switch (position) {
-		case 0:
-			menu.clear();
-			break;
-		case 1:
-			inflater.inflate(R.menu.activity_backlog_item, menu);
-			break;
-		case 2:
-			inflater.inflate(R.menu.activity_dashboard, menu);
-		default:
-			break;
+		if (currentFragment != null) {
+			return currentFragment.onCreateOptionsMenu(getMenuInflater(), menu);
 		}
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -123,15 +115,7 @@ public class DrawerActivity extends FragmentActivity {
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-		// Handle action buttons
-		switch (item.getItemId()) {
-		case R.id.action_pickup:
-			((BacklogItemFragment) backlogItemFragment).addTasks();
-			selectItem(0);
-			invalidateOptionsMenu();
-		default:
-			return super.onOptionsItemSelected(item);
-		}
+		return currentFragment.onOptionsItemSelected(item);
 	}
 
 	private class DrawerItemClickListener implements
@@ -146,16 +130,6 @@ public class DrawerActivity extends FragmentActivity {
 	/** Swaps fragments in the main content view */
 	private void selectItem(int position) {
 		FragmentManager fragmentManager = getFragmentManager();
-		android.support.v4.app.FragmentManager supportFragmentManager = getSupportFragmentManager();
-		android.support.v4.app.Fragment chart = getSupportFragmentManager()
-				.findFragmentByTag("chart");
-		Fragment other = fragmentManager.findFragmentByTag("other");
-		if (other != null) {
-			fragmentManager.beginTransaction().show(other).commit();
-		}
-		if (chart != null) {
-			supportFragmentManager.beginTransaction().hide(chart).commit();
-		}
 		if (loginFragment == null) {
 			loginFragment = new LoginFragment();
 		}
@@ -164,43 +138,30 @@ public class DrawerActivity extends FragmentActivity {
 		}
 		if (dayPlanFragment == null) {
 			dayPlanFragment = new DayPlanFragment();
+			((DayPlanFragment)dayPlanFragment).setJumpable(this);
 		}
 		if (backlogItemFragment == null) {
 			backlogItemFragment = new BacklogItemFragment();
+			((BacklogItemFragment) backlogItemFragment).setJumpable(this);
 		}
 		switch (position) {
 		case 0:
-			fragmentManager.beginTransaction()
-					.replace(R.id.content_frame, dayPlanFragment, "other")
-					.commit();
+			currentFragment = dayPlanFragment;
 			break;
 		case 1:
-			fragmentManager.beginTransaction()
-					.replace(R.id.content_frame, backlogItemFragment, "other")
-					.commit();
+			currentFragment = backlogItemFragment;
 			break;
 		case 2:
-			if (other != null) {
-				fragmentManager.beginTransaction().hide(other).commit();
-			}
-
-			if (chart != null) {
-				supportFragmentManager.beginTransaction().show(chart).commit();
-
-			} else {
-				supportFragmentManager.beginTransaction()
-						.replace(R.id.content_frame, chartFragment, "chart")
-						.commit();
-			}
+			currentFragment = chartFragment;
 			break;
 		case 3:
-			fragmentManager.beginTransaction()
-					.replace(R.id.content_frame, loginFragment, "other")
-					.commit();
+			currentFragment = loginFragment;
 			break;
 		default:
 			break;
 		}
+		fragmentManager.beginTransaction()
+				.replace(R.id.content_frame, currentFragment).commit();
 
 		mDrawerList.setItemChecked(position, true);
 		adapter.select(position);
@@ -232,6 +193,12 @@ public class DrawerActivity extends FragmentActivity {
 		super.onConfigurationChanged(newConfig);
 		// Pass any configuration change to the drawer toggls
 		mDrawerToggle.onConfigurationChanged(newConfig);
+	}
+
+	@Override
+	public void jumpTo(int target) {
+		selectItem(target);
+		invalidateOptionsMenu();
 	}
 
 }

@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- Search, should appear as action button -->
+    <item
+        android:id="@+id/action_pickup"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_pickup"/>
+    <item
+        android:id="@+id/action_finish"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_close"/>
+
+</menu>

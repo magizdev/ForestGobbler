@@ -9,6 +9,7 @@ import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -29,7 +30,7 @@ import com.versionone.om.Project;
 import com.versionone.om.V1Instance;
 import com.versionone.om.filters.ProjectFilter;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends MenuFragment {
 	private ListView productList;
 	private List<ProductInfo> products;
 	private LoginTask loginTask;
@@ -154,6 +155,18 @@ public class LoginFragment extends Fragment {
 
 	public void stopProgress() {
 		progressDialog.dismiss();
+	}
+
+	@Override
+	public int optionMenuResource() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
