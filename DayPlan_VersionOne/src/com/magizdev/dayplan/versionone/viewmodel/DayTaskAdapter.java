@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.magizdev.dayplan.R;
-import com.magizdev.dayplan.versionone.ChartFragment.PieChartData;
+import com.magizdev.dayplan.versionone.PieChartData;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTable;
 import com.magizdev.dayplan.versionone.util.DayTaskTimeUtil;
 import com.magizdev.dayplan.versionone.util.DayTaskUtil;
@@ -119,7 +120,7 @@ public class DayTaskAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final ViewHolder viewHolder;
-		DayTaskInfo taskInfo = tasks.get(position);
+		final DayTaskInfo taskInfo = tasks.get(position);
 
 		if (inEditMode) {
 			viewHolder = new ViewHolder();
@@ -134,16 +135,26 @@ public class DayTaskAdapter extends BaseAdapter {
 			if(taskTimeHash.containsKey(taskInfo.BIID)){
 				intEffort = taskTimeHash.get(taskInfo.BIID);
 			}
-			viewHolder.effort.setText(DayUtil.formatTime(intEffort / 60 / 60));
+			viewHolder.effort.setText(DayUtil.formatTime(intEffort / 1000));
 			float estimate = dayTaskUtil.GetTaskRemainEstimate(taskInfo.BIID);
-			viewHolder.remainEstimate.setText(String.format("%2f", estimate
-					- intEffort / 60 / 60 ));
+			viewHolder.remainEstimate.setText(String.format("%2.2f", estimate
+					- intEffort / 1000 / 60 / 60 ));
 			final int finalPosition = position;
+			viewHolder.updateButton = (ImageButton)convertView.findViewById(R.id.updateRemainEstimate);
+			viewHolder.updateButton.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					taskInfo.RemainEffort = Float.parseFloat(viewHolder.remainEstimate.getText().toString());
+					storageUtil.update(taskInfo.ID, taskInfo);
+				}
+			});
 			viewHolder.remainEstimate.setOnEditorActionListener(new OnEditorActionListener() {
 				
 				@Override
 				public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 					tasks.get(finalPosition).RemainEffort = Float.parseFloat(v.getText().toString());
+					Log.w("test", actionId+"");
 					return false;
 				}
 			});
@@ -223,6 +234,7 @@ public class DayTaskAdapter extends BaseAdapter {
 		public ProgressBar progress;
 		public TextView effort;
 		public EditText remainEstimate;
+		public ImageButton updateButton;
 		// public Button deleteBtn;
 		// public ImageButton notificationSetter;
 	}

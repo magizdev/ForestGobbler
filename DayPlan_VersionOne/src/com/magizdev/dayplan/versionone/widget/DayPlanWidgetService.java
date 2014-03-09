@@ -28,7 +28,7 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.magizdev.dayplan.R;
-import com.magizdev.dayplan.versionone.ChartFragment.PieChartData;
+import com.magizdev.dayplan.versionone.PieChartData;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTable;
 import com.magizdev.dayplan.versionone.util.DayTaskTimeUtil;
 import com.magizdev.dayplan.versionone.util.DayTaskUtil;

@@ -1,21 +1,17 @@
 package com.magizdev.dayplan.versionone;
 
 import android.app.ActionBar;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.magizdev.dayplan.R;
@@ -134,7 +130,7 @@ public class DrawerActivity extends FragmentActivity implements IJumpable {
 			loginFragment = new LoginFragment();
 		}
 		if (chartFragment == null) {
-			chartFragment = new ChartFragment();
+			chartFragment = new ReportFragment();
 		}
 		if (dayPlanFragment == null) {
 			dayPlanFragment = new DayPlanFragment();

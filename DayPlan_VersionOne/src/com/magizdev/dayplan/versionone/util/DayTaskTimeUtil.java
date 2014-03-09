@@ -6,8 +6,7 @@ import java.util.List;
 
 import android.content.Context;
 
-import com.magizdev.dayplan.versionone.ChartFragment;
-import com.magizdev.dayplan.versionone.ChartFragment.PieChartData;
+import com.magizdev.dayplan.versionone.PieChartData;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTimeTable;
 import com.magizdev.dayplan.versionone.viewmodel.DayTaskTimeInfo;
 import com.magizdev.dayplan.versionone.viewmodel.StorageUtil;
@@ -61,7 +60,7 @@ public class DayTaskTimeUtil {
 			}
 		}
 
-		List<PieChartData> result = new ArrayList<ChartFragment.PieChartData>();
+		List<PieChartData> result = new ArrayList<PieChartData>();
 		for (Long key : dayTasksEffort.keySet()) {
 			result.add(new PieChartData(key, idToName.get(key), dayTasksEffort
 					.get(key) / 1000 / 60));
@@ -102,9 +101,9 @@ public class DayTaskTimeUtil {
 
 		}
 
-		HashMap<Integer, List<PieChartData>> result = new HashMap<Integer, List<ChartFragment.PieChartData>>();
+		HashMap<Integer, List<PieChartData>> result = new HashMap<Integer, List<PieChartData>>();
 		for (Integer date : dayTasksEffort.keySet()) {
-			List<PieChartData> oneDaysRecord = new ArrayList<ChartFragment.PieChartData>();
+			List<PieChartData> oneDaysRecord = new ArrayList<PieChartData>();
 			for (Long biid : dayTasksEffort.get(date).keySet()) {
 				PieChartData oneRecord = new PieChartData(biid,
 						idToName.get(biid),

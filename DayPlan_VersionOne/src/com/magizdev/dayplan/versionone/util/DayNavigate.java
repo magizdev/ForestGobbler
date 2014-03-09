@@ -6,7 +6,7 @@ import java.util.List;
 
 import android.content.Context;
 
-import com.magizdev.dayplan.versionone.ChartFragment.PieChartData;
+import com.magizdev.dayplan.versionone.PieChartData;
 import com.magizdev.dayplan.versionone.viewmodel.DayTaskTimeInfo;
 
 public class DayNavigate implements INavigate {

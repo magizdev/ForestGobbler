@@ -17,7 +17,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 
-import com.magizdev.dayplan.versionone.ChartFragment.PieChartData;
+import com.magizdev.dayplan.versionone.PieChartData;
 import com.magizdev.dayplan.versionone.util.DayUtil;
 import com.magizdev.dayplan.versionone.util.INavigate;
 

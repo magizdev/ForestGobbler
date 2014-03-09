@@ -3,7 +3,7 @@ package com.magizdev.dayplan.versionone.util;
 import java.util.HashMap;
 import java.util.List;
 
-import com.magizdev.dayplan.versionone.ChartFragment.PieChartData;
+import com.magizdev.dayplan.versionone.PieChartData;
 
 
 public interface INavigate {
