@@ -129,9 +129,6 @@ public class DrawerActivity extends FragmentActivity implements IJumpable {
 		if (loginFragment == null) {
 			loginFragment = new LoginFragment();
 		}
-		if (chartFragment == null) {
-			chartFragment = new ReportFragment();
-		}
 		if (dayPlanFragment == null) {
 			dayPlanFragment = new DayPlanFragment();
 			((DayPlanFragment)dayPlanFragment).setJumpable(this);
@@ -148,7 +145,7 @@ public class DrawerActivity extends FragmentActivity implements IJumpable {
 			currentFragment = backlogItemFragment;
 			break;
 		case 2:
-			currentFragment = chartFragment;
+			currentFragment = new ReportFragment();
 			break;
 		case 3:
 			currentFragment = loginFragment;

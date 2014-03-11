@@ -1,4 +1,4 @@
-package com.magizdev.babyoneday;
+   package com.magizdev.babyoneday;
 
 import android.app.Fragment;
 import android.app.FragmentManager;

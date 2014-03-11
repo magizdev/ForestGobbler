@@ -76,7 +76,7 @@ public class BacklogItemFragment extends MenuFragment {
 			public void onClick(View arg0) {
 				if (backlog.getText().toString().length() > 0) {
 					BacklogItemInfo newItem = new BacklogItemInfo(-1, backlog
-							.getText().toString(), null, false, 0, 0);
+							.getText().toString(), null, false, -1, -1);
 					storageUtil.add(newItem);
 					adapter.refresh();
 					adapter.notifyDataSetChanged();

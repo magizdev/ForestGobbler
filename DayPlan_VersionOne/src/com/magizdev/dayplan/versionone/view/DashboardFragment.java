@@ -2,7 +2,6 @@ package com.magizdev.dayplan.versionone.view;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,19 +13,17 @@ import android.widget.ViewAnimator;
 
 import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.versionone.util.AnimationFactory;
-import com.magizdev.dayplan.versionone.util.INavigate;
 import com.magizdev.dayplan.versionone.util.AnimationFactory.FlipDirection;
+import com.magizdev.dayplan.versionone.util.INavigate;
 
 public class DashboardFragment extends Fragment implements OnClickListener {
 	private INavigate navigate;
-	private ViewPager pager;
+	private TextView title;
+	private LinearLayout pieChartArea;
+	private LinearLayout barChartArea;
 
 	public void setDataSource(INavigate naviate) {
 		this.navigate = naviate;
-	}
-
-	public void setPager(ViewPager pager) {
-		this.pager = pager;
 	}
 
 	public DashboardFragment() {
@@ -48,12 +45,12 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 		ImageButton flipChart2 = (ImageButton) rootView
 				.findViewById(R.id.flipButton2);
 
-		LinearLayout pieChartArea = (LinearLayout) rootView
+		pieChartArea = (LinearLayout) rootView
 				.findViewById(R.id.pieChartArea);
-		LinearLayout barChartArea = (LinearLayout) rootView
+		barChartArea = (LinearLayout) rootView
 				.findViewById(R.id.barChartArea);
-		
-		TextView title = (TextView)rootView.findViewById(R.id.reportTitle);
+
+		title = (TextView) rootView.findViewById(R.id.reportTitle);
 		title.setText(navigate.CurrentTitle());
 
 		PieChartView pieChart = new PieChartView(navigate, this.getActivity());
@@ -91,14 +88,18 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.btnLeft) {
-			int current = pager.getCurrentItem();
-			pager.setCurrentItem(current - 1, true);
+			navigate.Backword();
 		} else if (v.getId() == R.id.btnRight) {
-			int current = pager.getCurrentItem();
-			if (current < pager.getAdapter().getCount() - 1) {
-				pager.setCurrentItem(current + 1, true);
+			if (!navigate.IsLast()) {
+				navigate.Forward();
 			}
 		}
+		
+		title.setText(navigate.CurrentTitle());
+		pieChartArea.removeAllViews();
+		pieChartArea.addView(new PieChartView(navigate, getActivity()).GetChart());
+		barChartArea.removeAllViews();
+		barChartArea.addView(new BarChartView(navigate, getActivity()).GetChart());
 	}
 
 }

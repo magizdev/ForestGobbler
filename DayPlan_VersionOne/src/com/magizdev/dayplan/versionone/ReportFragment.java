@@ -13,8 +13,11 @@ import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 
 import com.magizdev.dayplan.R;
+import com.magizdev.dayplan.versionone.util.BurndownNavigate;
 import com.magizdev.dayplan.versionone.util.DayNavigate;
 import com.magizdev.dayplan.versionone.util.WeekNavigate;
+import com.magizdev.dayplan.versionone.view.BurndownChartView;
+import com.magizdev.dayplan.versionone.view.BurndownFragment;
 import com.magizdev.dayplan.versionone.view.DashboardFragment;
 
 public class ReportFragment extends MenuFragment {
@@ -35,6 +38,8 @@ public class ReportFragment extends MenuFragment {
 			DashboardFragment _dailyReportFragment = new DashboardFragment();
 			_dailyReportFragment.setDataSource(new DayNavigate(getActivity()));
 			dailyReportFragment = _dailyReportFragment;
+		}else {
+			dailyReportFragment.onResume();
 		}
 		return dailyReportFragment;
 	}
@@ -44,13 +49,17 @@ public class ReportFragment extends MenuFragment {
 			DashboardFragment _weeklyReportFragment = new DashboardFragment();
 			_weeklyReportFragment.setDataSource(new WeekNavigate(getActivity()));
 			weeklyReportFragment = _weeklyReportFragment;
+		}else {
+			weeklyReportFragment.onResume();
 		}
 		return weeklyReportFragment;
 	}
 
 	private Fragment getBurndownFragment() {
 		if (burndownFragment == null) {
-
+			BurndownFragment _burndownFragment = new BurndownFragment();
+			_burndownFragment.setDataSource(new BurndownNavigate(getActivity()));
+			burndownFragment = _burndownFragment;
 		}
 		return burndownFragment;
 	}
@@ -62,12 +71,10 @@ public class ReportFragment extends MenuFragment {
 				false);
 
 		tabHost = (TabHost) rootView.findViewById(android.R.id.tabhost);
-		tabHost.setup();
-
+		setupTabs();
 		FrameLayout contentFrame = (FrameLayout) rootView
 				.findViewById(android.R.id.tabcontent);
 		fragmentManager = getActivity().getFragmentManager();
-		setupTabs();
 		return rootView;
 	}
 
@@ -99,9 +106,10 @@ public class ReportFragment extends MenuFragment {
 
 	@Override
 	public void onResume() {
-		// tabHost.setCurrentTab(0);
-		// updateTab(TAB_RAWDATA, R.id.rawDataView);
 		super.onResume();
+
+		tabHost.setCurrentTab(0);
+		updateTab(TAB_DAILY, R.id.dailyReportView);
 
 	}
 
