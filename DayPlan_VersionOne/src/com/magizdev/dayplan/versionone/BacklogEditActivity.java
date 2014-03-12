@@ -15,8 +15,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.versionone.util.DayUtil;
@@ -34,6 +37,8 @@ public class BacklogEditActivity extends Activity implements OnDateSetListener {
 	StorageUtil<BacklogItemInfo> util;
 	Calendar calendar;
 	long backlogId;
+	private TextView estimateLabel;
+	private CheckBox estimateEnableBox;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,8 +51,31 @@ public class BacklogEditActivity extends Activity implements OnDateSetListener {
 		calendar = Calendar.getInstance();
 		txtNote = (EditText) findViewById(R.id.txtNote);
 		txtEstimate = (EditText) findViewById(R.id.estimate);
+		estimateLabel = (TextView) findViewById(R.id.backlog_estimate_unit_label);
+		estimateEnableBox = (CheckBox) findViewById(R.id.checkBoxEstimate);
+		estimateEnableBox
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						int visibility = isChecked ? View.VISIBLE
+								: View.INVISIBLE;
+						estimateLabel.setVisibility(visibility);
+						txtEstimate.setVisibility(visibility);
+					}
+				});
 		dueDate = (Button) findViewById(R.id.dueDate);
 		dueDateEnable = (CheckBox) findViewById(R.id.checkBoxDueDate);
+		dueDateEnable.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				int visibility = isChecked ? View.VISIBLE : View.INVISIBLE;
+				dueDate.setVisibility(visibility);
+			}
+		});
 		dueDate.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -82,7 +110,10 @@ public class BacklogEditActivity extends Activity implements OnDateSetListener {
 			txtNote.setText(backlog.Description);
 			txtEstimate.setText(backlog.Estimate + "");
 			completeCheckBox.setChecked(backlog.Completed);
+			dueDateEnable.setChecked(!backlog.HasDueDate());
 			dueDateEnable.setChecked(backlog.HasDueDate());
+			estimateEnableBox.setChecked(!backlog.HasEstimate());
+			estimateEnableBox.setChecked(backlog.HasEstimate());
 		}
 
 	}
@@ -112,11 +143,13 @@ public class BacklogEditActivity extends Activity implements OnDateSetListener {
 	}
 
 	private void btnSaveClick() {
-		int dueDate = dueDateEnable.isChecked() ? DayUtil.toDate(calendar.getTime()) : 0;
+		int dueDate = dueDateEnable.isChecked() ? DayUtil.toDate(calendar
+				.getTime()) : 0;
+		float estimate = estimateEnableBox.isChecked() ? Float
+				.parseFloat(txtEstimate.getText().toString()) : 0;
 		BacklogItemInfo backlog = new BacklogItemInfo(0, txtTitle.getText()
 				.toString(), txtNote.getText().toString(),
-				completeCheckBox.isChecked(), Float.parseFloat(txtEstimate
-						.getText().toString()), dueDate);
+				completeCheckBox.isChecked(), estimate, dueDate);
 		util.update(backlogId, backlog);
 		setResult(RESULT_OK);
 		finish();

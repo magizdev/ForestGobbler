@@ -101,7 +101,7 @@ public class BurndownFragment extends Fragment implements OnClickListener {
 	public void onResume() {
 		super.onResume();
 		backlogsDropdown.setAdapter(new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_spinner_item, navigate.getNames()));
+				R.layout.spinner_item, navigate.getNames()));
 		backlogsDropdown.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override

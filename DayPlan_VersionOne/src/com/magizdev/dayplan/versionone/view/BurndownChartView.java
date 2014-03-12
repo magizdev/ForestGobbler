@@ -7,10 +7,12 @@ import java.util.List;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
+import org.achartengine.chart.PointStyle;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
+import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -42,33 +44,38 @@ public class BurndownChartView extends BaseChartView {
 	}
 
 	private XYMultipleSeriesDataset buildDataset() {
-		seriesCount = 0;
 		chartData = navigate.GetBarChartData();
 
 		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-		HashMap<Long, XYSeries> categoryMap = new HashMap<Long, XYSeries>();
 		maxY = 0;
 
 		startDate = DayUtil.toDate(new Date());
 		endDate = DayUtil.toDate(new Date(0));
 
-		if (chartData.size() == 1) {
-			seriesCount = 1;
-			int i = 1;
-			XYSeries series = new XYSeries("");
-			categoryMap.put(1L, series);
-			for (Integer j : chartData.keySet()) {
-				for (PieChartData data : chartData.get(j)) {
-					series.add(i++, data.fdata);
-					maxY = data.fdata > maxY ? data.fdata : maxY;
-				}
+		seriesCount = 1;
+		XYSeries series = new XYSeries("");
+		
+		for (Integer date : chartData.keySet()) {
+			if(date < startDate) {
+				startDate = date;
 			}
+			if(date > endDate) {
+				endDate = date;
+			}
+		}
+		
+		startDate -= 1;
+		endDate += 1;
 
+		for (Integer date : chartData.keySet()) {
+			for (PieChartData data : chartData.get(date)) {
+				series.add(date - startDate, data.fdata);
+				maxY = data.fdata > maxY ? data.fdata : maxY;
+			}
 		}
 
-		for (XYSeries series : categoryMap.values()) {
-			dataset.addSeries(series);
-		}
+
+		dataset.addSeries(series);
 
 		return dataset;
 
@@ -89,12 +96,11 @@ public class BurndownChartView extends BaseChartView {
 		renderer.setLegendTextSize(15);
 		int length = COLORS.length;
 		for (int i = 0; i < seriesCount; i++) {
-			SimpleSeriesRenderer r = new SimpleSeriesRenderer();
+			XYSeriesRenderer r = new XYSeriesRenderer();
+			r.setFillPoints(true);
+			r.setPointStyle(PointStyle.CIRCLE);
 			r.setColor(COLORS[i % length]);
-			r.setDisplayChartValues(true);
-			if (seriesCount == 1) {
-				r.setShowLegendItem(false);
-			}
+//			r.setDisplayChartValues(true);
 			renderer.addSeriesRenderer(r);
 		}
 
