@@ -28,6 +28,10 @@
     <string name="backlog_estimate">预估:</string>
     <string name="backlog_estimate_unit">小时</string>
     <string name="backlog_due_date">到期日:</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="action_pickup">Choose tasks</string>
+    <string name="action_close">Done today</string>
 
     <string-array name="Pages">
         <item>今日安排</item>

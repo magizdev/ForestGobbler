@@ -30,15 +30,13 @@
     <string name="backlog_estimate">Estimate:</string>
     <string name="backlog_estimate_unit">Hours</string>
     <string name="backlog_due_date">Due Date:</string>
+    <string name="action_daily">Daily</string>
+    <string name="action_weekly">Weekly</string>
 
     <string-array name="Pages">
         <item>Tasks</item>
         <item>Backlog Items</item>
         <item>Reports</item>
-    </string-array>
-    <string-array name="ReportTypes">
-        <item>Daily Report</item>
-        <item>Weekly Report</item>
     </string-array>
 
     <string name="empty_view_text">Click to choose tasks for today.</string>
