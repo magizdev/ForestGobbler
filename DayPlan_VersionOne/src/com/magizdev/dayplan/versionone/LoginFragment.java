@@ -169,4 +169,9 @@ public class LoginFragment extends MenuFragment {
 		return false;
 	}
 
+	@Override
+	public int layoutResource() {
+		return R.layout.activity_login;
+	}
+
 }

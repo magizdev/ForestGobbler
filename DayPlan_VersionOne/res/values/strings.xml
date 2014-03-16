@@ -42,7 +42,7 @@
         <item>Weekly Report</item>
     </string-array>
 
-    <string name="empty_view_text">No task today, click to choose tasks for today.</string>
+    <string name="empty_view_text">Click to choose tasks for today.</string>
     <string name="refresh">Refresh</string>
     <string name="report">Report</string>
 

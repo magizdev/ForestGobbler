@@ -67,8 +67,7 @@ public class ReportFragment extends MenuFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.fragement_report_container, container,
-				false);
+		rootView = super.onCreateView(inflater, container, savedInstanceState);
 
 		tabHost = (TabHost) rootView.findViewById(android.R.id.tabhost);
 		setupTabs();
@@ -161,5 +160,10 @@ public class ReportFragment extends MenuFragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public int layoutResource() {
+		return R.layout.fragement_report_container;
 	}
 }

@@ -12,8 +12,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
 import com.magizdev.dayplan.R;
 
 public class DrawerActivity extends FragmentActivity implements IJumpable {
@@ -84,6 +88,8 @@ public class DrawerActivity extends FragmentActivity implements IJumpable {
 		if (savedInstanceState == null) {
 			selectItem(0);
 		}
+		
+
 	}
 
 	@Override

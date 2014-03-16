@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import android.R.integer;
 import android.content.Context;
 
 import com.magizdev.dayplan.versionone.PieChartData;
@@ -22,6 +23,17 @@ public class DayTaskTimeUtil {
 	public List<DayTaskTimeInfo> GetByDate(int date) {
 		return timeStorageUtil.getCollection("(" + DayTaskTimeTable.DATE + "="
 				+ date + ")", null);
+	}
+
+	public int getEffortInMs(int date, long biid) {
+		List<DayTaskTimeInfo> allRecords = timeStorageUtil.getCollection("("
+				+ DayTaskTimeTable.DATE + "=" + date + " and "
+				+ DayTaskTimeTable.BIID + "=" + biid + ")", null);
+		int effort = 0;
+		for(DayTaskTimeInfo record: allRecords){
+			effort += record.EndTime - record.StartTime;
+		}
+		return effort;
 	}
 
 	public List<DayTaskTimeInfo> GetByBacklog(long backlogId) {

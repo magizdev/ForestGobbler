@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.R.bool;
 import android.content.Context;
 
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTable;
@@ -18,6 +19,7 @@ public class DayTaskUtil {
 	private StorageUtil<DayTaskInfo> storage;
 	private StorageUtil<DayTaskTimeInfo> timeStorageUtil;
 	private StorageUtil<BacklogItemInfo> backlogStorage;
+	private long currentRunningTask;
 
 	public DayTaskUtil(Context context) {
 		storage = new StorageUtil<DayTaskInfo>(context, new DayTaskInfo());
@@ -25,22 +27,46 @@ public class DayTaskUtil {
 				new DayTaskTimeInfo());
 		backlogStorage = new StorageUtil<BacklogItemInfo>(context,
 				new BacklogItemInfo());
+		currentRunningTask = -1;
+		List<Long> todaysTasks = GetTasksByDate(DayUtil.Today());
+		for (Long id : todaysTasks) {
+			if (IsTaskWaitingForStop(id)) {
+				currentRunningTask = id;
+				break;
+			}
+		}
 	}
 
 	public void AddTask(long backlogId) {
 		DayTaskInfo dayTask = new DayTaskInfo(-1, DayUtil.Today(), backlogId,
-				null, TaskState.Stop, 0, 0);
+				null, TaskState.Stop, 0, -1);
 		storage.add(dayTask);
 	}
 
-	public float GetTaskRemainEstimate(long backlogId) {
-		List<DayTaskInfo> tasks = storage.getCollection("(" + DayTaskTable.DATE
-				+ "<" + DayUtil.Today() + ")", DayTaskTable.DATE + " DESC");
-		if (tasks.size() > 0) {
-			return tasks.get(0).RemainEffort;
-		}
+	public float GetTaskRemainEstimate(long backlogId, boolean excludToday) {
+		if (excludToday) {
+			List<DayTaskInfo> tasks = storage.getCollection("("
+					+ DayTaskTable.DATE + "<" + DayUtil.Today() + " and "
+					+ DayTaskTable.BIID + " = " + backlogId + ")",
+					DayTaskTable.DATE + " DESC");
+			if (tasks.size() > 0) {
+				return tasks.get(0).RemainEffort;
+			}
 
-		return backlogStorage.getSingle(backlogId).Estimate;
+			return backlogStorage.getSingle(backlogId).Estimate;
+		} else {
+			List<DayTaskInfo> tasks = storage.getCollection("("
+					+ DayTaskTable.DATE + "<=" + DayUtil.Today() + " and "
+					+ DayTaskTable.BIID + " = " + backlogId + ")",
+					DayTaskTable.DATE + " DESC");
+			if (tasks.size() > 0 && tasks.get(0).RemainEffort != -1) {
+				return tasks.get(0).RemainEffort;
+			} else if (tasks.size() > 1 && tasks.get(0).RemainEffort == -1) {
+				return tasks.get(1).RemainEffort;
+			}
+
+			return backlogStorage.getSingle(backlogId).Estimate;
+		}
 	}
 
 	public List<Long> GetTasksByDate(int date) {
@@ -53,6 +79,13 @@ public class DayTaskUtil {
 		return biIds;
 	}
 
+	public void CloseDate(int date) {
+		if (date < DayUtil.Today()) {
+			List<Long> biids = GetTasksByDate(date);
+
+		}
+	}
+
 	public void ClearTasksByDate(int date) {
 		List<DayTaskInfo> tasks = storage.getCollection("(" + DayTaskTable.DATE
 				+ "=" + date + ")", null);
@@ -62,6 +95,10 @@ public class DayTaskUtil {
 	}
 
 	public void StartTask(long backlogId) {
+		if (currentRunningTask > 0) {
+			StopTask(currentRunningTask);
+		}
+		currentRunningTask = backlogId;
 		Date now = new Date();
 		DayTaskTimeInfo timeInfo = new DayTaskTimeInfo(-1, DayUtil.Today(),
 				backlogId, null, DayUtil.msOfDay(now), 0);

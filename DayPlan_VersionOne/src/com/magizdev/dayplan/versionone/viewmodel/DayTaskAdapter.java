@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -35,11 +36,13 @@ public class DayTaskAdapter extends BaseAdapter {
 	private boolean inEditMode;
 	private StorageUtil<DayTaskTimeInfo> timeUtil;
 	private DayTaskUtil dayTaskUtil;
+	private DayTaskTimeUtil dayTaskTimeUtil;
 
 	public DayTaskAdapter(Context context) {
 		this.context = context;
 		dayTaskUtil = new DayTaskUtil(context);
 		DayTaskInfo blank = new DayTaskInfo();
+		dayTaskTimeUtil = new DayTaskTimeUtil(context);
 		storageUtil = new StorageUtil<DayTaskInfo>(context, blank);
 		String whereStrings = DayTaskTable.DATE + "=" + DayUtil.Today();
 		tasks = storageUtil.getCollection(whereStrings, null);
@@ -55,10 +58,13 @@ public class DayTaskAdapter extends BaseAdapter {
 			taskTimeHash.put(taskTime.biid, taskTime.data);
 		}
 	}
-	
-	private void fillRemainEstimate(){
-		for(DayTaskInfo task: tasks){
-			task.RemainEffort = dayTaskUtil.GetTaskRemainEstimate(task.BIID);
+
+	private void fillRemainEstimate() {
+		for (DayTaskInfo task : tasks) {
+			task.RemainEffort = dayTaskUtil.GetTaskRemainEstimate(task.BIID,
+					true)
+					- dayTaskTimeUtil.getEffortInMs(DayUtil.Today(), task.BIID)
+					/ 1000 / 60 / 60;
 		}
 	}
 
@@ -66,8 +72,8 @@ public class DayTaskAdapter extends BaseAdapter {
 		this.inEditMode = mode;
 		notifyDataSetChanged();
 	}
-	
-	public void save(){
+
+	public void save() {
 		for (DayTaskInfo task : tasks) {
 			storageUtil.update(task.ID, task);
 		}
@@ -132,32 +138,49 @@ public class DayTaskAdapter extends BaseAdapter {
 			viewHolder.remainEstimate = (EditText) convertView
 					.findViewById(R.id.remainEstimate);
 			int intEffort = 0;
-			if(taskTimeHash.containsKey(taskInfo.BIID)){
+			if (taskTimeHash.containsKey(taskInfo.BIID)) {
 				intEffort = taskTimeHash.get(taskInfo.BIID);
 			}
 			viewHolder.effort.setText(DayUtil.formatTime(intEffort / 1000));
-			float estimate = dayTaskUtil.GetTaskRemainEstimate(taskInfo.BIID);
-			viewHolder.remainEstimate.setText(String.format("%2.2f", estimate
-					- intEffort / 1000 / 60 / 60 ));
+			viewHolder.remainEstimate.setText(String.format("%2.2f",
+					taskInfo.RemainEffort));
 			final int finalPosition = position;
-			viewHolder.updateButton = (ImageButton)convertView.findViewById(R.id.updateRemainEstimate);
+			viewHolder.updateButton = (ImageButton) convertView
+					.findViewById(R.id.updateRemainEstimate);
+			viewHolder.updateButton.setEnabled(false);
 			viewHolder.updateButton.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
-					taskInfo.RemainEffort = Float.parseFloat(viewHolder.remainEstimate.getText().toString());
+					taskInfo.RemainEffort = Float
+							.parseFloat(viewHolder.remainEstimate.getText()
+									.toString());
 					storageUtil.update(taskInfo.ID, taskInfo);
+					viewHolder.updateButton.setEnabled(false);
 				}
 			});
-			viewHolder.remainEstimate.setOnEditorActionListener(new OnEditorActionListener() {
-				
-				@Override
-				public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-					tasks.get(finalPosition).RemainEffort = Float.parseFloat(v.getText().toString());
-					Log.w("test", actionId+"");
-					return false;
-				}
-			});
+			viewHolder.remainEstimate
+					.setOnFocusChangeListener(new OnFocusChangeListener() {
+
+						@Override
+						public void onFocusChange(View v, boolean hasFocus) {
+							if (hasFocus) {
+								viewHolder.updateButton.setEnabled(true);
+							}
+						}
+					});
+			viewHolder.remainEstimate
+					.setOnEditorActionListener(new OnEditorActionListener() {
+
+						@Override
+						public boolean onEditorAction(TextView v, int actionId,
+								KeyEvent event) {
+							tasks.get(finalPosition).RemainEffort = Float
+									.parseFloat(v.getText().toString());
+							Log.w("test", actionId + "");
+							return false;
+						}
+					});
 
 		} else {
 			viewHolder = new ViewHolder();

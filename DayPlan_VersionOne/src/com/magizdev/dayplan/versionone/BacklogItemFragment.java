@@ -35,6 +35,7 @@ public class BacklogItemFragment extends MenuFragment {
 	private StorageUtil<BacklogItemInfo> storageUtil;
 	private BacklogItemAdapter adapter;
 	private IJumpable jumpable;
+	private Switch showAll;
 
 	public BacklogItemFragment() {
 	}
@@ -46,22 +47,27 @@ public class BacklogItemFragment extends MenuFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.activity_backlog_item,
-				container, false);
+		View rootView = super.onCreateView(inflater, container,
+				savedInstanceState);
 
 		listView = (ListView) rootView.findViewById(R.id.listViewBacklog);
 		backlog = (EditText) rootView.findViewById(R.id.editTextBacklog);
 		ImageButton addButton = (ImageButton) rootView
 				.findViewById(R.id.btnAddBacklog);
-		Switch showAll = (Switch) rootView.findViewById(R.id.switchShowAll);
+		showAll = (Switch) rootView.findViewById(R.id.switchShowAll);
 		showAll.setChecked(false);
 		showAll.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				BacklogItemAdapter adapter = (BacklogItemAdapter) listView
-						.getAdapter();
+				if (adapter == null) {
+					List<Long> selectedBacklogs = dayTaskUtil
+							.GetTasksByDate(DayUtil.Today());
+					adapter = new BacklogItemAdapter(getActivity(),
+							selectedBacklogs);
+					listView.setAdapter(adapter);
+				}
 				adapter.setShowAll(isChecked);
 				adapter.notifyDataSetChanged();
 			}
@@ -116,6 +122,7 @@ public class BacklogItemFragment extends MenuFragment {
 			adapter = new BacklogItemAdapter(getActivity(), selectedBacklogs);
 			listView.setAdapter(adapter);
 		}
+		adapter.setShowAll(showAll.isChecked());
 		listView.invalidate();
 	}
 
@@ -155,5 +162,10 @@ public class BacklogItemFragment extends MenuFragment {
 			break;
 		}
 		return false;
+	}
+
+	@Override
+	public int layoutResource() {
+		return R.layout.activity_backlog_item;
 	}
 }

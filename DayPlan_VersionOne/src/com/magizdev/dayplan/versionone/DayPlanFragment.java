@@ -6,7 +6,9 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.magizdev.dayplan.R;
@@ -35,13 +37,19 @@ public class DayPlanFragment extends MenuFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View rootView = inflater.inflate(R.layout.activity_day_plan, container,
-				false);
+		View rootView = super.onCreateView(inflater, container, savedInstanceState);
 
 		taskListView = (ListView) rootView.findViewById(R.id.listViewDayPlan);
 		taskListView.setBackgroundResource(R.drawable.widget_bg);
-		View emptyView = rootView.findViewById(R.id.listViewDayPlanEmpty);
+		Button emptyView = (Button)rootView.findViewById(R.id.listViewDayPlanEmpty);
 		taskListView.setEmptyView(emptyView);
+		emptyView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				jumpable.jumpTo(1);
+			}
+		});
 		adapter = new DayTaskAdapter(getActivity());
 		taskListView.setAdapter(adapter);
 		return rootView;
@@ -90,7 +98,7 @@ public class DayPlanFragment extends MenuFragment {
 	@Override
 	public int optionMenuResource() {
 		if (inEditMode) {
-			return R.menu.activity_backlog_item_edit;
+			return R.menu.activity_day_plan_close;
 		} else {
 			return R.menu.activity_backlog_item_plan;
 		}
@@ -112,15 +120,20 @@ public class DayPlanFragment extends MenuFragment {
 			adapter.setEditMode(inEditMode);
 			getActivity().invalidateOptionsMenu();
 			break;
-		case R.id.action_save:
-			this.inEditMode = false;
-			adapter.save();
-			adapter.setEditMode(inEditMode);
-			getActivity().invalidateOptionsMenu();
+//		case R.id.action_save:
+//			this.inEditMode = false;
+//			adapter.save();
+//			adapter.setEditMode(inEditMode);
+//			getActivity().invalidateOptionsMenu();
 		default:
 			break;
 		}
 		return false;
+	}
+
+	@Override
+	public int layoutResource() {
+		return R.layout.activity_day_plan;
 	}
 
 }

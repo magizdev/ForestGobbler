@@ -12,10 +12,18 @@
         android:background="@drawable/widget_bg" >
     </ListView>
 
-    <TextView
+    <Button
         android:id="@+id/listViewDayPlanEmpty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Choose Tasks for Today" />
+        android:background="#FFFFFF"
+        android:text="@string/empty_view_text" />
+
+    <LinearLayout
+        android:id="@+id/adContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical" />
 
 </RelativeLayout>
