@@ -193,6 +193,13 @@ public class DrawerActivity extends FragmentActivity implements IJumpable {
 		// Pass any configuration change to the drawer toggls
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		int target = getIntent().getIntExtra("com.magizdev.dayplan.Target", 0);
+		jumpTo(target);
+	}
 
 	@Override
 	public void jumpTo(int target) {

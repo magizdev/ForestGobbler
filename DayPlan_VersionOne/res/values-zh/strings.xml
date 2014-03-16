@@ -6,6 +6,9 @@
     <string name="dashboard_activity_label">报表</string>
     <string name="ok">OK</string>
     <string name="action_mark">选择任务</string>
+    <string name="tab_label_daily">日报</string>
+    <string name="tab_label_weekly">周报</string>
+    <string name="tab_label_burndown">燃尽图</string>
     <string name="action_daily">每日</string>
     <string name="action_weekly">每周</string>
     <string name="action_cancel">取消</string>
@@ -14,7 +17,6 @@
     <string name="hint_title">任务名称</string>
     <string name="hint_desc">描述</string>
     <string name="hint_add_backlog_title">添加任务</string>
-    
     <string name="built_in_task_commute">通勤</string>
     <string name="built_in_task_personal">个人</string>
     <string name="built_in_task_work">工作</string>
@@ -22,8 +24,11 @@
     <string name="built_in_task_rest">休息</string>
     <string name="built_in_task_social">社交</string>
     <string name="built_in_task_idleness">空闲</string>
-    
     <string name="show_all_switch">显示已完成任务</string>
+    <string name="backlog_estimate">预估:</string>
+    <string name="backlog_estimate_unit">小时</string>
+    <string name="backlog_due_date">到期日:</string>
+
     <string-array name="Pages">
         <item>今日安排</item>
         <item>全部任务</item>
@@ -33,4 +38,5 @@
     <string name="empty_view_text">今日无任务，点击选择任务。</string>
     <string name="refresh">刷新</string>
     <string name="report">报告</string>
+
 </resources>

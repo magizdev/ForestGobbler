@@ -1,6 +1,7 @@
 package com.magizdev.dayplan.versionone.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,8 +31,10 @@ public class DayTaskTimeUtil {
 				+ DayTaskTimeTable.DATE + "=" + date + " and "
 				+ DayTaskTimeTable.BIID + "=" + biid + ")", null);
 		int effort = 0;
-		for(DayTaskTimeInfo record: allRecords){
-			effort += record.EndTime - record.StartTime;
+		for (DayTaskTimeInfo record : allRecords) {
+			if (record.EndTime > 0) {
+				effort += record.EndTime - record.StartTime;
+			}
 		}
 		return effort;
 	}
@@ -69,6 +72,10 @@ public class DayTaskTimeUtil {
 			if (current.EndTime > 0) {
 				dayTasksEffort.put(current.BIID, accumulate + current.EndTime
 						- current.StartTime);
+			} else if (current.Date == DayUtil.Today()) {
+				dayTasksEffort.put(current.BIID,
+						accumulate + DayUtil.msOfDay(new Date())
+								- current.StartTime);
 			}
 		}
 

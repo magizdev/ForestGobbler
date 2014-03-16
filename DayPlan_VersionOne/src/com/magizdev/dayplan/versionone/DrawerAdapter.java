@@ -62,10 +62,11 @@ public class DrawerAdapter extends BaseAdapter {
 
 		viewHolder.label.setText(labels.get(position));
 		if (position == selectedIndex) {
-			viewHolder.label
-					.setBackgroundResource(R.drawable.list_item_focused);
+			viewHolder.label.setBackgroundColor(Color.WHITE);
+			viewHolder.label.setTextColor(Color.BLACK);
 		} else {
 			viewHolder.label.setBackgroundColor(Color.TRANSPARENT);
+			viewHolder.label.setTextColor(Color.WHITE);
 		}
 		return convertView;
 	}

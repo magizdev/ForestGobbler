@@ -71,6 +71,9 @@ public class BurndownNavigate implements INavigate {
 
 	@Override
 	public HashMap<Integer, List<PieChartData>> GetBarChartData() {
+		if(ids.size() == 0){
+			return new HashMap<Integer, List<PieChartData>>();
+		}
 		List<DayTaskInfo> result = taskStorageUtil.getCollection(
 				DayTaskTable.BIID + " = " + ids.get(current), null);
 		HashMap<Integer, List<PieChartData>> temp = new HashMap<Integer, List<PieChartData>>();

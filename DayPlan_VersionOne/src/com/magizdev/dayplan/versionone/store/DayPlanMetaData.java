@@ -66,6 +66,7 @@ public class DayPlanMetaData {
 		// public static final String REMAIN_ESTIMATE = "remain_estimate";
 		public static final String DUE_DATE = "due_date";
 		public static final String SERVERID = "server_id";
+		public static final String SERVER_SIDE_ID  = "server_side_id";
 		public static final int STATE_ACTIVE = 0;
 		public static final int STATE_COMPLETE = 1;
 

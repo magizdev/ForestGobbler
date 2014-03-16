@@ -145,14 +145,10 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		if (taskTimeHash.containsKey(biid)) {
 			String timeString = "";
 			int time = taskTimeHash.get(biid);
-			if (time / 60 > 0) {
-				timeString = time / 60 + "h " + time % 60 + "m";
-			} else {
-				timeString = time % 60 + "m";
-			}
+			timeString = DayUtil.formatTime(time);
 			return timeString;
 		} else {
-			return "0m";
+			return "00:00";
 		}
 	}
 }

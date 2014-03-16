@@ -160,10 +160,12 @@ public class DayPlanWidgetProvider extends AppWidgetProvider {
 			});
 		} else if (action.equals(EMPTY_VIEW_CLICK_ACTION)) {
 			Intent chooseTaskIntent = new Intent(ctx, DrawerActivity.class);
+			chooseTaskIntent.putExtra("com.magizdev.dayplan.Target", 1);
 			chooseTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			ctx.startActivity(chooseTaskIntent);
 		} else if (action.equals(REPORT_ACTION)) {
 			Intent chooseTaskIntent = new Intent(ctx, DrawerActivity.class);
+			chooseTaskIntent.putExtra("com.magizdev.dayplan.Target", 2);
 			chooseTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			ctx.startActivity(chooseTaskIntent);
 		} else if (action.equals(AUTO_REFRESH_ACTION)) {
