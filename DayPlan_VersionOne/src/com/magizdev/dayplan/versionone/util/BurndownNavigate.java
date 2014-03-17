@@ -7,29 +7,29 @@ import java.util.NavigableMap;
 
 import android.content.Context;
 
-import com.magizdev.dayplan.versionone.PieChartData;
+import com.magizdev.dayplan.versionone.model.BacklogItem;
+import com.magizdev.dayplan.versionone.model.ChartData;
+import com.magizdev.dayplan.versionone.model.Task;
+import com.magizdev.dayplan.versionone.store.StorageUtil;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.BacklogItemTable;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTable;
-import com.magizdev.dayplan.versionone.viewmodel.BacklogItemInfo;
-import com.magizdev.dayplan.versionone.viewmodel.DayTaskInfo;
-import com.magizdev.dayplan.versionone.viewmodel.StorageUtil;
 
 public class BurndownNavigate implements INavigate {
-	private StorageUtil<BacklogItemInfo> storageUtil;
-	private StorageUtil<DayTaskInfo> taskStorageUtil;
+	private StorageUtil<BacklogItem> storageUtil;
+	private StorageUtil<Task> taskStorageUtil;
 	private int current;
 	private List<Long> ids;
 	private List<String> names;
 
 	public BurndownNavigate(Context context) {
-		storageUtil = new StorageUtil<BacklogItemInfo>(context,
-				new BacklogItemInfo());
-		taskStorageUtil = new StorageUtil<DayTaskInfo>(context, new DayTaskInfo());
-		List<BacklogItemInfo> backlogItemInfos = storageUtil.getCollection(
+		storageUtil = new StorageUtil<BacklogItem>(context,
+				new BacklogItem());
+		taskStorageUtil = new StorageUtil<Task>(context, new Task());
+		List<BacklogItem> backlogItemInfos = storageUtil.getCollection(
 				BacklogItemTable.ESTIMATE + " > 0", null);
 		ids = new ArrayList<Long>();
 		names = new ArrayList<String>();
-		for (BacklogItemInfo backlogItemInfo : backlogItemInfos) {
+		for (BacklogItem backlogItemInfo : backlogItemInfos) {
 			ids.add(backlogItemInfo.Id);
 			names.add(backlogItemInfo.Name);
 		}
@@ -65,22 +65,22 @@ public class BurndownNavigate implements INavigate {
 	}
 
 	@Override
-	public List<PieChartData> GetPieChartData() {
+	public List<ChartData> GetPieChartData() {
 		return null;
 	}
 
 	@Override
-	public HashMap<Integer, List<PieChartData>> GetBarChartData() {
+	public HashMap<Integer, List<ChartData>> GetBarChartData() {
 		if(ids.size() == 0){
-			return new HashMap<Integer, List<PieChartData>>();
+			return new HashMap<Integer, List<ChartData>>();
 		}
-		List<DayTaskInfo> result = taskStorageUtil.getCollection(
+		List<Task> result = taskStorageUtil.getCollection(
 				DayTaskTable.BIID + " = " + ids.get(current), null);
-		HashMap<Integer, List<PieChartData>> temp = new HashMap<Integer, List<PieChartData>>();
-		for (DayTaskInfo dayTaskInfo : result) {
-			PieChartData pieChartData = new PieChartData(dayTaskInfo.BIID,
+		HashMap<Integer, List<ChartData>> temp = new HashMap<Integer, List<ChartData>>();
+		for (Task dayTaskInfo : result) {
+			ChartData pieChartData = new ChartData(dayTaskInfo.BIID,
 					dayTaskInfo.BIName, dayTaskInfo.RemainEffort);
-			List<PieChartData> temp2 = new ArrayList<PieChartData>();
+			List<ChartData> temp2 = new ArrayList<ChartData>();
 			temp2.add(pieChartData);
 			temp.put(dayTaskInfo.Date, temp2);
 		}

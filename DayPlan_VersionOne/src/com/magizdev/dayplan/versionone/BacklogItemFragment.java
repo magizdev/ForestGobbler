@@ -22,17 +22,17 @@ import android.widget.ListView;
 import android.widget.Switch;
 
 import com.magizdev.dayplan.R;
+import com.magizdev.dayplan.versionone.model.BacklogItem;
+import com.magizdev.dayplan.versionone.store.StorageUtil;
 import com.magizdev.dayplan.versionone.util.DayTaskUtil;
 import com.magizdev.dayplan.versionone.util.DayUtil;
 import com.magizdev.dayplan.versionone.viewmodel.BacklogItemAdapter;
-import com.magizdev.dayplan.versionone.viewmodel.BacklogItemInfo;
-import com.magizdev.dayplan.versionone.viewmodel.StorageUtil;
 
 public class BacklogItemFragment extends MenuFragment {
 	private DayTaskUtil dayTaskUtil;
 	private ListView listView;
 	private EditText backlog;
-	private StorageUtil<BacklogItemInfo> storageUtil;
+	private StorageUtil<BacklogItem> storageUtil;
 	private BacklogItemAdapter adapter;
 	private IJumpable jumpable;
 	private Switch showAll;
@@ -74,14 +74,14 @@ public class BacklogItemFragment extends MenuFragment {
 		});
 
 		dayTaskUtil = new DayTaskUtil(getActivity());
-		storageUtil = new StorageUtil<BacklogItemInfo>(getActivity(),
-				new BacklogItemInfo());
+		storageUtil = new StorageUtil<BacklogItem>(getActivity(),
+				new BacklogItem());
 		addButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				if (backlog.getText().toString().length() > 0) {
-					BacklogItemInfo newItem = new BacklogItemInfo(-1, backlog
+					BacklogItem newItem = new BacklogItem(-1, backlog
 							.getText().toString(), null, false, -1, -1);
 					storageUtil.add(newItem);
 					adapter.refresh();
@@ -132,7 +132,7 @@ public class BacklogItemFragment extends MenuFragment {
 		ListAdapter adapter = listView.getAdapter();
 		int count = adapter.getCount();
 		for (int i = 0; i < count; i++) {
-			BacklogItemInfo backlogItemInfo = (BacklogItemInfo) adapter
+			BacklogItem backlogItemInfo = (BacklogItem) adapter
 					.getItem(i);
 			if (backlogItemInfo.Selected) {
 				dayTaskUtil.AddTask(backlogItemInfo.Id);

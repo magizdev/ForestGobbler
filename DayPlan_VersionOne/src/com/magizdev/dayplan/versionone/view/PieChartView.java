@@ -9,7 +9,7 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.magizdev.dayplan.versionone.PieChartData;
+import com.magizdev.dayplan.versionone.model.ChartData;
 import com.magizdev.dayplan.versionone.util.INavigate;
 
 public class PieChartView extends BaseChartView {
@@ -30,7 +30,7 @@ public class PieChartView extends BaseChartView {
 		mPieRenderer.setLabelsTextSize(30);
 		mPieRenderer.setLabelsColor(Color.BLUE);
 
-		for (PieChartData pieChartData : navigate.GetPieChartData()) {
+		for (ChartData pieChartData : navigate.GetPieChartData()) {
 			mPieSeries.add(pieChartData.backlogName, pieChartData.data);
 			SimpleSeriesRenderer renderer = new SimpleSeriesRenderer();
 			renderer.setColor(COLORS[(mPieSeries.getItemCount() - 1)

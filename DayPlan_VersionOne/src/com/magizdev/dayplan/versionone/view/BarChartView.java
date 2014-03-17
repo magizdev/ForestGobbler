@@ -17,7 +17,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 
-import com.magizdev.dayplan.versionone.PieChartData;
+import com.magizdev.dayplan.versionone.model.ChartData;
 import com.magizdev.dayplan.versionone.util.DayUtil;
 import com.magizdev.dayplan.versionone.util.INavigate;
 
@@ -28,7 +28,7 @@ public class BarChartView extends BaseChartView {
 	}
 
 	private int seriesCount;
-	private HashMap<Integer, List<PieChartData>> chartData;
+	private HashMap<Integer, List<ChartData>> chartData;
 	private int maxY;
 	private int startDate;
 	private int endDate;
@@ -60,7 +60,7 @@ public class BarChartView extends BaseChartView {
 			XYSeries series = new XYSeries("");
 			categoryMap.put(1L, series);
 			for (Integer j : chartData.keySet()) {
-				for (PieChartData data : chartData.get(j)) {
+				for (ChartData data : chartData.get(j)) {
 					series.add(i++, data.data);
 					maxY = data.data > maxY ? data.data : maxY;
 				}
@@ -78,7 +78,7 @@ public class BarChartView extends BaseChartView {
 
 			for (Integer date = startDate; date <= endDate; date++) {
 				if (chartData.containsKey(date)) {
-					for (PieChartData data : chartData.get(date)) {
+					for (ChartData data : chartData.get(date)) {
 						if (categoryMap.containsKey(data.biid)) {
 							categoryMap.get(data.biid).add(
 									date - startDate + 1, data.data);
@@ -137,7 +137,7 @@ public class BarChartView extends BaseChartView {
 		renderer.setXAxisMin(0);
 		if (chartData.size() == 1) {
 			for (Integer i : chartData.keySet()) {
-				List<PieChartData> datas = chartData.get(i);
+				List<ChartData> datas = chartData.get(i);
 				renderer.setXAxisMax(datas.size() + 2);
 
 				for (int j = 1; j < datas.size() + 1; j++) {

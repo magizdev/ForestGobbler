@@ -1,4 +1,4 @@
-package com.magizdev.dayplan.versionone.viewmodel;
+package com.magizdev.dayplan.versionone.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +8,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
+import com.magizdev.dayplan.versionone.store.IStoreableItem;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.BacklogItemTable;
 
-public class BacklogItemInfo implements IStoreableItem {
+public class BacklogItem implements IStoreableItem {
 	public long Id;
 	public String Name;
 	public String Description;
@@ -27,11 +28,11 @@ public class BacklogItemInfo implements IStoreableItem {
 		return Estimate > 0;
 	}
 
-	public BacklogItemInfo() {
+	public BacklogItem() {
 
 	}
 
-	public BacklogItemInfo(long id, String name, String description,
+	public BacklogItem(long id, String name, String description,
 			boolean completed, float estimate, int dueDate) {
 		this.Id = id;
 		this.Name = name;
@@ -74,7 +75,7 @@ public class BacklogItemInfo implements IStoreableItem {
 				int dueDate = cursor.getInt(cursor
 						.getColumnIndex(BacklogItemTable.DUE_DATE));
 				boolean completed = cursor.getInt(idxState) == BacklogItemTable.STATE_COMPLETE;
-				backlogs.add(new BacklogItemInfo(id, name, desc, completed,
+				backlogs.add(new BacklogItem(id, name, desc, completed,
 						estimate, dueDate));
 			}
 		} finally {

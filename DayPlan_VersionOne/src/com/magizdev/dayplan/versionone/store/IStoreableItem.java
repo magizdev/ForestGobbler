@@ -1,4 +1,4 @@
-package com.magizdev.dayplan.versionone.viewmodel;
+package com.magizdev.dayplan.versionone.store;
 
 import java.util.List;
 

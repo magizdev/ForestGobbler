@@ -14,6 +14,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import com.magizdev.dayplan.R;
+import com.magizdev.dayplan.versionone.model.BacklogItem;
+import com.magizdev.dayplan.versionone.store.StorageUtil;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.BacklogItemTable;
 
 public class BacklogItemAdapter extends BaseAdapter {
@@ -21,21 +23,21 @@ public class BacklogItemAdapter extends BaseAdapter {
 			+ "=" + BacklogItemTable.STATE_ACTIVE + ")";
 	private static String conditionAll = "(1=1)";
 	Context context;
-	StorageUtil<BacklogItemInfo> storageUtil;
+	StorageUtil<BacklogItem> storageUtil;
 	int completedCount;
-	List<BacklogItemInfo> backlogs;
+	List<BacklogItem> backlogs;
 	List<Long> selectedIds;
 	private String condition;
 
 	public BacklogItemAdapter(Context context, List<Long> selectedIds) {
 		this.context = context;
-		BacklogItemInfo blank = new BacklogItemInfo();
+		BacklogItem blank = new BacklogItem();
 		this.selectedIds = selectedIds;
-		storageUtil = new StorageUtil<BacklogItemInfo>(context, blank);
+		storageUtil = new StorageUtil<BacklogItem>(context, blank);
 		condition = conditionActiveOnly;
 		backlogs = storageUtil.getCollection(condition, null);
 		for (int i = 0; i < backlogs.size(); i++) {
-			BacklogItemInfo backlogItemInfo = backlogs.get(i);
+			BacklogItem backlogItemInfo = backlogs.get(i);
 			if (selectedIds.contains(backlogItemInfo.Id)) {
 				backlogItemInfo.Selected = true;
 			} else {
@@ -63,7 +65,7 @@ public class BacklogItemAdapter extends BaseAdapter {
 	public void refresh() {
 		backlogs = storageUtil.getCollection(condition, null);
 		for (int i = 0; i < backlogs.size(); i++) {
-			BacklogItemInfo backlogItemInfo = backlogs.get(i);
+			BacklogItem backlogItemInfo = backlogs.get(i);
 			if (selectedIds.contains(backlogItemInfo.Id)) {
 				backlogItemInfo.Selected = true;
 			} else {
@@ -119,7 +121,7 @@ public class BacklogItemAdapter extends BaseAdapter {
 						@Override
 						public void onCheckedChanged(CompoundButton buttonView,
 								boolean isChecked) {
-							BacklogItemInfo backlogItemInfo = (BacklogItemInfo) buttonView
+							BacklogItem backlogItemInfo = (BacklogItem) buttonView
 									.getTag();
 							backlogItemInfo.Selected = isChecked;
 						}
@@ -129,7 +131,7 @@ public class BacklogItemAdapter extends BaseAdapter {
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
-		BacklogItemInfo backlog = backlogs.get(position);
+		BacklogItem backlog = backlogs.get(position);
 		viewHolder.name.setText(backlog.Name);
 		viewHolder.checkBox.setTag(backlogs.get(position));
 		viewHolder.checkBox.setChecked(backlogs.get(position).Selected);

@@ -6,8 +6,8 @@ import java.util.List;
 
 import android.content.Context;
 
-import com.magizdev.dayplan.versionone.PieChartData;
-import com.magizdev.dayplan.versionone.viewmodel.DayTaskTimeInfo;
+import com.magizdev.dayplan.versionone.model.ChartData;
+import com.magizdev.dayplan.versionone.model.TaskTimeRecord;
 
 public class WeekNavigate implements INavigate {
 	private int currentWeekOfYear;
@@ -69,18 +69,18 @@ public class WeekNavigate implements INavigate {
 	}
 
 	@Override
-	public List<PieChartData> GetPieChartData() {
-		List<DayTaskTimeInfo> data = util.GetByDateRange(currentWeekStartDay,
+	public List<ChartData> GetPieChartData() {
+		List<TaskTimeRecord> data = util.GetByDateRange(currentWeekStartDay,
 				currentWeekEndDay());
 		return DayTaskTimeUtil.compute(data);
 	}
 
 	@Override
-	public HashMap<Integer, List<PieChartData>> GetBarChartData() {
-		List<DayTaskTimeInfo> data = util.GetByDateRange(currentWeekStartDay,
+	public HashMap<Integer, List<ChartData>> GetBarChartData() {
+		List<TaskTimeRecord> data = util.GetByDateRange(currentWeekStartDay,
 				currentWeekEndDay());
 
-		HashMap<Integer, List<PieChartData>> chartDatas = DayTaskTimeUtil
+		HashMap<Integer, List<ChartData>> chartDatas = DayTaskTimeUtil
 				.computeBarData(data);
 		return chartDatas;
 	}

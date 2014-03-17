@@ -8,30 +8,30 @@ import java.util.List;
 import android.R.integer;
 import android.content.Context;
 
-import com.magizdev.dayplan.versionone.PieChartData;
+import com.magizdev.dayplan.versionone.model.ChartData;
+import com.magizdev.dayplan.versionone.model.TaskTimeRecord;
+import com.magizdev.dayplan.versionone.store.StorageUtil;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTimeTable;
-import com.magizdev.dayplan.versionone.viewmodel.DayTaskTimeInfo;
-import com.magizdev.dayplan.versionone.viewmodel.StorageUtil;
 
 public class DayTaskTimeUtil {
-	private StorageUtil<DayTaskTimeInfo> timeStorageUtil;
+	private StorageUtil<TaskTimeRecord> timeStorageUtil;
 
 	public DayTaskTimeUtil(Context context) {
-		timeStorageUtil = new StorageUtil<DayTaskTimeInfo>(context,
-				new DayTaskTimeInfo());
+		timeStorageUtil = new StorageUtil<TaskTimeRecord>(context,
+				new TaskTimeRecord());
 	}
 
-	public List<DayTaskTimeInfo> GetByDate(int date) {
+	public List<TaskTimeRecord> GetByDate(int date) {
 		return timeStorageUtil.getCollection("(" + DayTaskTimeTable.DATE + "="
 				+ date + ")", null);
 	}
 
 	public int getEffortInMs(int date, long biid) {
-		List<DayTaskTimeInfo> allRecords = timeStorageUtil.getCollection("("
+		List<TaskTimeRecord> allRecords = timeStorageUtil.getCollection("("
 				+ DayTaskTimeTable.DATE + "=" + date + " and "
 				+ DayTaskTimeTable.BIID + "=" + biid + ")", null);
 		int effort = 0;
-		for (DayTaskTimeInfo record : allRecords) {
+		for (TaskTimeRecord record : allRecords) {
 			if (record.EndTime > 0) {
 				effort += record.EndTime - record.StartTime;
 			}
@@ -39,14 +39,14 @@ public class DayTaskTimeUtil {
 		return effort;
 	}
 
-	public List<DayTaskTimeInfo> GetByBacklog(long backlogId) {
+	public List<TaskTimeRecord> GetByBacklog(long backlogId) {
 		return timeStorageUtil.getCollection("(" + DayTaskTimeTable.BIID + "="
 				+ backlogId + ")", null);
 	}
 
-	public List<DayTaskTimeInfo> GetByDateRange(int startDate, int endDate) {
+	public List<TaskTimeRecord> GetByDateRange(int startDate, int endDate) {
 		if (startDate > endDate) {
-			return new ArrayList<DayTaskTimeInfo>();
+			return new ArrayList<TaskTimeRecord>();
 		} else {
 			return timeStorageUtil.getCollection("(" + DayTaskTimeTable.DATE
 					+ ">=" + startDate + " and " + DayTaskTimeTable.DATE + "<"
@@ -54,12 +54,12 @@ public class DayTaskTimeUtil {
 		}
 	}
 
-	public static List<PieChartData> compute(List<DayTaskTimeInfo> input) {
+	public static List<ChartData> compute(List<TaskTimeRecord> input) {
 		HashMap<Long, Integer> dayTasksEffort = new HashMap<Long, Integer>();
 		HashMap<Long, String> idToName = new HashMap<Long, String>();
 		for (int i = input.size() - 1; i > -1; i--) {
 
-			DayTaskTimeInfo current = input.get(i);
+			TaskTimeRecord current = input.get(i);
 
 			if (!idToName.containsKey(current.BIID)) {
 				idToName.put(current.BIID, current.BIName);
@@ -79,22 +79,22 @@ public class DayTaskTimeUtil {
 			}
 		}
 
-		List<PieChartData> result = new ArrayList<PieChartData>();
+		List<ChartData> result = new ArrayList<ChartData>();
 		for (Long key : dayTasksEffort.keySet()) {
-			result.add(new PieChartData(key, idToName.get(key), dayTasksEffort
+			result.add(new ChartData(key, idToName.get(key), dayTasksEffort
 					.get(key) / 1000 / 60));
 		}
 
 		return result;
 	}
 
-	public static HashMap<Integer, List<PieChartData>> computeBarData(
-			List<DayTaskTimeInfo> input) {
+	public static HashMap<Integer, List<ChartData>> computeBarData(
+			List<TaskTimeRecord> input) {
 		HashMap<Integer, HashMap<Long, Integer>> dayTasksEffort = new HashMap<Integer, HashMap<Long, Integer>>();
 		HashMap<Long, String> idToName = new HashMap<Long, String>();
 		for (int i = input.size() - 1; i > -1; i--) {
 
-			DayTaskTimeInfo current = input.get(i);
+			TaskTimeRecord current = input.get(i);
 			if (current.EndTime == 0) {
 				continue;
 			}
@@ -120,11 +120,11 @@ public class DayTaskTimeUtil {
 
 		}
 
-		HashMap<Integer, List<PieChartData>> result = new HashMap<Integer, List<PieChartData>>();
+		HashMap<Integer, List<ChartData>> result = new HashMap<Integer, List<ChartData>>();
 		for (Integer date : dayTasksEffort.keySet()) {
-			List<PieChartData> oneDaysRecord = new ArrayList<PieChartData>();
+			List<ChartData> oneDaysRecord = new ArrayList<ChartData>();
 			for (Long biid : dayTasksEffort.get(date).keySet()) {
-				PieChartData oneRecord = new PieChartData(biid,
+				ChartData oneRecord = new ChartData(biid,
 						idToName.get(biid),
 						dayTasksEffort.get(date).get(biid) / 1000 / 60);
 				oneDaysRecord.add(oneRecord);

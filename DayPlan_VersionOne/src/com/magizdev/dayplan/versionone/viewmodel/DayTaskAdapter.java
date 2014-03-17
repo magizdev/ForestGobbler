@@ -20,7 +20,10 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.magizdev.dayplan.R;
-import com.magizdev.dayplan.versionone.PieChartData;
+import com.magizdev.dayplan.versionone.model.ChartData;
+import com.magizdev.dayplan.versionone.model.Task;
+import com.magizdev.dayplan.versionone.model.TaskTimeRecord;
+import com.magizdev.dayplan.versionone.store.StorageUtil;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTable;
 import com.magizdev.dayplan.versionone.util.DayTaskTimeUtil;
 import com.magizdev.dayplan.versionone.util.DayTaskUtil;
@@ -28,39 +31,39 @@ import com.magizdev.dayplan.versionone.util.DayUtil;
 
 public class DayTaskAdapter extends BaseAdapter {
 	Context context;
-	StorageUtil<DayTaskInfo> storageUtil;
-	List<DayTaskInfo> tasks;
+	StorageUtil<Task> storageUtil;
+	List<Task> tasks;
 	DayTaskUtil taskUtil;
-	List<PieChartData> taskTimes;
+	List<ChartData> taskTimes;
 	HashMap<Long, Integer> taskTimeHash;
 	private boolean inEditMode;
-	private StorageUtil<DayTaskTimeInfo> timeUtil;
+	private StorageUtil<TaskTimeRecord> timeUtil;
 	private DayTaskUtil dayTaskUtil;
 	private DayTaskTimeUtil dayTaskTimeUtil;
 
 	public DayTaskAdapter(Context context) {
 		this.context = context;
 		dayTaskUtil = new DayTaskUtil(context);
-		DayTaskInfo blank = new DayTaskInfo();
+		Task blank = new Task();
 		dayTaskTimeUtil = new DayTaskTimeUtil(context);
-		storageUtil = new StorageUtil<DayTaskInfo>(context, blank);
+		storageUtil = new StorageUtil<Task>(context, blank);
 		String whereStrings = DayTaskTable.DATE + "=" + DayUtil.Today();
 		tasks = storageUtil.getCollection(whereStrings, null);
 		taskUtil = new DayTaskUtil(context);
 		fillRemainEstimate();
-		timeUtil = new StorageUtil<DayTaskTimeInfo>(context,
-				new DayTaskTimeInfo());
-		List<DayTaskTimeInfo> times = timeUtil
+		timeUtil = new StorageUtil<TaskTimeRecord>(context,
+				new TaskTimeRecord());
+		List<TaskTimeRecord> times = timeUtil
 				.getCollection(whereStrings, null);
 		taskTimes = DayTaskTimeUtil.compute(times);
 		taskTimeHash = new HashMap<Long, Integer>();
-		for (PieChartData taskTime : taskTimes) {
+		for (ChartData taskTime : taskTimes) {
 			taskTimeHash.put(taskTime.biid, taskTime.data);
 		}
 	}
 
 	private void fillRemainEstimate() {
-		for (DayTaskInfo task : tasks) {
+		for (Task task : tasks) {
 			task.RemainEffort = dayTaskUtil.GetTaskRemainEstimate(task.BIID,
 					true)
 					- dayTaskTimeUtil.getEffortInMs(DayUtil.Today(), task.BIID)
@@ -74,7 +77,7 @@ public class DayTaskAdapter extends BaseAdapter {
 	}
 
 	public void save() {
-		for (DayTaskInfo task : tasks) {
+		for (Task task : tasks) {
 			storageUtil.update(task.ID, task);
 		}
 	}
@@ -86,11 +89,11 @@ public class DayTaskAdapter extends BaseAdapter {
 		String whereStrings = DayTaskTable.DATE + "=" + DayUtil.Today();
 		tasks = storageUtil.getCollection(whereStrings, null);
 		fillRemainEstimate();
-		List<DayTaskTimeInfo> times = timeUtil
+		List<TaskTimeRecord> times = timeUtil
 				.getCollection(whereStrings, null);
 		taskTimes = DayTaskTimeUtil.compute(times);
 		taskTimeHash = new HashMap<Long, Integer>();
-		for (PieChartData taskTime : taskTimes) {
+		for (ChartData taskTime : taskTimes) {
 			taskTimeHash.put(taskTime.biid, taskTime.data);
 		}
 		notifyDataSetChanged();
@@ -126,7 +129,7 @@ public class DayTaskAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final ViewHolder viewHolder;
-		final DayTaskInfo taskInfo = tasks.get(position);
+		final Task taskInfo = tasks.get(position);
 
 		if (inEditMode) {
 			viewHolder = new ViewHolder();
@@ -199,7 +202,7 @@ public class DayTaskAdapter extends BaseAdapter {
 
 				@Override
 				public void onClick(View v) {
-					DayTaskInfo taskInfo = (DayTaskInfo) v.getTag();
+					Task taskInfo = (Task) v.getTag();
 					boolean waitStop = taskUtil
 							.IsTaskWaitingForStop(taskInfo.BIID);
 					if (waitStop) {

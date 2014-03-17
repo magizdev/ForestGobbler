@@ -28,14 +28,14 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.magizdev.dayplan.R;
-import com.magizdev.dayplan.versionone.PieChartData;
+import com.magizdev.dayplan.versionone.model.ChartData;
+import com.magizdev.dayplan.versionone.model.Task;
+import com.magizdev.dayplan.versionone.model.TaskTimeRecord;
+import com.magizdev.dayplan.versionone.store.StorageUtil;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTable;
 import com.magizdev.dayplan.versionone.util.DayTaskTimeUtil;
 import com.magizdev.dayplan.versionone.util.DayTaskUtil;
 import com.magizdev.dayplan.versionone.util.DayUtil;
-import com.magizdev.dayplan.versionone.viewmodel.DayTaskInfo;
-import com.magizdev.dayplan.versionone.viewmodel.DayTaskTimeInfo;
-import com.magizdev.dayplan.versionone.viewmodel.StorageUtil;
 
 /**
  * This is the service that provides the factory to be bound to the collection
@@ -53,7 +53,7 @@ public class DayPlanWidgetService extends RemoteViewsService {
  */
 class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	private Context mContext;
-	private List<DayTaskInfo> allTasks;
+	private List<Task> allTasks;
 	private int mAppWidgetId;
 	private HashMap<Long, Integer> taskTimeHash;
 	private DayTaskUtil taskUtil;
@@ -80,7 +80,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 	public RemoteViews getViewAt(int position) {
 		// Get the data for this position from the content provider
-		DayTaskInfo taskInfo = allTasks.get(position);
+		Task taskInfo = allTasks.get(position);
 
 		final int itemId = R.layout.widget_item;
 		RemoteViews rv = new RemoteViews(mContext.getPackageName(), itemId);
@@ -125,18 +125,18 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	}
 
 	public void onDataSetChanged() {
-		DayTaskInfo blank = new DayTaskInfo();
-		StorageUtil<DayTaskInfo> storageUtil = new StorageUtil<DayTaskInfo>(
+		Task blank = new Task();
+		StorageUtil<Task> storageUtil = new StorageUtil<Task>(
 				mContext, blank);
 		String whereStrings = DayTaskTable.DATE + "=" + DayUtil.Today();
 		allTasks = storageUtil.getCollection(whereStrings, null);
 
-		StorageUtil<DayTaskTimeInfo> timeUtil = new StorageUtil<DayTaskTimeInfo>(
-				mContext, new DayTaskTimeInfo());
-		List<DayTaskTimeInfo> times = timeUtil.getCollection(whereStrings, null);
-		List<PieChartData> taskTimes = DayTaskTimeUtil.compute(times);
+		StorageUtil<TaskTimeRecord> timeUtil = new StorageUtil<TaskTimeRecord>(
+				mContext, new TaskTimeRecord());
+		List<TaskTimeRecord> times = timeUtil.getCollection(whereStrings, null);
+		List<ChartData> taskTimes = DayTaskTimeUtil.compute(times);
 		taskTimeHash = new HashMap<Long, Integer>();
-		for (PieChartData taskTime : taskTimes) {
+		for (ChartData taskTime : taskTimes) {
 			taskTimeHash.put(taskTime.biid, taskTime.data);
 		}
 	}

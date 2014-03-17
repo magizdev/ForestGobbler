@@ -22,9 +22,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.magizdev.dayplan.R;
+import com.magizdev.dayplan.versionone.model.BacklogItem;
+import com.magizdev.dayplan.versionone.store.StorageUtil;
 import com.magizdev.dayplan.versionone.util.DayUtil;
-import com.magizdev.dayplan.versionone.viewmodel.BacklogItemInfo;
-import com.magizdev.dayplan.versionone.viewmodel.StorageUtil;
 
 public class BacklogEditActivity extends Activity implements OnDateSetListener {
 
@@ -34,7 +34,7 @@ public class BacklogEditActivity extends Activity implements OnDateSetListener {
 	Button dueDate;
 	CheckBox completeCheckBox;
 	CheckBox dueDateEnable;
-	StorageUtil<BacklogItemInfo> util;
+	StorageUtil<BacklogItem> util;
 	Calendar calendar;
 	long backlogId;
 	private TextView estimateLabel;
@@ -44,7 +44,7 @@ public class BacklogEditActivity extends Activity implements OnDateSetListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_backlog_edit);
-		util = new StorageUtil<BacklogItemInfo>(this, new BacklogItemInfo());
+		util = new StorageUtil<BacklogItem>(this, new BacklogItem());
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		txtTitle = (EditText) findViewById(R.id.txtTitle);
@@ -101,7 +101,7 @@ public class BacklogEditActivity extends Activity implements OnDateSetListener {
 		backlogId = taskIntent.getLongExtra("backlogId", 0L);
 
 		if (backlogId != 0) {
-			BacklogItemInfo backlog = util.getSingle(backlogId);
+			BacklogItem backlog = util.getSingle(backlogId);
 			if (backlog.HasDueDate()) {
 				calendar = DayUtil.toCalendar(backlog.DueDate);
 				dueDate.setText(DayUtil.formatCalendar(calendar));
@@ -147,7 +147,7 @@ public class BacklogEditActivity extends Activity implements OnDateSetListener {
 				.getTime()) : 0;
 		float estimate = estimateEnableBox.isChecked() ? Float
 				.parseFloat(txtEstimate.getText().toString()) : 0;
-		BacklogItemInfo backlog = new BacklogItemInfo(0, txtTitle.getText()
+		BacklogItem backlog = new BacklogItem(0, txtTitle.getText()
 				.toString(), txtNote.getText().toString(),
 				completeCheckBox.isChecked(), estimate, dueDate);
 		util.update(backlogId, backlog);

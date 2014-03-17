@@ -1,4 +1,4 @@
-package com.magizdev.dayplan.versionone.viewmodel;
+package com.magizdev.dayplan.versionone.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,11 +7,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
+import com.magizdev.dayplan.versionone.store.IStoreableItem;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.BacklogItemTable;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTable;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTimeTable;
 
-public class DayTaskTimeInfo implements IStoreableItem {
+public class TaskTimeRecord implements IStoreableItem {
 
 	public long ID;
 	public int Date;
@@ -20,11 +21,11 @@ public class DayTaskTimeInfo implements IStoreableItem {
 	public int StartTime;
 	public int EndTime;
 
-	public DayTaskTimeInfo() {
+	public TaskTimeRecord() {
 
 	}
 
-	public DayTaskTimeInfo(long id, int date, long biid, String biname,
+	public TaskTimeRecord(long id, int date, long biid, String biname,
 			int startTime, int endTime) {
 		this.ID = id;
 		this.Date = date;
@@ -65,7 +66,7 @@ public class DayTaskTimeInfo implements IStoreableItem {
 				int startTime = cursor.getInt(idxStartTime);
 				int endTime = cursor.getInt(idxEndTime);
 
-				daytask.add(new DayTaskTimeInfo(id, date, biid, biname, startTime,
+				daytask.add(new TaskTimeRecord(id, date, biid, biname, startTime,
 						endTime));
 			}
 		} finally {

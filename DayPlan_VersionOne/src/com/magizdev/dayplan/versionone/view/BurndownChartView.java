@@ -18,7 +18,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 
-import com.magizdev.dayplan.versionone.PieChartData;
+import com.magizdev.dayplan.versionone.model.ChartData;
 import com.magizdev.dayplan.versionone.util.DayUtil;
 import com.magizdev.dayplan.versionone.util.INavigate;
 
@@ -26,7 +26,7 @@ public class BurndownChartView extends BaseChartView {
 
 	private int seriesCount;
 	private float maxY;
-	private HashMap<Integer, List<PieChartData>> chartData;
+	private HashMap<Integer, List<ChartData>> chartData;
 	private int startDate;
 	private int endDate;
 
@@ -68,7 +68,7 @@ public class BurndownChartView extends BaseChartView {
 		endDate += 1;
 
 		for (Integer date : chartData.keySet()) {
-			for (PieChartData data : chartData.get(date)) {
+			for (ChartData data : chartData.get(date)) {
 				series.add(date - startDate, data.fdata);
 				maxY = data.fdata > maxY ? data.fdata : maxY;
 			}
@@ -113,7 +113,7 @@ public class BurndownChartView extends BaseChartView {
 		renderer.setXAxisMin(0);
 		if (chartData.size() == 1) {
 			for (Integer i : chartData.keySet()) {
-				List<PieChartData> datas = chartData.get(i);
+				List<ChartData> datas = chartData.get(i);
 				renderer.setXAxisMax(datas.size() + 2);
 
 				for (int j = 1; j < datas.size() + 1; j++) {

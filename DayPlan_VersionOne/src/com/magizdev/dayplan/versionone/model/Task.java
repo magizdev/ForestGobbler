@@ -1,8 +1,9 @@
-package com.magizdev.dayplan.versionone.viewmodel;
+package com.magizdev.dayplan.versionone.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.magizdev.dayplan.versionone.store.IStoreableItem;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.BacklogItemTable;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.DayTaskTable;
 
@@ -10,7 +11,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
-public class DayTaskInfo implements IStoreableItem {
+public class Task implements IStoreableItem {
 	public enum TaskState {
 		Running, Stop
 	}
@@ -23,11 +24,11 @@ public class DayTaskInfo implements IStoreableItem {
 	public float RemainEffort;
 	public TaskState State;
 
-	public DayTaskInfo() {
+	public Task() {
 
 	}
 
-	public DayTaskInfo(long id, int date, long biid, String biname,
+	public Task(long id, int date, long biid, String biname,
 			TaskState state, float todayEffort, float remainEffort) {
 		this.ID = id;
 		this.Date = date;
@@ -84,7 +85,7 @@ public class DayTaskInfo implements IStoreableItem {
 						.getColumnIndex(DayTaskTable.REMAIN_ESTIMATE));
 				TaskState s = state == DayTaskTable.STATE_RUNNING ? TaskState.Running
 						: TaskState.Stop;
-				daytask.add(new DayTaskInfo(id, date, biid, biname, s, effort,
+				daytask.add(new Task(id, date, biid, biname, s, effort,
 						remainEstimate));
 			}
 		} finally {
