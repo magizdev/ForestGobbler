@@ -53,10 +53,10 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 		title = (TextView) rootView.findViewById(R.id.reportTitle);
 		title.setText(navigate.CurrentTitle());
 
-		PieChartView pieChart = new PieChartView(navigate, this.getActivity());
+		PieChart pieChart = new PieChart(navigate, this.getActivity());
 		pieChartArea.addView(pieChart.GetChart());
 
-		BarChartView barChart = new BarChartView(navigate, this.getActivity());
+		BarChart barChart = new BarChart(navigate, this.getActivity());
 		barChartArea.addView(barChart.GetChart());
 
 		final ViewAnimator viewAnimator = (ViewAnimator) rootView
@@ -97,9 +97,9 @@ public class DashboardFragment extends Fragment implements OnClickListener {
 		
 		title.setText(navigate.CurrentTitle());
 		pieChartArea.removeAllViews();
-		pieChartArea.addView(new PieChartView(navigate, getActivity()).GetChart());
+		pieChartArea.addView(new PieChart(navigate, getActivity()).GetChart());
 		barChartArea.removeAllViews();
-		barChartArea.addView(new BarChartView(navigate, getActivity()).GetChart());
+		barChartArea.addView(new BarChart(navigate, getActivity()).GetChart());
 	}
 
 }

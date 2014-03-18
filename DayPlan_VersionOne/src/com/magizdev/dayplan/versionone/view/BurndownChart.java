@@ -22,7 +22,7 @@ import com.magizdev.dayplan.versionone.model.ChartData;
 import com.magizdev.dayplan.versionone.util.DayUtil;
 import com.magizdev.dayplan.versionone.util.INavigate;
 
-public class BurndownChartView extends BaseChartView {
+public class BurndownChart extends BaseChart {
 
 	private int seriesCount;
 	private float maxY;
@@ -30,7 +30,7 @@ public class BurndownChartView extends BaseChartView {
 	private int startDate;
 	private int endDate;
 
-	public BurndownChartView(INavigate navigate, Context context) {
+	public BurndownChart(INavigate navigate, Context context) {
 		super(navigate, context);
 	}
 

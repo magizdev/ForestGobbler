@@ -12,8 +12,8 @@ import android.graphics.Color;
 import com.magizdev.dayplan.versionone.model.ChartData;
 import com.magizdev.dayplan.versionone.util.INavigate;
 
-public class PieChartView extends BaseChartView {
-	public PieChartView(INavigate navigate, Context context) {
+public class PieChart extends BaseChart {
+	public PieChart(INavigate navigate, Context context) {
 		super(navigate, context);
 	}
 

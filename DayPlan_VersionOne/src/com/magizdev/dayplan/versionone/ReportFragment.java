@@ -16,7 +16,7 @@ import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.versionone.util.BurndownNavigate;
 import com.magizdev.dayplan.versionone.util.DayNavigate;
 import com.magizdev.dayplan.versionone.util.WeekNavigate;
-import com.magizdev.dayplan.versionone.view.BurndownChartView;
+import com.magizdev.dayplan.versionone.view.BurndownChart;
 import com.magizdev.dayplan.versionone.view.BurndownFragment;
 import com.magizdev.dayplan.versionone.view.DashboardFragment;
 

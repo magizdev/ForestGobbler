@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
-import org.achartengine.chart.BarChart;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.SimpleSeriesRenderer;
@@ -21,9 +20,9 @@ import com.magizdev.dayplan.versionone.model.ChartData;
 import com.magizdev.dayplan.versionone.util.DayUtil;
 import com.magizdev.dayplan.versionone.util.INavigate;
 
-public class BarChartView extends BaseChartView {
+public class BarChart extends BaseChart {
 
-	public BarChartView(INavigate navigate, Context context) {
+	public BarChart(INavigate navigate, Context context) {
 		super(navigate, context);
 	}
 
@@ -40,7 +39,7 @@ public class BarChartView extends BaseChartView {
 		mBarDataset = buildBarDataset();
 		mBarRenderer = buildBarRenderer();
 		return ChartFactory.getBarChartView(this.context, mBarDataset,
-				mBarRenderer, BarChart.Type.DEFAULT);
+				mBarRenderer, org.achartengine.chart.BarChart.Type.DEFAULT);
 	}
 
 	private XYMultipleSeriesDataset buildBarDataset() {

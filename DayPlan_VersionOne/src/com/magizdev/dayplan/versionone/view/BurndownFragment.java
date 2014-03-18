@@ -28,7 +28,7 @@ public class BurndownFragment extends Fragment implements OnClickListener {
 	private LinearLayout pieChartArea;
 	private LinearLayout barChartArea;
 	private Spinner backlogsDropdown;
-	private BurndownChartView chart;
+	private BurndownChart chart;
 
 	public void setDataSource(INavigate naviate) {
 		this.navigate = (BurndownNavigate) naviate;
@@ -59,7 +59,7 @@ public class BurndownFragment extends Fragment implements OnClickListener {
 //		title = (TextView) rootView.findViewById(R.id.reportTitle);
 //		title.setText(navigate.CurrentTitle());
 		
-		chart = new BurndownChartView(navigate, getActivity());
+		chart = new BurndownChart(navigate, getActivity());
 		pieChartArea.addView(chart.GetChart());
 
 //		PieChartView pieChart = new PieChartView(navigate, this.getActivity());
@@ -132,10 +132,10 @@ public class BurndownFragment extends Fragment implements OnClickListener {
 
 		title.setText(navigate.CurrentTitle());
 		pieChartArea.removeAllViews();
-		pieChartArea.addView(new PieChartView(navigate, getActivity())
+		pieChartArea.addView(new PieChart(navigate, getActivity())
 				.GetChart());
 		barChartArea.removeAllViews();
-		barChartArea.addView(new BarChartView(navigate, getActivity())
+		barChartArea.addView(new BarChart(navigate, getActivity())
 				.GetChart());
 	}
 
