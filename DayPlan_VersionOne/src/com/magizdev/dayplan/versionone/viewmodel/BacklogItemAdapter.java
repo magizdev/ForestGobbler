@@ -1,5 +1,6 @@
 package com.magizdev.dayplan.versionone.viewmodel;
 
+import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
@@ -17,6 +18,8 @@ import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.versionone.model.BacklogItem;
 import com.magizdev.dayplan.versionone.store.StorageUtil;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.BacklogItemTable;
+import com.magizdev.dayplan.versionone.util.BacklogComparator;
+import com.magizdev.dayplan.versionone.util.DayTaskUtil;
 
 public class BacklogItemAdapter extends BaseAdapter {
 	private static String conditionActiveOnly = "(" + BacklogItemTable.STATE
@@ -24,6 +27,7 @@ public class BacklogItemAdapter extends BaseAdapter {
 	private static String conditionAll = "(1=1)";
 	Context context;
 	StorageUtil<BacklogItem> storageUtil;
+	DayTaskUtil taskUtil;
 	int completedCount;
 	List<BacklogItem> backlogs;
 	List<Long> selectedIds;
@@ -31,6 +35,7 @@ public class BacklogItemAdapter extends BaseAdapter {
 
 	public BacklogItemAdapter(Context context, List<Long> selectedIds) {
 		this.context = context;
+		taskUtil = new DayTaskUtil(context);
 		BacklogItem blank = new BacklogItem();
 		this.selectedIds = selectedIds;
 		storageUtil = new StorageUtil<BacklogItem>(context, blank);
@@ -43,7 +48,12 @@ public class BacklogItemAdapter extends BaseAdapter {
 			} else {
 				backlogItemInfo.Selected = false;
 			}
+			if (backlogItemInfo.HasEstimate()) {
+				backlogItemInfo.RemainEstimate = taskUtil
+						.GetTaskRemainEstimate(backlogItemInfo.Id, true);
+			}
 		}
+		Collections.sort(backlogs, new BacklogComparator());
 	}
 
 	public void removeAt(int index) {
@@ -57,8 +67,8 @@ public class BacklogItemAdapter extends BaseAdapter {
 		}
 		refresh();
 	}
-	
-	public void setSelected(List<Long> selected){
+
+	public void setSelected(List<Long> selected) {
 		this.selectedIds = selected;
 	}
 
@@ -71,8 +81,12 @@ public class BacklogItemAdapter extends BaseAdapter {
 			} else {
 				backlogItemInfo.Selected = false;
 			}
+			if (backlogItemInfo.HasEstimate()) {
+				backlogItemInfo.RemainEstimate = taskUtil
+						.GetTaskRemainEstimate(backlogItemInfo.Id, true);
+			}
 		}
-		
+		Collections.sort(backlogs, new BacklogComparator());
 		notifyDataSetChanged();
 	}
 

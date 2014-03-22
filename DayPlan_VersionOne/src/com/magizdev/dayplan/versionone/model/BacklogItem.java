@@ -17,6 +17,7 @@ public class BacklogItem implements IStoreableItem {
 	public String Description;
 	public boolean Selected;
 	public float Estimate;
+	public float RemainEstimate;
 	public int DueDate;
 	public boolean Completed;
 

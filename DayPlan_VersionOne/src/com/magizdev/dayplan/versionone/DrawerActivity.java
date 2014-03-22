@@ -91,6 +91,11 @@ public class DrawerActivity extends FragmentActivity implements IJumpable {
 		
 
 	}
+	
+	@Override
+	public void onPause(){
+		super.onPause();
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -131,6 +136,7 @@ public class DrawerActivity extends FragmentActivity implements IJumpable {
 
 	/** Swaps fragments in the main content view */
 	private void selectItem(int position) {
+		this.position = position;
 		FragmentManager fragmentManager = getFragmentManager();
 		if (loginFragment == null) {
 			loginFragment = new LoginFragment();
@@ -197,7 +203,7 @@ public class DrawerActivity extends FragmentActivity implements IJumpable {
 	@Override
 	public void onResume(){
 		super.onResume();
-		int target = getIntent().getIntExtra("com.magizdev.dayplan.Target", 0);
+		int target = getIntent().getIntExtra("com.magizdev.dayplan.Target", position);
 		jumpTo(target);
 	}
 

@@ -53,8 +53,7 @@ public class DayTaskAdapter extends BaseAdapter {
 		fillRemainEstimate();
 		timeUtil = new StorageUtil<TaskTimeRecord>(context,
 				new TaskTimeRecord());
-		List<TaskTimeRecord> times = timeUtil
-				.getCollection(whereStrings, null);
+		List<TaskTimeRecord> times = timeUtil.getCollection(whereStrings, null);
 		taskTimes = DayTaskTimeUtil.compute(times);
 		taskTimeHash = new HashMap<Long, Integer>();
 		for (ChartData taskTime : taskTimes) {
@@ -89,8 +88,7 @@ public class DayTaskAdapter extends BaseAdapter {
 		String whereStrings = DayTaskTable.DATE + "=" + DayUtil.Today();
 		tasks = storageUtil.getCollection(whereStrings, null);
 		fillRemainEstimate();
-		List<TaskTimeRecord> times = timeUtil
-				.getCollection(whereStrings, null);
+		List<TaskTimeRecord> times = timeUtil.getCollection(whereStrings, null);
 		taskTimes = DayTaskTimeUtil.compute(times);
 		taskTimeHash = new HashMap<Long, Integer>();
 		for (ChartData taskTime : taskTimes) {
@@ -140,50 +138,57 @@ public class DayTaskAdapter extends BaseAdapter {
 					.findViewById(R.id.effort);
 			viewHolder.remainEstimate = (EditText) convertView
 					.findViewById(R.id.remainEstimate);
+			viewHolder.updateButton = (ImageButton) convertView
+					.findViewById(R.id.updateRemainEstimate);
 			int intEffort = 0;
 			if (taskTimeHash.containsKey(taskInfo.BIID)) {
 				intEffort = taskTimeHash.get(taskInfo.BIID);
 			}
 			viewHolder.effort.setText(DayUtil.formatTime(intEffort / 1000));
-			viewHolder.remainEstimate.setText(String.format("%2.2f",
-					taskInfo.RemainEffort));
-			final int finalPosition = position;
-			viewHolder.updateButton = (ImageButton) convertView
-					.findViewById(R.id.updateRemainEstimate);
-			viewHolder.updateButton.setEnabled(false);
-			viewHolder.updateButton.setOnClickListener(new OnClickListener() {
+			if (taskInfo.Estimate > 0) {
+				viewHolder.remainEstimate.setText(String.format("%2.2f",
+						taskInfo.RemainEffort));
+				final int finalPosition = position;
 
-				@Override
-				public void onClick(View v) {
-					taskInfo.RemainEffort = Float
-							.parseFloat(viewHolder.remainEstimate.getText()
-									.toString());
-					storageUtil.update(taskInfo.ID, taskInfo);
-					viewHolder.updateButton.setEnabled(false);
-				}
-			});
-			viewHolder.remainEstimate
-					.setOnFocusChangeListener(new OnFocusChangeListener() {
+				viewHolder.updateButton.setEnabled(false);
+				viewHolder.updateButton
+						.setOnClickListener(new OnClickListener() {
 
-						@Override
-						public void onFocusChange(View v, boolean hasFocus) {
-							if (hasFocus) {
-								viewHolder.updateButton.setEnabled(true);
+							@Override
+							public void onClick(View v) {
+								taskInfo.RemainEffort = Float
+										.parseFloat(viewHolder.remainEstimate
+												.getText().toString());
+								storageUtil.update(taskInfo.ID, taskInfo);
+								viewHolder.updateButton.setEnabled(false);
 							}
-						}
-					});
-			viewHolder.remainEstimate
-					.setOnEditorActionListener(new OnEditorActionListener() {
+						});
+				viewHolder.remainEstimate
+						.setOnFocusChangeListener(new OnFocusChangeListener() {
 
-						@Override
-						public boolean onEditorAction(TextView v, int actionId,
-								KeyEvent event) {
-							tasks.get(finalPosition).RemainEffort = Float
-									.parseFloat(v.getText().toString());
-							Log.w("test", actionId + "");
-							return false;
-						}
-					});
+							@Override
+							public void onFocusChange(View v, boolean hasFocus) {
+								if (hasFocus) {
+									viewHolder.updateButton.setEnabled(true);
+								}
+							}
+						});
+				viewHolder.remainEstimate
+						.setOnEditorActionListener(new OnEditorActionListener() {
+
+							@Override
+							public boolean onEditorAction(TextView v,
+									int actionId, KeyEvent event) {
+								tasks.get(finalPosition).RemainEffort = Float
+										.parseFloat(v.getText().toString());
+								Log.w("test", actionId + "");
+								return false;
+							}
+						});
+			} else {
+				viewHolder.remainEstimate.setVisibility(View.INVISIBLE);
+				viewHolder.updateButton.setVisibility(View.INVISIBLE);
+			}
 
 		} else {
 			viewHolder = new ViewHolder();

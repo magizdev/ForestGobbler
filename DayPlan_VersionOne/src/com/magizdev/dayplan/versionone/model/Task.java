@@ -23,13 +23,14 @@ public class Task implements IStoreableItem {
 	public float TodayEffort;
 	public float RemainEffort;
 	public TaskState State;
+	public float Estimate;
 
 	public Task() {
 
 	}
 
-	public Task(long id, int date, long biid, String biname,
-			TaskState state, float todayEffort, float remainEffort) {
+	public Task(long id, int date, long biid, String biname, TaskState state,
+			float todayEffort, float remainEffort) {
 		this.ID = id;
 		this.Date = date;
 		this.BIID = biid;
@@ -85,8 +86,12 @@ public class Task implements IStoreableItem {
 						.getColumnIndex(DayTaskTable.REMAIN_ESTIMATE));
 				TaskState s = state == DayTaskTable.STATE_RUNNING ? TaskState.Running
 						: TaskState.Stop;
-				daytask.add(new Task(id, date, biid, biname, s, effort,
-						remainEstimate));
+				Task task = new Task(id, date, biid, biname, s, effort,
+						remainEstimate);
+				task.Estimate = cursor.getFloat(cursor
+						.getColumnIndex(BacklogItemTable.ESTIMATE));
+				daytask.add(task);
+
 			}
 		} finally {
 			if (cursor != null) {

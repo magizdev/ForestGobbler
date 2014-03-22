@@ -119,6 +119,7 @@ public class DayPlanMetaData {
 			projectionMap.put(DayTaskTable.EFFORT, DayTaskTable.EFFORT);
 			projectionMap.put(DayTaskTable.REMAIN_ESTIMATE,
 					DayTaskTable.REMAIN_ESTIMATE);
+			projectionMap.put(BacklogItemTable.ESTIMATE, BacklogItemTable.ESTIMATE);
 		}
 	}
 
