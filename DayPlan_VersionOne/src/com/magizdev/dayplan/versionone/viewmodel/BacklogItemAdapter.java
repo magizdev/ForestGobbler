@@ -11,15 +11,18 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.magizdev.dayplan.R;
 import com.magizdev.dayplan.versionone.model.BacklogItem;
-import com.magizdev.dayplan.versionone.store.StorageUtil;
 import com.magizdev.dayplan.versionone.store.DayPlanMetaData.BacklogItemTable;
+import com.magizdev.dayplan.versionone.store.StorageUtil;
 import com.magizdev.dayplan.versionone.util.BacklogComparator;
 import com.magizdev.dayplan.versionone.util.DayTaskUtil;
+import com.magizdev.dayplan.versionone.util.DayUtil;
 
 public class BacklogItemAdapter extends BaseAdapter {
 	private static String conditionActiveOnly = "(" + BacklogItemTable.STATE
@@ -129,6 +132,24 @@ public class BacklogItemAdapter extends BaseAdapter {
 			viewHolder.name = (TextView) convertView.findViewById(R.id.tVName);
 			viewHolder.checkBox = (CheckBox) convertView
 					.findViewById(R.id.checkBox1);
+			viewHolder.dueDate = (TextView) convertView
+					.findViewById(R.id.dueDate);
+			viewHolder.dueDateState = (ImageView) convertView
+					.findViewById(R.id.dueDateState);
+			viewHolder.dueDateToNow = (TextView) convertView
+					.findViewById(R.id.dueDateToNow);
+			viewHolder.remainEstimateState = (ImageView) convertView
+					.findViewById(R.id.remainEffortState);
+			viewHolder.remainEstimate = (TextView) convertView
+					.findViewById(R.id.remainEffort);
+			viewHolder.remainEstimateAvg = (TextView) convertView
+					.findViewById(R.id.remainEffortAverage);
+			viewHolder.remainEstimateArea = (LinearLayout) convertView
+					.findViewById(R.id.remainEffortArea);
+			viewHolder.dueDateArea = (LinearLayout) convertView
+					.findViewById(R.id.dueDateArea);
+			viewHolder.remainEstimateAvgLabel = (TextView)convertView.findViewById(R.id.remainEffortAverageLabel);
+
 			viewHolder.checkBox
 					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -149,6 +170,54 @@ public class BacklogItemAdapter extends BaseAdapter {
 		viewHolder.name.setText(backlog.Name);
 		viewHolder.checkBox.setTag(backlogs.get(position));
 		viewHolder.checkBox.setChecked(backlogs.get(position).Selected);
+		if (backlog.HasDueDate()) {
+			viewHolder.dueDateArea.setVisibility(View.VISIBLE);
+			viewHolder.dueDate.setText(DayUtil.formatCalendar(DayUtil
+					.toCalendar(backlog.DueDate)));
+			int untilNow = backlog.DueDate - DayUtil.Today();
+			viewHolder.dueDateToNow.setText(untilNow + "");
+			if (untilNow < 0) {
+				viewHolder.dueDateState.setImageResource(R.drawable.red);
+			} else if (untilNow < 7) {
+				viewHolder.dueDateState.setImageResource(R.drawable.yellow);
+			} else {
+				viewHolder.dueDateState.setImageResource(R.drawable.green);
+			}
+		} else {
+			viewHolder.dueDateArea.setVisibility(View.GONE);
+		}
+		viewHolder.remainEstimateState.setImageResource(R.drawable.green);
+		if (backlog.HasEstimate()) {
+			viewHolder.remainEstimateArea.setVisibility(View.VISIBLE);
+
+			viewHolder.remainEstimate.setText(String.format("%.2f",
+					backlog.RemainEstimate));
+			if (backlog.HasDueDate()) {
+				viewHolder.remainEstimateAvg.setVisibility(View.VISIBLE);
+				viewHolder.remainEstimateAvgLabel.setVisibility(View.VISIBLE);
+				int untilNow = backlog.DueDate - DayUtil.Today();
+				if (untilNow < 0) {
+					viewHolder.remainEstimateState
+							.setImageResource(R.drawable.red);
+				} else {
+					float avg = backlog.RemainEstimate / untilNow;
+					viewHolder.remainEstimateAvg.setText(String.format("%.2f",
+							avg));
+					if (avg > 8) {
+						viewHolder.remainEstimateState
+								.setImageResource(R.drawable.red);
+					} else if (avg > 4) {
+						viewHolder.remainEstimateState
+								.setImageResource(R.drawable.yellow);
+					}
+				}
+			} else {
+				viewHolder.remainEstimateAvg.setVisibility(View.GONE);
+				viewHolder.remainEstimateAvgLabel.setVisibility(View.GONE);
+			}
+		} else {
+			viewHolder.remainEstimateArea.setVisibility(View.GONE);
+		}
 
 		return convertView;
 
@@ -177,8 +246,15 @@ public class BacklogItemAdapter extends BaseAdapter {
 	class ViewHolder {
 		public TextView name;
 		public CheckBox checkBox;
-		// public Button deleteBtn;
-		// public ImageButton notificationSetter;
+		public LinearLayout dueDateArea;
+		public ImageView dueDateState;
+		public TextView dueDate;
+		public TextView dueDateToNow;
+		public LinearLayout remainEstimateArea;
+		public ImageView remainEstimateState;
+		public TextView remainEstimate;
+		public TextView remainEstimateAvg;
+		public TextView remainEstimateAvgLabel;
 	}
 
 }

@@ -28,8 +28,10 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="backlog_estimate">Estimate:</string>
+    <string name="estimate_average">Avg/Day:</string>
     <string name="backlog_estimate_unit">Hours</string>
     <string name="backlog_due_date">Due Date:</string>
+    <string name="due_date_left">Left:</string>
     <string name="action_daily">Daily</string>
     <string name="action_weekly">Weekly</string>
 

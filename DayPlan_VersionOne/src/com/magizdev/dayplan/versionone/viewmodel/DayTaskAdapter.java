@@ -160,7 +160,7 @@ public class DayTaskAdapter extends BaseAdapter {
 										.parseFloat(viewHolder.remainEstimate
 												.getText().toString());
 								storageUtil.update(taskInfo.ID, taskInfo);
-								viewHolder.updateButton.setEnabled(false);
+								viewHolder.updateButton.setVisibility(View.INVISIBLE);
 							}
 						});
 				viewHolder.remainEstimate
@@ -169,7 +169,7 @@ public class DayTaskAdapter extends BaseAdapter {
 							@Override
 							public void onFocusChange(View v, boolean hasFocus) {
 								if (hasFocus) {
-									viewHolder.updateButton.setEnabled(true);
+									viewHolder.updateButton.setVisibility(View.VISIBLE);
 								}
 							}
 						});
