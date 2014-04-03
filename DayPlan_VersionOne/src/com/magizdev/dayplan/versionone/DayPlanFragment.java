@@ -23,6 +23,7 @@ public class DayPlanFragment extends MenuFragment {
 		@Override
 		public void handleMessage(Message msg) {
 			adapter.refresh();
+			handler.sendEmptyMessageDelayed(0, 30000);
 		}
 	};
 	
@@ -60,7 +61,7 @@ public class DayPlanFragment extends MenuFragment {
 		super.onResume();
 		adapter.setEditMode(inEditMode);
 		adapter.refresh();
-		handler.sendEmptyMessageDelayed(0, 60000);
+		handler.sendEmptyMessageDelayed(0, 30000);
 	}
 
 	@Override
@@ -112,6 +113,7 @@ public class DayPlanFragment extends MenuFragment {
 			break;
 		case R.id.action_finish:
 			this.inEditMode = true;
+			adapter.refresh();
 			adapter.setEditMode(inEditMode);
 			getActivity().invalidateOptionsMenu();
 			break;

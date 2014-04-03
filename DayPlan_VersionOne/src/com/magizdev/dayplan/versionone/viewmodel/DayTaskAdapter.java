@@ -85,16 +85,19 @@ public class DayTaskAdapter extends BaseAdapter {
 	}
 
 	public void refresh() {
-		String whereStrings = DayTaskTable.DATE + "=" + DayUtil.Today();
-		tasks = storageUtil.getCollection(whereStrings, null);
-		fillRemainEstimate();
-		List<TaskTimeRecord> times = timeUtil.getCollection(whereStrings, null);
-		taskTimes = DayTaskTimeUtil.compute(times);
-		taskTimeHash = new HashMap<Long, Integer>();
-		for (ChartData taskTime : taskTimes) {
-			taskTimeHash.put(taskTime.biid, taskTime.data);
+		if (!inEditMode) {
+			String whereStrings = DayTaskTable.DATE + "=" + DayUtil.Today();
+			tasks = storageUtil.getCollection(whereStrings, null);
+			fillRemainEstimate();
+			List<TaskTimeRecord> times = timeUtil.getCollection(whereStrings,
+					null);
+			taskTimes = DayTaskTimeUtil.compute(times);
+			taskTimeHash = new HashMap<Long, Integer>();
+			for (ChartData taskTime : taskTimes) {
+				taskTimeHash.put(taskTime.biid, taskTime.data);
+			}
+			notifyDataSetChanged();
 		}
-		notifyDataSetChanged();
 	}
 
 	@Override
@@ -144,7 +147,7 @@ public class DayTaskAdapter extends BaseAdapter {
 			if (taskTimeHash.containsKey(taskInfo.BIID)) {
 				intEffort = taskTimeHash.get(taskInfo.BIID);
 			}
-			viewHolder.effort.setText(DayUtil.formatTime(intEffort / 1000));
+			viewHolder.effort.setText(DayUtil.formatTime(intEffort));
 			if (taskInfo.Estimate > 0) {
 				viewHolder.remainEstimate.setText(String.format("%2.2f",
 						taskInfo.RemainEffort));
@@ -160,7 +163,9 @@ public class DayTaskAdapter extends BaseAdapter {
 										.parseFloat(viewHolder.remainEstimate
 												.getText().toString());
 								storageUtil.update(taskInfo.ID, taskInfo);
-								viewHolder.updateButton.setVisibility(View.INVISIBLE);
+								viewHolder.updateButton
+										.setVisibility(View.INVISIBLE);
+								viewHolder.updateButton.setEnabled(false);
 							}
 						});
 				viewHolder.remainEstimate
@@ -169,7 +174,9 @@ public class DayTaskAdapter extends BaseAdapter {
 							@Override
 							public void onFocusChange(View v, boolean hasFocus) {
 								if (hasFocus) {
-									viewHolder.updateButton.setVisibility(View.VISIBLE);
+									viewHolder.updateButton
+											.setVisibility(View.VISIBLE);
+									viewHolder.updateButton.setEnabled(true);
 								}
 							}
 						});
