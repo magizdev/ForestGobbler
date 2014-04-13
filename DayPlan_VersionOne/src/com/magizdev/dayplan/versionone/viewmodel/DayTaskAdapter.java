@@ -64,9 +64,7 @@ public class DayTaskAdapter extends BaseAdapter {
 	private void fillRemainEstimate() {
 		for (Task task : tasks) {
 			task.RemainEffort = dayTaskUtil.GetTaskRemainEstimate(task.BIID,
-					true)
-					- dayTaskTimeUtil.getEffortInMs(DayUtil.Today(), task.BIID)
-					/ 1000 / 60 / 60;
+					DayUtil.Today() + 1);
 		}
 	}
 

@@ -20,10 +20,11 @@ public class BurndownNavigate implements INavigate {
 	private int current;
 	private List<Long> ids;
 	private List<String> names;
+	private DayTaskTimeUtil timeUtil;
 
 	public BurndownNavigate(Context context) {
-		storageUtil = new StorageUtil<BacklogItem>(context,
-				new BacklogItem());
+		storageUtil = new StorageUtil<BacklogItem>(context, new BacklogItem());
+		timeUtil = new DayTaskTimeUtil(context);
 		taskStorageUtil = new StorageUtil<Task>(context, new Task());
 		List<BacklogItem> backlogItemInfos = storageUtil.getCollection(
 				BacklogItemTable.ESTIMATE + " > 0", null);
@@ -71,13 +72,26 @@ public class BurndownNavigate implements INavigate {
 
 	@Override
 	public HashMap<Integer, List<ChartData>> GetBarChartData() {
-		if(ids.size() == 0){
+		if (ids.size() == 0) {
 			return new HashMap<Integer, List<ChartData>>();
 		}
-		List<Task> result = taskStorageUtil.getCollection(
-				DayTaskTable.BIID + " = " + ids.get(current), null);
+		BacklogItem backlogItem = storageUtil.getSingle(ids.get(current));
+		float initEstimate = backlogItem.Estimate;
+		List<Task> result = taskStorageUtil.getCollection(DayTaskTable.BIID
+				+ " = " + ids.get(current), DayTaskTable.DATE);
 		HashMap<Integer, List<ChartData>> temp = new HashMap<Integer, List<ChartData>>();
-		for (Task dayTaskInfo : result) {
+		for (int i = 0; i < result.size(); i++) {
+			Task dayTaskInfo = result.get(i);
+			if (dayTaskInfo.RemainEffort < 0) {
+				float effort = timeUtil.getEffortInMs(dayTaskInfo.Date,
+						dayTaskInfo.BIID) / 1000.0F / 60 / 60;
+				initEstimate = initEstimate >= effort ? initEstimate - effort
+						: 0;
+				dayTaskInfo.RemainEffort = initEstimate;
+				taskStorageUtil.update(dayTaskInfo.ID, dayTaskInfo);
+			} else {
+				initEstimate = dayTaskInfo.RemainEffort;
+			}
 			ChartData pieChartData = new ChartData(dayTaskInfo.BIID,
 					dayTaskInfo.BIName, dayTaskInfo.RemainEffort);
 			List<ChartData> temp2 = new ArrayList<ChartData>();

@@ -53,7 +53,8 @@ public class BacklogItemAdapter extends BaseAdapter {
 			}
 			if (backlogItemInfo.HasEstimate()) {
 				backlogItemInfo.RemainEstimate = taskUtil
-						.GetTaskRemainEstimate(backlogItemInfo.Id, true);
+						.GetTaskRemainEstimate(backlogItemInfo.Id,
+								DayUtil.Today() + 1);
 			}
 		}
 		Collections.sort(backlogs, new BacklogComparator());
@@ -86,7 +87,8 @@ public class BacklogItemAdapter extends BaseAdapter {
 			}
 			if (backlogItemInfo.HasEstimate()) {
 				backlogItemInfo.RemainEstimate = taskUtil
-						.GetTaskRemainEstimate(backlogItemInfo.Id, true);
+						.GetTaskRemainEstimate(backlogItemInfo.Id,
+								DayUtil.Today() + 1);
 			}
 		}
 		Collections.sort(backlogs, new BacklogComparator());
@@ -148,7 +150,8 @@ public class BacklogItemAdapter extends BaseAdapter {
 					.findViewById(R.id.remainEffortArea);
 			viewHolder.dueDateArea = (LinearLayout) convertView
 					.findViewById(R.id.dueDateArea);
-			viewHolder.remainEstimateAvgLabel = (TextView)convertView.findViewById(R.id.remainEffortAverageLabel);
+			viewHolder.remainEstimateAvgLabel = (TextView) convertView
+					.findViewById(R.id.remainEffortAverageLabel);
 
 			viewHolder.checkBox
 					.setOnCheckedChangeListener(new OnCheckedChangeListener() {

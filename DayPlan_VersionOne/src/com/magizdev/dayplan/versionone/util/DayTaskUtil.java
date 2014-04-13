@@ -20,8 +20,10 @@ public class DayTaskUtil {
 	private StorageUtil<TaskTimeRecord> timeStorageUtil;
 	private StorageUtil<BacklogItem> backlogStorage;
 	private long currentRunningTask;
+	private Context context;
 
 	public DayTaskUtil(Context context) {
+		this.context = context;
 		storage = new StorageUtil<Task>(context, new Task());
 		timeStorageUtil = new StorageUtil<TaskTimeRecord>(context,
 				new TaskTimeRecord());
@@ -38,40 +40,50 @@ public class DayTaskUtil {
 	}
 
 	public void AddTask(long backlogId) {
-		Task dayTask = new Task(-1, DayUtil.Today(), backlogId,
-				null, TaskState.Stop, 0, -1);
+		Task dayTask = new Task(-1, DayUtil.Today(), backlogId, null,
+				TaskState.Stop, 0, -1);
 		storage.add(dayTask);
 	}
 
-	public float GetTaskRemainEstimate(long backlogId, boolean excludToday) {
-		if (excludToday) {
-			List<Task> tasks = storage.getCollection("("
-					+ DayTaskTable.DATE + "<" + DayUtil.Today() + " and "
-					+ DayTaskTable.BIID + " = " + backlogId + ")",
-					DayTaskTable.DATE + " DESC");
-			if (tasks.size() > 0) {
-				return tasks.get(0).RemainEffort;
-			}
+	public float GetTaskRemainEstimate(long backlogId, int exclusiveEndDate) {
+		DayTaskTimeUtil timeUtil = new DayTaskTimeUtil(context);
 
-			return backlogStorage.getSingle(backlogId).Estimate;
-		} else {
-			List<Task> tasks = storage.getCollection("("
-					+ DayTaskTable.DATE + "<=" + DayUtil.Today() + " and "
-					+ DayTaskTable.BIID + " = " + backlogId + ")",
-					DayTaskTable.DATE + " DESC");
-			if (tasks.size() > 0 && tasks.get(0).RemainEffort != -1) {
-				return tasks.get(0).RemainEffort;
-			} else if (tasks.size() > 1 && tasks.get(0).RemainEffort == -1) {
-				return tasks.get(1).RemainEffort;
+		List<Task> tasks = storage.getCollection("(" + DayTaskTable.DATE + "<"
+				+ exclusiveEndDate + " and " + DayTaskTable.BIID + " = "
+				+ backlogId + ")", DayTaskTable.DATE + " DESC");
+		float effortSinceLastRecord = 0;
+		if (tasks.size() > 0) {
+			for (int i = 0; i < tasks.size(); i++) {
+				if (tasks.get(i).RemainEffort >= 0) {
+					float remain = tasks.get(i).RemainEffort
+							- effortSinceLastRecord;
+					return remain > 0 ? remain : 0;
+				} else {
+					int effort = timeUtil.getEffortInMs(tasks.get(i).Date,
+							backlogId);
+					effortSinceLastRecord += effort / 1000 / 60 / 60;
+				}
 			}
-
-			return backlogStorage.getSingle(backlogId).Estimate;
 		}
+		float remain = backlogStorage.getSingle(backlogId).Estimate
+				- effortSinceLastRecord;
+		return remain > 0 ? remain : 0;
+	}
+
+	public boolean hasRemainEstimate(long backlogId, int date) {
+		List<Task> tasks = storage.getCollection("(" + DayTaskTable.DATE + "="
+				+ date + " and " + DayTaskTable.BIID + " = " + backlogId + ")",
+				DayTaskTable.DATE + " DESC");
+		if (tasks.size() > 0) {
+			return tasks.get(0).RemainEffort >= 0;
+		}
+
+		return false;
 	}
 
 	public List<Long> GetTasksByDate(int date) {
-		List<Task> tasks = storage.getCollection("(" + DayTaskTable.DATE
-				+ "=" + date + ")", null);
+		List<Task> tasks = storage.getCollection("(" + DayTaskTable.DATE + "="
+				+ date + ")", null);
 		List<Long> biIds = new ArrayList<Long>();
 		for (Task task : tasks) {
 			biIds.add(task.BIID);
@@ -87,8 +99,8 @@ public class DayTaskUtil {
 	}
 
 	public void ClearTasksByDate(int date) {
-		List<Task> tasks = storage.getCollection("(" + DayTaskTable.DATE
-				+ "=" + date + ")", null);
+		List<Task> tasks = storage.getCollection("(" + DayTaskTable.DATE + "="
+				+ date + ")", null);
 		for (Task task : tasks) {
 			storage.delete(task.ID);
 		}
