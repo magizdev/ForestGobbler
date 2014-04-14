@@ -50,117 +50,35 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@id/backlog_item_main_area"
         android:layout_gravity="center"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:layout_marginBottom="2dp"
         android:layout_marginRight="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingLeft="20dp" >
 
         <LinearLayout
             android:id="@+id/remainEffortArea"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/text_bg"
-            android:gravity="center_vertical"
             android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
             android:orientation="horizontal" >
 
             <ImageView
-                android:id="@+id/remainEffortState"
+                android:id="@+id/stateIcon"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:src="@drawable/red" />
 
             <TextView
-                android:id="@+id/remainEffortLabel"
+                android:id="@+id/stateText"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:gravity="center"
-                android:text="@string/backlog_estimate"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/remainEffort"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:gravity="center"
-                android:text="10.9" />
-
-            <TextView
-                android:id="@+id/remainEffortAverageLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:gravity="center"
-                android:text="@string/estimate_average" >
-            </TextView>
-
-            <TextView
-                android:id="@+id/remainEffortAverage"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:gravity="center"
-                android:text="2.3" >
-            </TextView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/dueDateArea"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/text_bg"
-            android:gravity="center_vertical"
-            android:orientation="horizontal" >
-
-            <ImageView
-                android:id="@+id/dueDateState"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/yellow" />
-
-            <TextView
-                android:id="@+id/dueDateLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:gravity="center"
-                android:text="@string/backlog_due_date"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/dueDate"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:gravity="center"
-                android:text="2014-3-22" />
-
-            <TextView
-                android:id="@+id/dueDateToNowLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:gravity="center"
-                android:text="@string/due_date_left" >
-            </TextView>
-
-            <TextView
-                android:id="@+id/dueDateToNow"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:gravity="center"
-                android:text="5" >
-            </TextView>
+                android:text="" />
         </LinearLayout>
     </LinearLayout>
 

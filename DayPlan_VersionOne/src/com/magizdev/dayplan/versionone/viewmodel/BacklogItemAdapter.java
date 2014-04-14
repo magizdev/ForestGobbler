@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.magizdev.dayplan.R;
@@ -134,24 +134,12 @@ public class BacklogItemAdapter extends BaseAdapter {
 			viewHolder.name = (TextView) convertView.findViewById(R.id.tVName);
 			viewHolder.checkBox = (CheckBox) convertView
 					.findViewById(R.id.checkBox1);
-			viewHolder.dueDate = (TextView) convertView
-					.findViewById(R.id.dueDate);
-			viewHolder.dueDateState = (ImageView) convertView
-					.findViewById(R.id.dueDateState);
-			viewHolder.dueDateToNow = (TextView) convertView
-					.findViewById(R.id.dueDateToNow);
-			viewHolder.remainEstimateState = (ImageView) convertView
-					.findViewById(R.id.remainEffortState);
-			viewHolder.remainEstimate = (TextView) convertView
-					.findViewById(R.id.remainEffort);
-			viewHolder.remainEstimateAvg = (TextView) convertView
-					.findViewById(R.id.remainEffortAverage);
-			viewHolder.remainEstimateArea = (LinearLayout) convertView
-					.findViewById(R.id.remainEffortArea);
-			viewHolder.dueDateArea = (LinearLayout) convertView
-					.findViewById(R.id.dueDateArea);
-			viewHolder.remainEstimateAvgLabel = (TextView) convertView
-					.findViewById(R.id.remainEffortAverageLabel);
+
+			viewHolder.stateIcon = (ImageView) convertView
+					.findViewById(R.id.stateIcon);
+			viewHolder.stateText = (TextView) convertView
+					.findViewById(R.id.stateText);
+			viewHolder.dueDateArea = (LinearLayout) convertView.findViewById(R.id.remainEffortArea);
 
 			viewHolder.checkBox
 					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -175,51 +163,11 @@ public class BacklogItemAdapter extends BaseAdapter {
 		viewHolder.checkBox.setChecked(backlogs.get(position).Selected);
 		if (backlog.HasDueDate()) {
 			viewHolder.dueDateArea.setVisibility(View.VISIBLE);
-			viewHolder.dueDate.setText(DayUtil.formatCalendar(DayUtil
-					.toCalendar(backlog.DueDate)));
-			int untilNow = backlog.DueDate - DayUtil.Today();
-			viewHolder.dueDateToNow.setText(untilNow + "");
-			if (untilNow < 0) {
-				viewHolder.dueDateState.setImageResource(R.drawable.red);
-			} else if (untilNow < 7) {
-				viewHolder.dueDateState.setImageResource(R.drawable.yellow);
-			} else {
-				viewHolder.dueDateState.setImageResource(R.drawable.green);
-			}
+			viewHolder.stateIcon
+					.setImageResource(getBacklogStateIconResource(backlog));
+			viewHolder.stateText.setText(getBacklogStateText(backlog));
 		} else {
 			viewHolder.dueDateArea.setVisibility(View.GONE);
-		}
-		viewHolder.remainEstimateState.setImageResource(R.drawable.green);
-		if (backlog.HasEstimate()) {
-			viewHolder.remainEstimateArea.setVisibility(View.VISIBLE);
-
-			viewHolder.remainEstimate.setText(String.format("%.2f",
-					backlog.RemainEstimate));
-			if (backlog.HasDueDate()) {
-				viewHolder.remainEstimateAvg.setVisibility(View.VISIBLE);
-				viewHolder.remainEstimateAvgLabel.setVisibility(View.VISIBLE);
-				int untilNow = backlog.DueDate - DayUtil.Today();
-				if (untilNow < 0) {
-					viewHolder.remainEstimateState
-							.setImageResource(R.drawable.red);
-				} else {
-					float avg = backlog.RemainEstimate / untilNow;
-					viewHolder.remainEstimateAvg.setText(String.format("%.2f",
-							avg));
-					if (avg > 8) {
-						viewHolder.remainEstimateState
-								.setImageResource(R.drawable.red);
-					} else if (avg > 4) {
-						viewHolder.remainEstimateState
-								.setImageResource(R.drawable.yellow);
-					}
-				}
-			} else {
-				viewHolder.remainEstimateAvg.setVisibility(View.GONE);
-				viewHolder.remainEstimateAvgLabel.setVisibility(View.GONE);
-			}
-		} else {
-			viewHolder.remainEstimateArea.setVisibility(View.GONE);
 		}
 
 		return convertView;
@@ -246,18 +194,56 @@ public class BacklogItemAdapter extends BaseAdapter {
 		return true;
 	}
 
+	private int getBacklogStateIconResource(BacklogItem backlogItem) {
+		int stateResource = R.drawable.green;
+		if (backlogItem.HasDueDate()) {
+			int remainDate = backlogItem.DueDate - DayUtil.Today();
+			if (remainDate <= 0) {
+				stateResource = R.drawable.red;
+			} else if (remainDate < 7) {
+				stateResource = R.drawable.yellow;
+			}
+		}
+
+		if (backlogItem.HasEstimate() && backlogItem.HasDueDate()
+				&& backlogItem.DueDate > DayUtil.Today()) {
+			int remainDate = backlogItem.DueDate - DayUtil.Today();
+			double avg = backlogItem.RemainEstimate / remainDate;
+			if (avg > 4 && stateResource == R.drawable.green) {
+				stateResource = R.drawable.yellow;
+			} else if (avg > 8) {
+				stateResource = R.drawable.red;
+			}
+		}
+		return stateResource;
+	}
+
+	private String getBacklogStateText(BacklogItem backlogItem) {
+		String state = "";
+		if (backlogItem.HasDueDate()) {
+			state += DayUtil.formatCalendar(DayUtil
+					.toCalendar(backlogItem.DueDate));
+			state += " (" + (backlogItem.DueDate - DayUtil.Today()) + ") ";
+		}
+		if (backlogItem.HasEstimate()) {
+			state += String.format("%.2f", backlogItem.RemainEstimate) + " ";
+			if (backlogItem.HasDueDate()
+					&& backlogItem.DueDate > DayUtil.Today()) {
+				state += "("
+						+ String.format("%.2f", (backlogItem.RemainEstimate / (backlogItem.DueDate - DayUtil
+								.Today()))) + ")";
+			}
+		}
+
+		return state;
+	}
+
 	class ViewHolder {
 		public TextView name;
 		public CheckBox checkBox;
 		public LinearLayout dueDateArea;
-		public ImageView dueDateState;
-		public TextView dueDate;
-		public TextView dueDateToNow;
-		public LinearLayout remainEstimateArea;
-		public ImageView remainEstimateState;
-		public TextView remainEstimate;
-		public TextView remainEstimateAvg;
-		public TextView remainEstimateAvgLabel;
+		public ImageView stateIcon;
+		public TextView stateText;
 	}
 
 }
