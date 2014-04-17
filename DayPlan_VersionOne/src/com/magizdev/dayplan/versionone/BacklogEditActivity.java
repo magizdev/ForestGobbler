@@ -105,6 +105,9 @@ public class BacklogEditActivity extends Activity implements OnDateSetListener {
 			if (backlog.HasDueDate()) {
 				calendar = DayUtil.toCalendar(backlog.DueDate);
 				dueDate.setText(DayUtil.formatCalendar(calendar));
+			} else {
+				calendar = DayUtil.toCalendar(DayUtil.Today());
+				dueDate.setText(DayUtil.formatCalendar(calendar));
 			}
 			txtTitle.setText(backlog.Name);
 			txtNote.setText(backlog.Description);
@@ -147,9 +150,9 @@ public class BacklogEditActivity extends Activity implements OnDateSetListener {
 				.getTime()) : 0;
 		float estimate = estimateEnableBox.isChecked() ? Float
 				.parseFloat(txtEstimate.getText().toString()) : 0;
-		BacklogItem backlog = new BacklogItem(0, txtTitle.getText()
-				.toString(), txtNote.getText().toString(),
-				completeCheckBox.isChecked(), estimate, dueDate);
+		BacklogItem backlog = new BacklogItem(0, txtTitle.getText().toString(),
+				txtNote.getText().toString(), completeCheckBox.isChecked(),
+				estimate, dueDate);
 		util.update(backlogId, backlog);
 		setResult(RESULT_OK);
 		finish();
