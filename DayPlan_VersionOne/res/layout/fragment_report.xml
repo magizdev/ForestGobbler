@@ -5,6 +5,20 @@
     android:background="#FFFAFAFA" >
 
     <RelativeLayout
+        android:id="@+id/burndownNavigateArea"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp" >
+
+        <Spinner
+            android:id="@+id/dropdownBacklogs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/chartNavigateArea"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp" >
@@ -31,11 +45,11 @@
             android:id="@+id/reportTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="20dp"
             android:layout_centerInParent="true"
             android:layout_toLeftOf="@id/btnRight"
-            android:layout_toRightOf="@id/btnLeft" />
+            android:layout_toRightOf="@id/btnLeft"
+            android:gravity="center"
+            android:textSize="20dp" />
     </RelativeLayout>
 
     <ViewFlipper
@@ -95,5 +109,13 @@
                 android:src="@drawable/ic_action_flip" />
         </RelativeLayout>
     </ViewFlipper>
+
+    <LinearLayout
+        android:id="@+id/burndownChartArea"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/chartNavigateArea"
+        android:orientation="vertical" />
 
 </RelativeLayout>

@@ -13,15 +13,15 @@ import com.magizdev.dayplan.versionone.model.ChartData;
 import com.magizdev.dayplan.versionone.util.INavigate;
 
 public class PieChart extends BaseChart {
-	public PieChart(INavigate navigate, Context context) {
-		super(navigate, context);
+	public PieChart(Context context) {
+		super(context);
 	}
 
 	private DefaultRenderer mPieRenderer;
 	private CategorySeries mPieSeries;
 
 	@Override
-	protected GraphicalView GetChart() {
+	public GraphicalView GetChart(INavigate navigate) {
 		mPieRenderer = new DefaultRenderer();
 		mPieSeries = new CategorySeries("");
 		mPieRenderer.setStartAngle(180);

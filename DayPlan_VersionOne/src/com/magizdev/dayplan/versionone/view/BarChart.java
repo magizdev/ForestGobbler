@@ -22,8 +22,8 @@ import com.magizdev.dayplan.versionone.util.INavigate;
 
 public class BarChart extends BaseChart {
 
-	public BarChart(INavigate navigate, Context context) {
-		super(navigate, context);
+	public BarChart(Context context) {
+		super(context);
 	}
 
 	private int seriesCount;
@@ -31,11 +31,13 @@ public class BarChart extends BaseChart {
 	private int maxY;
 	private int startDate;
 	private int endDate;
+	private INavigate navigate;
 	private XYMultipleSeriesDataset mBarDataset;
 	private XYMultipleSeriesRenderer mBarRenderer;
 
 	@Override
-	protected GraphicalView GetChart() {
+	public GraphicalView GetChart(INavigate navigate) {
+		this.navigate = navigate;
 		mBarDataset = buildBarDataset();
 		mBarRenderer = buildBarRenderer();
 		return ChartFactory.getBarChartView(this.context, mBarDataset,

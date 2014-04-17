@@ -8,54 +8,33 @@
     <LinearLayout
         android:id="@+id/adContainer"
         android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:orientation="vertical" />
 
     <TabHost
         android:id="@android:id/tabhost"
-        android:layout_above="@id/adContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" >
 
-        <LinearLayout
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-            </TabWidget>
-
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <FrameLayout
-                    android:id="@+id/dailyReportView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical" >
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/weeklyReportView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical" >
-                </FrameLayout>
-
-                <LinearLayout
-                    android:id="@+id/burndownReportView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical" >
-                </LinearLayout>
-            </FrameLayout>
-        </LinearLayout>
+            android:layout_height="wrap_content" >
+        </FrameLayout>
     </TabHost>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/adContainer"
+        android:layout_below="@android:id/tabhost"
+        layout="@layout/fragment_report" />
 
 </RelativeLayout>

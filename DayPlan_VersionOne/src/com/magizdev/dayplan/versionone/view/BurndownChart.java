@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.jar.Attributes.Name;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -29,13 +30,15 @@ public class BurndownChart extends BaseChart {
 	private HashMap<Integer, List<ChartData>> chartData;
 	private int startDate;
 	private int endDate;
+	private INavigate navigate;
 
-	public BurndownChart(INavigate navigate, Context context) {
-		super(navigate, context);
+	public BurndownChart(Context context) {
+		super(context);
 	}
 
 	@Override
-	protected GraphicalView GetChart() {
+	public GraphicalView GetChart(INavigate navigate) {
+		this.navigate = navigate;
 
 		XYMultipleSeriesDataset dataset = buildDataset();
 		XYMultipleSeriesRenderer renderer = buildRenderer();
