@@ -14,6 +14,13 @@
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
         android:orientation="vertical" >
+        
+        <ImageButton
+            android:id="@+id/profile_pic"
+            android:layout_width="150dp"
+            android:layout_gravity="center"
+            android:layout_height="150dp"
+            android:src="@drawable/baby"></ImageButton>
 
         <EditText
             android:id="@+id/profile_name"

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_boy"
+        android:focusable="true"
+        android:focusableInTouchMode="true" >
+
+        <LinearLayout
+            android:id="@+id/activityArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/btnWeiNai"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:layout_weight="1"
+                    android:background="#00000000"
+                    android:scaleType="fitCenter"
+                    android:text="@string/task_weinai" />
+
+                <Button
+                    android:id="@+id/btnShuiJiao"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:layout_weight="1"
+                    android:background="#00000000"
+                    android:scaleType="fitCenter"
+                    android:text="@string/task_shuijiao" />
+
+                <Button
+                    android:id="@+id/btnXiaoBian"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:layout_weight="1"
+                    android:background="#00000000"
+                    android:scaleType="fitCenter"
+                    android:text="@string/task_xiaobian" />
+
+                <Button
+                    android:id="@+id/btnDaBian"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:layout_weight="1"
+                    android:background="#00000000"
+                    android:scaleType="fitCenter"
+                    android:text="@string/task_dabian" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/btnNaiFen"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="#00000000"
+                    android:scaleType="fitCenter"
+                    android:text="@string/task_naifen" />
+
+                <Button
+                    android:id="@+id/btnShenGao"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="#00000000"
+                    android:scaleType="fitCenter"
+                    android:text="@string/task_shengao" />
+
+                <Button
+                    android:id="@+id/btnTiZhong"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="#00000000"
+                    android:scaleType="fitCenter"
+                    android:text="@string/task_tizhong" />
+
+                <Button
+                    android:id="@+id/btnTiWen"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="#00000000"
+                    android:scaleType="fitCenter"
+                    android:text="@string/task_tiwen" />
+
+                <Button
+                    android:id="@+id/btnShiKe"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="#00000000"
+                    android:scaleType="fitCenter"
+                    android:text="@string/task_jiyi" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/listViewDayPlan"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/activityArea"
+            android:background="@drawable/widget_bg" >
+        </ListView>
+    </RelativeLayout>
+
+</merge>

@@ -11,17 +11,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TabHost;
-import android.widget.TabHost.TabSpec;
 
 import com.magizdev.babyoneday.util.ActivityUtil;
 import com.magizdev.babyoneday.viewmodel.DayOneAdapter;
 
-public class DayOneRecordFragment extends Fragment implements OnClickListener {
-	private static final int TAB_DAILY = 1;
-	private static final int TAB_WEEKLY = 2;
-	private static final int TAB_BURNDOWN = 3;
+public class DayOneRecordFragmentNew extends Fragment implements OnClickListener {
 	private ListView taskListView;
 	private DayOneAdapter adapter;
 	private ActivityUtil taskUtil;
@@ -49,21 +45,17 @@ public class DayOneRecordFragment extends Fragment implements OnClickListener {
 			adapter.refresh();
 		}
 	};
-	private TabHost tabHost;
 
-	public DayOneRecordFragment() {
+	public DayOneRecordFragmentNew() {
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View rootView = inflater.inflate(R.layout.activity_day_plan_new, container,
+		View rootView = inflater.inflate(R.layout.activity_day_plan, container,
 				false);
 
-		tabHost = (TabHost)rootView.findViewById(android.R.id.tabhost);
-		tabHost.setup();
-		setupTabs();
 		taskListView = (ListView) rootView.findViewById(R.id.listViewDayPlan);
 		taskListView.setBackgroundResource(R.drawable.widget_bg);
 		adapter = new DayOneAdapter(getActivity());
@@ -104,8 +96,6 @@ public class DayOneRecordFragment extends Fragment implements OnClickListener {
 		});
 		return rootView;
 	}
-	
-	
 
 	@Override
 	public void onResume() {
@@ -164,28 +154,6 @@ public class DayOneRecordFragment extends Fragment implements OnClickListener {
 		adapter.refresh();
 
 		taskListView.setSelection(adapter.getCount() - 1);
-	}
-
-	private void setupTabs() {
-		tabHost.setup();
-		tabHost.addTab(newTab(TAB_DAILY, "tab1"));
-		tabHost.addTab(newTab(TAB_WEEKLY, "tab2"));
-	}
-	
-	private TabSpec newTab(int tag, String label) {
-		TabSpec tabSpec = tabHost.newTabSpec(String.valueOf(tag));
-		tabSpec.setIndicator(label);
-		switch (tag) {
-		case 1:
-			tabSpec.setContent(R.id.tab1);
-			break;
-		case 2:
-			tabSpec.setContent(R.id.tab2);
-			break;
-		default:
-			break;
-		}
-		return tabSpec;
 	}
 
 	// @Override

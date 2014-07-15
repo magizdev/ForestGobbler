@@ -2,18 +2,41 @@ package com.magizdev.babyoneday.util;
 
 import java.util.Date;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
 import android.preference.PreferenceManager;
 
-public class Profile {
+@Table(name="profile")
+public class Profile extends Model {
 	private Context context;
+	
+	@Column(name="name")
 	public String name;
+	
+	@Column(name="gender")
 	public int gender;
+	
+	@Column(name="shengao")
 	public float shengao;
+	
+	@Column(name="tizhong")
 	public float tizhong;
+	
+	@Column(name="birthday")
 	public int birthday;
+	
+	@Column(name="avatar")
+	public Bitmap pic;
+	
+	public Profile(){
+		
+	}
 
 	public Profile(Context context) {
 		this.context = context;
