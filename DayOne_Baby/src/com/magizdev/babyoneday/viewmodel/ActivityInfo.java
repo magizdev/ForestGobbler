@@ -1,25 +1,32 @@
 package com.magizdev.babyoneday.viewmodel;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.net.Uri;
-
-import com.magizdev.babyoneday.store.DayPlanMetaData.ActivityTable;
-import com.magizdev.babyoneday.store.DayPlanMetaData.ActivityTypeTable;
-import com.magizdev.babyoneday.viewmodel.ActivityTypeInfo.TimeType;
-
-public class ActivityInfo implements IStoreableItem {
+@Table(name="Activity")
+public class ActivityInfo extends Model {
+	public static final int AC_BREED=1;
+	public static final int AC_SLEEP=2;
+	public static final int AC_PEE=3;
+	public static final int AC_POO=4;
+	
+	public static final int TIME_DURATION=1;
+	public static final int TIME_ONETIME=2;
 
 	public long ID;
+	@Column(name="date")
 	public int Date;
+	@Column(name="type")
 	public long TypeID;
+	@Column(name="name")
 	public String Name;
+	@Column(name="startTime")
 	public int StartTime;
+	@Column(name="endTime")
 	public int EndTime;
-	public TimeType timeType;
+	@Column(name="timeType")
+	public int timeType;
 	public float Data;
 	public String Note;
 
@@ -28,7 +35,7 @@ public class ActivityInfo implements IStoreableItem {
 	}
 
 	public ActivityInfo(long id, int date, long typeId, String name,
-			int startTime, int endTime, TimeType timeType, float data, String note) {
+			int startTime, int endTime, int timeType, float data, String note) {
 		this.ID = id;
 		this.Date = date;
 		this.TypeID = typeId;
@@ -39,67 +46,4 @@ public class ActivityInfo implements IStoreableItem {
 		this.Data = data;
 		this.Note = note;
 	}
-
-	@Override
-	public ContentValues toContentValues() {
-
-		ContentValues cv = new ContentValues();
-		cv.put(ActivityTable.DATE, Date);
-		cv.put(ActivityTable.ACTIVITY_TYPE_ID, TypeID);
-		cv.put(ActivityTable.START_TIME, StartTime);
-		cv.put(ActivityTable.END_TIME, EndTime);
-		cv.put(ActivityTable.DATA, Data);
-		cv.put(ActivityTable.NOTE, Note);
-		return cv;
-	}
-
-	@Override
-	public List<IStoreableItem> fromCursor(Cursor cursor) {
-		List<IStoreableItem> activities = new ArrayList<IStoreableItem>();
-		try {
-			for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
-					.moveToNext()) {
-				long id = cursor.getLong(cursor
-						.getColumnIndex(ActivityTable._ID));
-				int date = cursor.getInt(cursor
-						.getColumnIndex(ActivityTable.DATE));
-				long typeId = cursor.getLong(cursor
-						.getColumnIndex(ActivityTable.ACTIVITY_TYPE_ID));
-				String name = cursor.getString(cursor
-						.getColumnIndex(ActivityTypeTable.NAME));
-
-				TimeType timeType = cursor.getInt(cursor
-						.getColumnIndex(ActivityTypeTable.TIME_TYPE)) == ActivityTypeTable.TIME_TYPE_DURATION ? TimeType.Duration
-						: TimeType.Once;
-				int startTime = cursor.getInt(cursor
-						.getColumnIndex(ActivityTable.START_TIME));
-				int endTime = cursor.getInt(cursor
-						.getColumnIndex(ActivityTable.END_TIME));
-				float data = cursor.getFloat(cursor
-						.getColumnIndex(ActivityTable.DATA));
-				String note = cursor.getString(cursor
-						.getColumnIndex(ActivityTable.NOTE));
-
-				activities.add(new ActivityInfo(id, date, typeId, name,
-						startTime, endTime, timeType, data, note));
-			}
-		} finally {
-			if (cursor != null) {
-				cursor.close();
-			}
-		}
-		return activities;
-	}
-
-	@Override
-	public Uri contentUri() {
-		return ActivityTable.CONTENT_URI;
-	}
-
-	@Override
-	public String[] projection() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

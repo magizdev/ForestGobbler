@@ -5,35 +5,31 @@ import java.util.List;
 
 import android.content.Context;
 
-import com.magizdev.babyoneday.store.DayPlanMetaData.ActivityTable;
+import com.activeandroid.query.Select;
 import com.magizdev.babyoneday.viewmodel.ActivityInfo;
-import com.magizdev.babyoneday.viewmodel.StorageUtil;
 
 public class DayTaskTimeUtil {
-	private StorageUtil<ActivityInfo> timeStorageUtil;
 
 	public DayTaskTimeUtil(Context context) {
-		timeStorageUtil = new StorageUtil<ActivityInfo>(context,
-				new ActivityInfo());
 	}
 
 	public List<ActivityInfo> GetByDate(int date) {
-		return timeStorageUtil.getCollection("(" + ActivityTable.DATE + "="
-				+ date + ")");
+		return new Select().from(ActivityInfo.class).where("date=" + date)
+				.execute();
 	}
 
 	public List<ActivityInfo> GetByBacklog(long backlogId) {
-		return timeStorageUtil.getCollection("(" + ActivityTable.ACTIVITY_TYPE_ID + "="
-				+ backlogId + ")");
+		return new Select().from(ActivityInfo.class).where("type=" + backlogId)
+				.execute();
 	}
 
 	public List<ActivityInfo> GetByDateRange(int startDate, int endDate) {
 		if (startDate > endDate) {
 			return new ArrayList<ActivityInfo>();
 		} else {
-			return timeStorageUtil.getCollection("(" + ActivityTable.DATE
-					+ ">=" + startDate + " and " + ActivityTable.DATE + "<"
-					+ endDate + ")");
+			return new Select().from(ActivityInfo.class)
+					.where("date >= " + startDate + " and date<" + endDate)
+					.execute();
 		}
 	}
 }

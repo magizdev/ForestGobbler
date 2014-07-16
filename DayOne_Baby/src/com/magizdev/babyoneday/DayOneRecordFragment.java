@@ -19,9 +19,8 @@ import com.magizdev.babyoneday.util.ActivityUtil;
 import com.magizdev.babyoneday.viewmodel.DayOneAdapter;
 
 public class DayOneRecordFragment extends Fragment implements OnClickListener {
-	private static final int TAB_DAILY = 1;
-	private static final int TAB_WEEKLY = 2;
-	private static final int TAB_BURNDOWN = 3;
+	private static final int TAB_ACTIVITY = 1;
+	private static final int TAB_GROWTHINDEX = 2;
 	private ListView taskListView;
 	private DayOneAdapter adapter;
 	private ActivityUtil taskUtil;
@@ -31,18 +30,13 @@ public class DayOneRecordFragment extends Fragment implements OnClickListener {
 	private Button btnDaBian;
 	private Button btnNaiFen;
 	private Button btnTiWen;
-	private Button btnShenGao;
-	private Button btnTiZhong;
-	private Button btnJiYi;
-	private long weinaiId = 1;
-	private long shuijiaoId = 2;
-	private long xiaobianId = 3;
-	private long dabianId = 4;
-	private long naifenId = 5;
-	private long tiwenId = 6;
-	private long shengaoId = 7;
-	private long tizhongId = 8;
-	private long jiyiId = 9;
+	private Button btnHeight;
+	private Button btnWeight;
+	private Button btnHeadGirth;
+	private long breadId = 1;
+	private long sleepId = 2;
+	private long peeId = 3;
+	private long pooId = 4;
 	private Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -74,11 +68,9 @@ public class DayOneRecordFragment extends Fragment implements OnClickListener {
 		btnShuiJiao = (Button) rootView.findViewById(R.id.btnShuiJiao);
 		btnXiaoBian = (Button) rootView.findViewById(R.id.btnXiaoBian);
 		btnDaBian = (Button) rootView.findViewById(R.id.btnDaBian);
-		btnNaiFen = (Button) rootView.findViewById(R.id.btnNaiFen);
-		btnTiWen = (Button) rootView.findViewById(R.id.btnTiWen);
-		btnShenGao = (Button) rootView.findViewById(R.id.btnShenGao);
-		btnTiZhong = (Button) rootView.findViewById(R.id.btnTiZhong);
-		btnJiYi = (Button) rootView.findViewById(R.id.btnShiKe);
+		btnHeight = (Button) rootView.findViewById(R.id.btnHeight);
+		btnWeight = (Button) rootView.findViewById(R.id.btnWeight);
+		btnHeadGirth = (Button) rootView.findViewById(R.id.btnHeadGirth);
 
 		btnWeiNai.setOnClickListener(this);
 
@@ -88,11 +80,9 @@ public class DayOneRecordFragment extends Fragment implements OnClickListener {
 
 		btnDaBian.setOnClickListener(this);
 
-		btnNaiFen.setOnClickListener(this);
-		btnTiWen.setOnClickListener(this);
-		btnShenGao.setOnClickListener(this);
-		btnTiZhong.setOnClickListener(this);
-		btnJiYi.setOnClickListener(this);
+		btnHeight.setOnClickListener(this);
+		btnWeight.setOnClickListener(this);
+		btnHeadGirth.setOnClickListener(this);
 		taskListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
@@ -124,39 +114,33 @@ public class DayOneRecordFragment extends Fragment implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnWeiNai:
-			if (taskUtil.IsActivityWaitingForStop(weinaiId)) {
-				taskUtil.StopActivity(weinaiId);
+			if (taskUtil.IsActivityWaitingForStop(breadId)) {
+				taskUtil.StopActivity(breadId);
 			} else {
-				taskUtil.StartActivity(weinaiId);
+				taskUtil.StartActivity(breadId);
 			}
 			break;
 		case R.id.btnShuiJiao:
-			if (taskUtil.IsActivityWaitingForStop(shuijiaoId)) {
-				taskUtil.StopActivity(shuijiaoId);
+			if (taskUtil.IsActivityWaitingForStop(sleepId)) {
+				taskUtil.StopActivity(sleepId);
 			} else {
-				taskUtil.StartActivity(shuijiaoId);
+				taskUtil.StartActivity(sleepId);
 			}
 			break;
 		case R.id.btnXiaoBian:
-			taskUtil.StartActivity(xiaobianId);
+			taskUtil.StartActivity(peeId);
 			break;
 		case R.id.btnDaBian:
-			taskUtil.StartActivity(dabianId);
+			taskUtil.StartActivity(pooId);
 			break;
-		case R.id.btnNaiFen:
-			taskUtil.StartActivity(naifenId);
+		case R.id.btnHeight:
+			
 			break;
-		case R.id.btnTiWen:
-			taskUtil.StartActivity(tiwenId);
+		case R.id.btnWeight:
+			
 			break;
-		case R.id.btnShenGao:
-			taskUtil.StartActivity(shengaoId);
-			break;
-		case R.id.btnTiZhong:
-			taskUtil.StartActivity(tizhongId);
-			break;
-		case R.id.btnShiKe:
-			taskUtil.StartActivity(jiyiId);
+		case R.id.btnHeadGirth:
+			
 			break;
 		default:
 			break;
@@ -168,8 +152,8 @@ public class DayOneRecordFragment extends Fragment implements OnClickListener {
 
 	private void setupTabs() {
 		tabHost.setup();
-		tabHost.addTab(newTab(TAB_DAILY, "tab1"));
-		tabHost.addTab(newTab(TAB_WEEKLY, "tab2"));
+		tabHost.addTab(newTab(TAB_ACTIVITY, "tab1"));
+		tabHost.addTab(newTab(TAB_GROWTHINDEX, "tab2"));
 	}
 	
 	private TabSpec newTab(int tag, String label) {

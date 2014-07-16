@@ -15,29 +15,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.activeandroid.query.Select;
 import com.magizdev.babyoneday.R;
-import com.magizdev.babyoneday.store.DayPlanMetaData.ActivityTable;
 import com.magizdev.babyoneday.util.ActivityUtil;
 import com.magizdev.babyoneday.util.DayUtil;
-import com.magizdev.babyoneday.viewmodel.ActivityTypeInfo.TimeType;
 
 public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 	Context context;
-	StorageUtil<ActivityInfo> storageUtil;
+
 	ActivityUtil taskUtil;
-	private StorageUtil<ActivityInfo> timeUtil;
+
 	private List<ActivityInfo> activities;
 	private int inEditModePosition;
 
 	public DayOneAdapter(Context context) {
 		this.context = context;
 		ActivityInfo blank = new ActivityInfo();
-		storageUtil = new StorageUtil<ActivityInfo>(context, blank);
-		String whereStrings = ActivityTable.DATE + "=" + DayUtil.Today();
+		String whereStrings = "date=" + DayUtil.Today();
 		taskUtil = new ActivityUtil(context);
 
-		timeUtil = new StorageUtil<ActivityInfo>(context, new ActivityInfo());
-		activities = timeUtil.getCollection(whereStrings);
+		activities = new Select().from(ActivityInfo.class).where(whereStrings)
+				.execute();
 		Collections.reverse(activities);
 		inEditModePosition = -1;
 	}
@@ -46,17 +44,17 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 	}
 
 	public void refresh() {
-		String whereStrings = ActivityTable.DATE + "=" + DayUtil.Today();
+		String whereStrings = "date=" + DayUtil.Today();
 		inEditModePosition = -1;
-		activities = timeUtil.getCollection(whereStrings);
+		activities = new Select().from(ActivityInfo.class).where(whereStrings).execute();
 		Collections.reverse(activities);
 		notifyDataSetChanged();
 	}
 
 	public void refresh(Date date) {
-		String whereStrings = ActivityTable.DATE + "=" + DayUtil.toDate(date);
+		String whereStrings = "date=" + DayUtil.toDate(date);
 		inEditModePosition = -1;
-		activities = timeUtil.getCollection(whereStrings);
+		activities = new Select().from(ActivityInfo.class).where(whereStrings).execute();
 		Collections.reverse(activities);
 		notifyDataSetChanged();
 	}
@@ -126,7 +124,7 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 			String startTime = formatTime(activityInfo.StartTime);
 
 			viewHolder.startTime.setText(startTime);
-			if (activityInfo.timeType == TimeType.Duration) {
+			if (activityInfo.timeType == ActivityInfo.TIME_DURATION) {
 				viewHolder.endTime.setVisibility(View.VISIBLE);
 				viewHolder.startTime.setTextSize(15);
 				if (activityInfo.EndTime > 0) {
@@ -163,7 +161,7 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 			String startTime = formatTime(activityInfo.StartTime);
 
 			viewHolder.startTime.setText(startTime);
-			if (activityInfo.timeType == TimeType.Duration) {
+			if (activityInfo.timeType == ActivityInfo.TIME_DURATION) {
 				viewHolder.endTime.setVisibility(View.VISIBLE);
 				viewHolder.startTime.setTextSize(15);
 				if (activityInfo.EndTime > 0) {
@@ -180,7 +178,7 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 			if (activityInfo.Data > 0) {
 				viewHolder.data.setText(activityInfo.Data + "");
 			}
-			if (activityInfo.Note.isEmpty()) {
+			if (false && activityInfo.Note.isEmpty()) {
 				viewHolder.note.setVisibility(View.GONE);
 			} else {
 				viewHolder.note.setVisibility(View.VISIBLE);
@@ -252,10 +250,10 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 					.findViewById(R.id.activityDataEdit);
 			activityInfo.Note = note.getText().toString();
 			activityInfo.Data = Float.parseFloat(data.getText().toString());
-			timeUtil.update(activityInfo.ID, activityInfo);
+			activityInfo.save();
 			break;
 		case R.id.activityDelete:
-			timeUtil.delete(activityInfo.ID);
+			activityInfo.delete();
 			break;
 		default:
 			break;

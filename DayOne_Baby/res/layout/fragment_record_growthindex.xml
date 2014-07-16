@@ -17,16 +17,6 @@
             android:layout_alignParentBottom="true"
             android:orientation="vertical" >
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Summary Area" />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,40 +24,32 @@
                 android:orientation="horizontal" >
 
                 <Button
-                    android:id="@+id/btnWeiNai"
+                    android:id="@+id/btnHeight"
                     android:layout_width="match_parent"
-                    android:layout_height="75dp"
+                    android:layout_height="60dp"
                     android:layout_weight="1"
                     android:background="#00000000"
                     android:scaleType="fitCenter"
-                    android:text="@string/task_weinai" />
+                    android:text="@string/gi_height" />
 
                 <Button
-                    android:id="@+id/btnShuiJiao"
+                    android:id="@+id/btnWeight"
                     android:layout_width="match_parent"
-                    android:layout_height="75dp"
+                    android:layout_height="60dp"
                     android:layout_weight="1"
                     android:background="#00000000"
                     android:scaleType="fitCenter"
-                    android:text="@string/task_shuijiao" />
+                    android:text="@string/gi_weight" />
 
                 <Button
-                    android:id="@+id/btnXiaoBian"
+                    android:id="@+id/btnHeadGirth"
                     android:layout_width="match_parent"
-                    android:layout_height="75dp"
+                    android:layout_height="60dp"
                     android:layout_weight="1"
                     android:background="#00000000"
                     android:scaleType="fitCenter"
-                    android:text="@string/task_xiaobian" />
+                    android:text="@string/gi_headgirth" />
 
-                <Button
-                    android:id="@+id/btnDaBian"
-                    android:layout_width="match_parent"
-                    android:layout_height="75dp"
-                    android:layout_weight="1"
-                    android:background="#00000000"
-                    android:scaleType="fitCenter"
-                    android:text="@string/task_dabian" />
             </LinearLayout>
         </LinearLayout>
 

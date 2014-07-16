@@ -25,10 +25,6 @@
             android:name="AA_SERIALIZERS"
             android:value="com.magizdev.babyoneday.util.ImageSerializer" />
 
-        <provider
-            android:name="com.magizdev.babyoneday.store.DayPlanProvider"
-            android:authorities="com.magizdev.babydayone" />
-
         <activity
             android:name=".DrawerActivity"
             android:label="@string/backlog_item_activity_label"

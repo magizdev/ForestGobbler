@@ -18,9 +18,19 @@
             android:orientation="vertical" >
 
             <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Summary Area" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:orientation="horizontal" >
 
                 <Button
@@ -30,7 +40,7 @@
                     android:layout_weight="1"
                     android:background="#00000000"
                     android:scaleType="fitCenter"
-                    android:text="@string/task_weinai" />
+                    android:text="@string/activity_breed" />
 
                 <Button
                     android:id="@+id/btnShuiJiao"
@@ -39,7 +49,7 @@
                     android:layout_weight="1"
                     android:background="#00000000"
                     android:scaleType="fitCenter"
-                    android:text="@string/task_shuijiao" />
+                    android:text="@string/activity_sleep" />
 
                 <Button
                     android:id="@+id/btnXiaoBian"
@@ -48,7 +58,7 @@
                     android:layout_weight="1"
                     android:background="#00000000"
                     android:scaleType="fitCenter"
-                    android:text="@string/task_xiaobian" />
+                    android:text="@string/activity_pee" />
 
                 <Button
                     android:id="@+id/btnDaBian"
@@ -57,59 +67,7 @@
                     android:layout_weight="1"
                     android:background="#00000000"
                     android:scaleType="fitCenter"
-                    android:text="@string/task_dabian" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:orientation="horizontal" >
-
-                <Button
-                    android:id="@+id/btnNaiFen"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:background="#00000000"
-                    android:scaleType="fitCenter"
-                    android:text="@string/task_naifen" />
-
-                <Button
-                    android:id="@+id/btnShenGao"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:background="#00000000"
-                    android:scaleType="fitCenter"
-                    android:text="@string/task_shengao" />
-
-                <Button
-                    android:id="@+id/btnTiZhong"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:background="#00000000"
-                    android:scaleType="fitCenter"
-                    android:text="@string/task_tizhong" />
-
-                <Button
-                    android:id="@+id/btnTiWen"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:background="#00000000"
-                    android:scaleType="fitCenter"
-                    android:text="@string/task_tiwen" />
-
-                <Button
-                    android:id="@+id/btnShiKe"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:background="#00000000"
-                    android:scaleType="fitCenter"
-                    android:text="@string/task_jiyi" />
+                    android:text="@string/activity_poo" />
             </LinearLayout>
         </LinearLayout>
 

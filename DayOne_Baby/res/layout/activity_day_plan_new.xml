@@ -35,7 +35,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical" >
 
-                    <include layout="@layout/fragment_plan_daily" />
+                    <include layout="@layout/fragment_record" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -44,10 +44,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical" >
 
-                    <Button
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:text="text" />
+                    <include layout="@layout/fragment_record_growthindex" />
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
