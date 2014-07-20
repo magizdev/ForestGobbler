@@ -1,5 +1,7 @@
 package com.magizdev.babyoneday;
 
+import com.magizdev.babyoneday.util.Profile;
+
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
@@ -9,7 +11,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -76,22 +77,26 @@ public class DrawerActivity extends FragmentActivity {
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
 		if (savedInstanceState == null) {
-			selectItem(0);
+			if (Profile.Instance() == null) {
+				selectItem(2);
+			} else {
+				selectItem(0);
+			}
 		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-//		MenuInflater inflater = getMenuInflater();
-//		switch (position) {
-//		case 1:
-//			inflater.inflate(R.menu.activity_backlog_item, menu);
-//			break;
-//		case 2:
-//			inflater.inflate(R.menu.activity_dashboard, menu);
-//		default:
-//			break;
-//		}
+		// MenuInflater inflater = getMenuInflater();
+		// switch (position) {
+		// case 1:
+		// inflater.inflate(R.menu.activity_backlog_item, menu);
+		// break;
+		// case 2:
+		// inflater.inflate(R.menu.activity_dashboard, menu);
+		// default:
+		// break;
+		// }
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -130,7 +135,7 @@ public class DrawerActivity extends FragmentActivity {
 	}
 
 	/** Swaps fragments in the main content view */
-	private void selectItem(int position) {
+	public void selectItem(int position) {
 		FragmentManager fragmentManager = getFragmentManager();
 		if (profileFragment == null) {
 			profileFragment = new DayOneProfileFragment();
@@ -144,7 +149,7 @@ public class DrawerActivity extends FragmentActivity {
 		switch (position) {
 		case 0:
 			fragmentManager.beginTransaction()
-					.replace(R.id.content_frame, dayOnePlanFragment, "other")
+					.replace(R.id.content_frame, dayOnePlanFragment, "record")
 					.commit();
 			break;
 		case 1:
@@ -154,7 +159,7 @@ public class DrawerActivity extends FragmentActivity {
 			break;
 		case 2:
 			fragmentManager.beginTransaction()
-					.replace(R.id.content_frame, profileFragment, "other")
+					.replace(R.id.content_frame, profileFragment, "profile")
 					.commit();
 			break;
 		default:

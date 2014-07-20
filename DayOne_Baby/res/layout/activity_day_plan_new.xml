@@ -44,7 +44,16 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical" >
 
-                    <include layout="@layout/fragment_record_growthindex" />
+                    <include layout="@layout/fragment_record_height" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <include layout="@layout/fragment_record_weight" />
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>

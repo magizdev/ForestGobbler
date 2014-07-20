@@ -34,9 +34,8 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 		String whereStrings = "date=" + DayUtil.Today();
 		taskUtil = new ActivityUtil(context);
 
-		activities = new Select().from(ActivityInfo.class).where(whereStrings)
+		activities = new Select().from(ActivityInfo.class).where(whereStrings).orderBy("startTime")
 				.execute();
-		Collections.reverse(activities);
 		inEditModePosition = -1;
 	}
 
@@ -46,16 +45,14 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 	public void refresh() {
 		String whereStrings = "date=" + DayUtil.Today();
 		inEditModePosition = -1;
-		activities = new Select().from(ActivityInfo.class).where(whereStrings).execute();
-		Collections.reverse(activities);
+		activities = new Select().from(ActivityInfo.class).where(whereStrings).orderBy("startTime").execute();
 		notifyDataSetChanged();
 	}
 
 	public void refresh(Date date) {
 		String whereStrings = "date=" + DayUtil.toDate(date);
 		inEditModePosition = -1;
-		activities = new Select().from(ActivityInfo.class).where(whereStrings).execute();
-		Collections.reverse(activities);
+		activities = new Select().from(ActivityInfo.class).where(whereStrings).orderBy("startTime").execute();
 		notifyDataSetChanged();
 	}
 

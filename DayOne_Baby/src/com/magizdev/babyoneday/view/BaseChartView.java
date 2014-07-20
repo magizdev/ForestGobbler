@@ -15,6 +15,6 @@ public abstract class BaseChartView {
 
 	}
 
-	protected abstract GraphicalView GetChart();
+	public abstract GraphicalView GetChart(int gender, int indexType);
 
 }

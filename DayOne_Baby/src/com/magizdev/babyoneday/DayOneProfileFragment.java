@@ -70,8 +70,9 @@ public class DayOneProfileFragment extends Fragment implements
 		update = (Button) rootView.findViewById(R.id.profile_update);
 		birthday = (Button) rootView.findViewById(R.id.profile_birthday);
 		profile = new Select().from(Profile.class).executeSingle();
-		if(profile == null){
+		if (profile == null) {
 			profile = new Profile();
+			profile.birthday = DayUtil.Today();
 		}
 		calendar = DayUtil.toCalendar(profile.birthday);
 
@@ -92,7 +93,7 @@ public class DayOneProfileFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				
+
 				profile.name = name.getText().toString();
 				profile.shengao = Float
 						.parseFloat(shengao.getText().toString());
@@ -101,6 +102,7 @@ public class DayOneProfileFragment extends Fragment implements
 				profile.birthday = DayUtil.toDate(calendar.getTime());
 				profile.gender = gender_boy.isChecked() ? 0 : 1;
 				profile.save();
+				((DrawerActivity)getActivity()).selectItem(0);
 			}
 		});
 
@@ -130,7 +132,7 @@ public class DayOneProfileFragment extends Fragment implements
 		} else {
 			gender_girl.setChecked(true);
 		}
-		if(profile.pic != null){
+		if (profile.pic != null) {
 			pic.setImageDrawable(new BitmapDrawable(profile.pic));
 		}
 		birthdayString = getActivity().getResources().getString(
@@ -138,46 +140,46 @@ public class DayOneProfileFragment extends Fragment implements
 		birthday.setText(birthdayString + ":"
 				+ DayUtil.formatCalendar(calendar));
 	}
-	
+
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {  
-        if (resultCode != Activity.RESULT_OK) {  
-            return;  
-        } else {  
-            switch (requestCode) {  
-            case IMAGE_REQUEST_CODE:  
-                resizeImage(data.getData());  
-                break;    
-            case RESIZE_REQUEST_CODE:  
-                if (data != null) {  
-                    showResizeImage(data);  
-                }  
-                break;  
-            }  
-        }
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode != Activity.RESULT_OK) {
+			return;
+		} else {
+			switch (requestCode) {
+			case IMAGE_REQUEST_CODE:
+				resizeImage(data.getData());
+				break;
+			case RESIZE_REQUEST_CODE:
+				if (data != null) {
+					showResizeImage(data);
+				}
+				break;
+			}
+		}
 	}
-	
-    private void showResizeImage(Intent data) {  
-        Bundle extras = data.getExtras();  
-        if (extras != null) {  
-            Bitmap photo = extras.getParcelable("data");  
-            profile.pic = photo;
-            Drawable drawable = new BitmapDrawable(photo);  
-            pic.setImageDrawable(drawable);
-        }  
-    }  
-	
-    public void resizeImage(Uri uri) {  
-        Intent intent = new Intent("com.android.camera.action.CROP");  
-        intent.setDataAndType(uri, "image/*");  
-        intent.putExtra("crop", "true");  
-        intent.putExtra("aspectX", 1);  
-        intent.putExtra("aspectY", 1);  
-        intent.putExtra("outputX", 150);  
-        intent.putExtra("outputY", 150);  
-        intent.putExtra("return-data", true);  
-        startActivityForResult(intent, RESIZE_REQUEST_CODE);  
-    } 
+
+	private void showResizeImage(Intent data) {
+		Bundle extras = data.getExtras();
+		if (extras != null) {
+			Bitmap photo = extras.getParcelable("data");
+			profile.pic = photo;
+			Drawable drawable = new BitmapDrawable(photo);
+			pic.setImageDrawable(drawable);
+		}
+	}
+
+	public void resizeImage(Uri uri) {
+		Intent intent = new Intent("com.android.camera.action.CROP");
+		intent.setDataAndType(uri, "image/*");
+		intent.putExtra("crop", "true");
+		intent.putExtra("aspectX", 1);
+		intent.putExtra("aspectY", 1);
+		intent.putExtra("outputX", 450);
+		intent.putExtra("outputY", 450);
+		intent.putExtra("return-data", true);
+		startActivityForResult(intent, RESIZE_REQUEST_CODE);
+	}
 
 	@Override
 	public void onDateSet(DatePicker view, int year, int monthOfYear,
