@@ -38,9 +38,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_action_weinai"
                     android:background="#00000000"
                     android:scaleType="fitCenter"
+                    android:src="@drawable/ic_action_weinai"
                     android:text="@string/activity_breed" />
 
                 <ImageButton
@@ -48,9 +48,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_action_shuijiao"
                     android:background="#00000000"
                     android:scaleType="fitCenter"
+                    android:src="@drawable/ic_action_shuijiao"
                     android:text="@string/activity_sleep" />
 
                 <ImageButton
@@ -59,8 +59,8 @@
                     android:layout_height="75dp"
                     android:layout_weight="1"
                     android:background="#00000000"
-                    android:src="@drawable/ic_action_xiaobian"
                     android:scaleType="fitCenter"
+                    android:src="@drawable/ic_action_xiaobian"
                     android:text="@string/activity_pee" />
 
                 <ImageButton
@@ -69,8 +69,8 @@
                     android:layout_height="75dp"
                     android:layout_weight="1"
                     android:background="#00000000"
-                    android:src="@drawable/ic_action_dabian"
                     android:scaleType="fitCenter"
+                    android:src="@drawable/ic_action_dabian"
                     android:text="@string/activity_poo" />
             </LinearLayout>
         </LinearLayout>
@@ -79,8 +79,7 @@
             android:id="@+id/listViewDayPlan"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/activityArea"
-            android:background="@drawable/widget_bg" >
+            android:layout_above="@id/activityArea" >
         </ListView>
     </RelativeLayout>
 

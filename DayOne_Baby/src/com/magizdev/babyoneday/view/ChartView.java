@@ -10,13 +10,15 @@ import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
-import android.R.integer;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.util.Pair;
 
+import com.magizdev.babyoneday.R;
+import com.magizdev.babyoneday.util.DayUtil;
 import com.magizdev.babyoneday.util.GrowthIndexUtil;
+import com.magizdev.babyoneday.util.Profile;
 
 public class ChartView extends BaseChartView {
 
@@ -40,30 +42,48 @@ public class ChartView extends BaseChartView {
 
 	private XYMultipleSeriesDataset buildBarDataset(int gender, int indexType) {
 
+		String idxLow = context.getResources().getString(R.string.low);
+		String idxHigh = context.getResources().getString(R.string.high);
+		String idxProfile = "";
+		if (indexType == GrowthIndexUtil.GI_HEIGHT) {
+			idxProfile = context.getResources().getString(R.string.profile_height);
+		} else {
+			idxProfile = context.getResources().getString(R.string.profile_weight);
+		}
+
 		List<Pair<Integer, Float>> lowBound = GrowthIndexUtil.getStandard(
 				gender, indexType, GrowthIndexUtil.GI_LOW);
 		List<Pair<Integer, Float>> highBound = GrowthIndexUtil.getStandard(
 				gender, indexType, GrowthIndexUtil.GI_HEIGH);
 		List<Pair<Integer, Float>> profile = GrowthIndexUtil
 				.getProfile(indexType);
+		
+		int upper = (DayUtil.Today() - Profile.Instance().birthday) / 30 + 1;
+		
 		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 
 		minY = Math.round(lowBound.get(0).second);
-		XYSeries lowSeries = new XYSeries("low");
+		XYSeries lowSeries = new XYSeries(idxLow);
 		for (Pair<Integer, Float> data : lowBound) {
+			if(data.first > upper){
+				break;
+			}
 			lowSeries.add(data.first * 30, data.second);
 		}
 
 		dataset.addSeries(lowSeries);
 
-		XYSeries profileSeries = new XYSeries("profile");
-		for(Pair<Integer, Float> data: profile){
+		XYSeries profileSeries = new XYSeries(idxProfile);
+		for (Pair<Integer, Float> data : profile) {
 			profileSeries.add(data.first, data.second);
 		}
 		dataset.addSeries(profileSeries);
 
-		XYSeries highSeries = new XYSeries("High");
+		XYSeries highSeries = new XYSeries(idxHigh);
 		for (Pair<Integer, Float> data : highBound) {
+			if(data.first > upper){
+				break;
+			}
 			highSeries.add(data.first * 30, data.second);
 		}
 		dataset.addSeries(highSeries);

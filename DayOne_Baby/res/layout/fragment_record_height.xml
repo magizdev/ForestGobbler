@@ -12,6 +12,7 @@
         android:orientation="vertical" >
 
         <LinearLayout
+            android:id="@+id/giInputArea"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
@@ -20,8 +21,9 @@
                 android:id="@+id/heightInput"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:background="@android:drawable/edit_text"
                 android:ems="10"
-                android:inputType="number" >
+                android:inputType="numberDecimal" >
 
                 <requestFocus />
             </EditText>
@@ -41,7 +43,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#00000000"
                 android:scaleType="fitCenter"
                 android:text="@string/gi_height" />
         </LinearLayout>
@@ -50,10 +51,9 @@
             android:id="@+id/chartAreaHeight"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="10dp"
             android:background="@drawable/widget_bg"
             android:orientation="vertical" >
-
-
         </RelativeLayout>
     </LinearLayout>
 

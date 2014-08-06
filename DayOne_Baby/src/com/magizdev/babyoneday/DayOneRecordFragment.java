@@ -10,10 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
@@ -32,15 +36,12 @@ public class DayOneRecordFragment extends Fragment implements OnClickListener {
 	private ListView taskListView;
 	private DayOneAdapter adapter;
 	private ActivityUtil taskUtil;
-	private Button btnWeiNai;
-	private Button btnShuiJiao;
-	private Button btnXiaoBian;
-	private Button btnDaBian;
-	private Button btnNaiFen;
-	private Button btnTiWen;
+	private ImageButton btnWeiNai;
+	private ImageButton btnShuiJiao;
+	private ImageButton btnXiaoBian;
+	private ImageButton btnDaBian;
+
 	private Button btnHeight;
-	private Button btnWeight;
-	private Button btnHeadGirth;
 	private EditText heightInput;
 	private EditText weightInput;
 	private EditText dateInput;
@@ -61,6 +62,8 @@ public class DayOneRecordFragment extends Fragment implements OnClickListener {
 	private RelativeLayout chartAreWeight;
 	private ChartView weightChart;
 	private GraphicalView chartWeight;
+	private LinearLayout giInputLayout1;
+	private LinearLayout giInputLayout2;
 
 	public DayOneRecordFragment() {
 	}
@@ -81,15 +84,17 @@ public class DayOneRecordFragment extends Fragment implements OnClickListener {
 		taskListView.setAdapter(adapter);
 		taskUtil = new ActivityUtil(getActivity());
 
-		btnWeiNai = (Button) rootView.findViewById(R.id.btnWeiNai);
-		btnShuiJiao = (Button) rootView.findViewById(R.id.btnShuiJiao);
-		btnXiaoBian = (Button) rootView.findViewById(R.id.btnXiaoBian);
-		btnDaBian = (Button) rootView.findViewById(R.id.btnDaBian);
+		btnWeiNai = (ImageButton) rootView.findViewById(R.id.btnWeiNai);
+		btnShuiJiao = (ImageButton) rootView.findViewById(R.id.btnShuiJiao);
+		btnXiaoBian = (ImageButton) rootView.findViewById(R.id.btnXiaoBian);
+		btnDaBian = (ImageButton) rootView.findViewById(R.id.btnDaBian);
 		btnHeight = (Button) rootView.findViewById(R.id.btnHeight);
-		btnWeight = (Button) rootView.findViewById(R.id.btnWeight);
 		heightInput = (EditText) rootView.findViewById(R.id.heightInput);
 		weightInput = (EditText) rootView.findViewById(R.id.weightInput);
 		dateInput = (EditText) rootView.findViewById(R.id.testDateInput);
+		giInputLayout1 = (LinearLayout) rootView.findViewById(R.id.giInputArea);
+		giInputLayout2 = (LinearLayout) rootView
+				.findViewById(R.id.giInputArea2);
 
 		chartAreaHeight = (RelativeLayout) rootView
 				.findViewById(R.id.chartAreaHeight);
@@ -119,7 +124,14 @@ public class DayOneRecordFragment extends Fragment implements OnClickListener {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
-				adapter.setEditMode(arg2);
+				View deleteView = arg1.findViewById(R.id.btnDelete);
+				deleteView.setScaleX(0);
+				deleteView.setVisibility(View.VISIBLE);
+				deleteView.setPivotX(200);
+				deleteView
+						.animate()
+						.setInterpolator(new OvershootInterpolator())
+						.scaleX(1).start();
 				return false;
 			}
 		});
@@ -168,6 +180,8 @@ public class DayOneRecordFragment extends Fragment implements OnClickListener {
 			GrowthIndexUtil.addRecord(GrowthIndexUtil.GI_HEIGHT, height,
 					Profile.Instance().birthday + date);
 			heightChart.addData(date, height);
+			giInputLayout1.setPivotY(1000);
+			giInputLayout1.animate().scaleY(0).setInterpolator(new DecelerateInterpolator()).start();
 			break;
 		case R.id.btnWeight:
 			float weight = Float.parseFloat(weightInput.getText().toString());

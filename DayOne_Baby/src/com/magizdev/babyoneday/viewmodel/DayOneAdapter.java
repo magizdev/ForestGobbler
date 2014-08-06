@@ -1,11 +1,12 @@
 package com.magizdev.babyoneday.viewmodel;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.activeandroid.query.Select;
@@ -27,15 +29,15 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 
 	private List<ActivityInfo> activities;
 	private int inEditModePosition;
-
+	
 	public DayOneAdapter(Context context) {
 		this.context = context;
 		ActivityInfo blank = new ActivityInfo();
 		String whereStrings = "date=" + DayUtil.Today();
 		taskUtil = new ActivityUtil(context);
 
-		activities = new Select().from(ActivityInfo.class).where(whereStrings).orderBy("startTime")
-				.execute();
+		activities = new Select().from(ActivityInfo.class).where(whereStrings)
+				.orderBy("startTime").execute();
 		inEditModePosition = -1;
 	}
 
@@ -45,14 +47,16 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 	public void refresh() {
 		String whereStrings = "date=" + DayUtil.Today();
 		inEditModePosition = -1;
-		activities = new Select().from(ActivityInfo.class).where(whereStrings).orderBy("startTime").execute();
+		activities = new Select().from(ActivityInfo.class).where(whereStrings)
+				.orderBy("startTime").execute();
 		notifyDataSetChanged();
 	}
 
 	public void refresh(Date date) {
 		String whereStrings = "date=" + DayUtil.toDate(date);
 		inEditModePosition = -1;
-		activities = new Select().from(ActivityInfo.class).where(whereStrings).orderBy("startTime").execute();
+		activities = new Select().from(ActivityInfo.class).where(whereStrings)
+				.orderBy("startTime").execute();
 		notifyDataSetChanged();
 	}
 
@@ -92,97 +96,78 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final ViewHolder viewHolder;
 		ActivityInfo activityInfo = activities.get(position);
-		if (position == inEditModePosition) {
-
-			viewHolder = new ViewHolder();
-			LayoutInflater inflater = LayoutInflater.from(context);
-			convertView = inflater.inflate(R.layout.activity_item_edit, null);
-			viewHolder.name = (TextView) convertView
-					.findViewById(R.id.activityName);
-			viewHolder.startTime = (TextView) convertView
-					.findViewById(R.id.activityStartTime);
-			viewHolder.endTime = (TextView) convertView
-					.findViewById(R.id.activityEndTime);
-			viewHolder.dataEdit = (EditText) convertView
-					.findViewById(R.id.activityDataEdit);
-			viewHolder.noteEdit = (EditText) convertView
-					.findViewById(R.id.activityNoteEdit);
-			viewHolder.cancelButton = (Button) convertView
-					.findViewById(R.id.activityCancel);
-			viewHolder.deletebuButton = (Button) convertView
-					.findViewById(R.id.activityDelete);
-			viewHolder.saveButton = (Button) convertView
-					.findViewById(R.id.activitySave);
-			viewHolder.cancelButton.setOnClickListener(this);
-			viewHolder.deletebuButton.setOnClickListener(this);
-			viewHolder.saveButton.setOnClickListener(this);
-			viewHolder.saveButton.setTag(convertView);
-
-			String startTime = formatTime(activityInfo.StartTime);
-
-			viewHolder.startTime.setText(startTime);
-			if (activityInfo.timeType == ActivityInfo.TIME_DURATION) {
-				viewHolder.endTime.setVisibility(View.VISIBLE);
-				viewHolder.startTime.setTextSize(15);
-				if (activityInfo.EndTime > 0) {
-					viewHolder.endTime.setText("- "
-							+ formatTime(activityInfo.EndTime));
-				} else {
-					viewHolder.endTime.setText("-");
-				}
-			} else {
-				viewHolder.endTime.setVisibility(View.GONE);
-				viewHolder.startTime.setTextSize(25);
-			}
-			viewHolder.name.setText(activityInfo.Name);
-			viewHolder.dataEdit.setText(activityInfo.Data + "");
-			viewHolder.noteEdit.setText(activityInfo.Note);
-
-		} else {
+		if (convertView == null) {
 			viewHolder = new ViewHolder();
 			LayoutInflater inflater = LayoutInflater.from(context);
 			convertView = inflater
 					.inflate(R.layout.activity_item_display, null);
-			viewHolder.name = (TextView) convertView
-					.findViewById(R.id.activityName);
+			viewHolder.activityType = (ImageView) convertView
+					.findViewById(R.id.imageActivity);
 			viewHolder.startTime = (TextView) convertView
 					.findViewById(R.id.activityStartTime);
 			viewHolder.endTime = (TextView) convertView
 					.findViewById(R.id.activityEndTime);
-			viewHolder.data = (TextView) convertView
-					.findViewById(R.id.activityData);
-			viewHolder.note = (TextView) convertView
-					.findViewById(R.id.activityNote);
+			viewHolder.deletebuButton = (Button) convertView
+					.findViewById(R.id.btnDelete);
+
 			convertView.setTag(viewHolder);
-
-			String startTime = formatTime(activityInfo.StartTime);
-
-			viewHolder.startTime.setText(startTime);
-			if (activityInfo.timeType == ActivityInfo.TIME_DURATION) {
-				viewHolder.endTime.setVisibility(View.VISIBLE);
-				viewHolder.startTime.setTextSize(15);
-				if (activityInfo.EndTime > 0) {
-					viewHolder.endTime.setText("- "
-							+ formatTime(activityInfo.EndTime));
-				} else {
-					viewHolder.endTime.setText("-");
-				}
-			} else {
-				viewHolder.endTime.setVisibility(View.GONE);
-				viewHolder.startTime.setTextSize(25);
-			}
-			viewHolder.name.setText(activityInfo.Name);
-			if (activityInfo.Data > 0) {
-				viewHolder.data.setText(activityInfo.Data + "");
-			}
-			if (false && activityInfo.Note.isEmpty()) {
-				viewHolder.note.setVisibility(View.GONE);
-			} else {
-				viewHolder.note.setVisibility(View.VISIBLE);
-				viewHolder.note.setText(activityInfo.Note);
-			}
-
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
 		}
+
+		int image = R.drawable.ic_action_shuijiao;
+		switch ((int) activityInfo.TypeID) {
+		case 1:
+			image = R.drawable.ic_action_weinai;
+			break;
+		case 2:
+			image = R.drawable.ic_action_shuijiao;
+			break;
+		case 3:
+			image = R.drawable.ic_action_xiaobian;
+			break;
+		case 4:
+			image = R.drawable.ic_action_dabian;
+			break;
+
+		default:
+			break;
+		}
+		viewHolder.activityType.setImageResource(image);
+
+		String startTime = formatTime(activityInfo.StartTime);
+
+		viewHolder.startTime.setText(startTime);
+		if (activityInfo.timeType == ActivityInfo.TIME_DURATION) {
+			viewHolder.endTime.setVisibility(View.GONE);
+			viewHolder.startTime.setTextSize(15);
+			if (activityInfo.EndTime > 0) {
+				viewHolder.endTime.setVisibility(View.VISIBLE);
+				viewHolder.endTime.setText(" - "
+						+ formatTime(activityInfo.EndTime));
+			} else {
+				viewHolder.endTime.setText(" - "
+						+ formatTime(activityInfo.StartTime));
+			}
+		} else {
+			viewHolder.endTime.setVisibility(View.GONE);
+			viewHolder.startTime.setTextSize(25);
+		}
+		viewHolder.deletebuButton.setVisibility(View.GONE);
+		viewHolder.deletebuButton.setTag(activityInfo.getId());
+		viewHolder.deletebuButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				long id = (Long) v.getTag();
+				ActivityInfo tobeDeleted = ActivityInfo.load(
+						ActivityInfo.class, id);
+				if (tobeDeleted != null) {
+					tobeDeleted.delete();
+				}
+				refresh();
+			}
+		});
 
 		return convertView;
 	}
@@ -220,16 +205,10 @@ public class DayOneAdapter extends BaseAdapter implements OnClickListener {
 	}
 
 	public class ViewHolder {
-		public TextView name;
+		public ImageView activityType;
 		public TextView startTime;
 		public TextView endTime;
-		public TextView data;
-		public EditText dataEdit;
-		public TextView note;
-		public EditText noteEdit;
 		public Button deletebuButton;
-		public Button cancelButton;
-		public Button saveButton;
 	}
 
 	@Override

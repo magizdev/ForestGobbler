@@ -19,13 +19,13 @@
  <!-- 图片边框属性 -->
     <corners android:radius="5dp" />
  <!-- 圆角的程度 -->
-    <gradient
+    <!-- gradient
         android:angle="90"
         android:centerColor="#ffffff"
         android:centerX="0.5"
         android:centerY="0.5"
         android:endColor="#ffffff"
         android:startColor="#E3E3E3"
-        android:type="linear" />
+        android:type="linear" /-->
 
 </shape>

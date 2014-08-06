@@ -40,6 +40,10 @@
     <string name="profile_shengao">出生身高</string>
     <string name="cancel">取消</string>
     <string name="save">保存</string>
+    <string name="low">标准下限</string>
+    <string name="high">标准上限</string>
+    <string name="profile_height">宝宝身高</string>
+    <string name="profile_weight">宝宝体重</string>
 
     <string-array name="Pages">
         <item>记录今天</item>

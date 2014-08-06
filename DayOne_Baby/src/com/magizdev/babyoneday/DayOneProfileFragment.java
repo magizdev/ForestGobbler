@@ -1,6 +1,7 @@
 package com.magizdev.babyoneday;
 
 import java.util.Calendar;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -24,7 +25,9 @@ import android.widget.RadioButton;
 
 import com.activeandroid.query.Select;
 import com.magizdev.babyoneday.util.DayUtil;
+import com.magizdev.babyoneday.util.GrowthIndexUtil;
 import com.magizdev.babyoneday.util.Profile;
+import com.magizdev.babyoneday.viewmodel.GrowthIndexInfo;
 
 public class DayOneProfileFragment extends Fragment implements
 		OnDateSetListener {
@@ -42,6 +45,7 @@ public class DayOneProfileFragment extends Fragment implements
 	private Calendar calendar;
 	private Profile profile;
 	private String birthdayString;
+	private int oldBirthday;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,12 +73,6 @@ public class DayOneProfileFragment extends Fragment implements
 		tizhong = (EditText) rootView.findViewById(R.id.profile_iniTizhong);
 		update = (Button) rootView.findViewById(R.id.profile_update);
 		birthday = (Button) rootView.findViewById(R.id.profile_birthday);
-		profile = new Select().from(Profile.class).executeSingle();
-		if (profile == null) {
-			profile = new Profile();
-			profile.birthday = DayUtil.Today();
-		}
-		calendar = DayUtil.toCalendar(profile.birthday);
 
 		birthday.setOnClickListener(new OnClickListener() {
 
@@ -102,7 +100,27 @@ public class DayOneProfileFragment extends Fragment implements
 				profile.birthday = DayUtil.toDate(calendar.getTime());
 				profile.gender = gender_boy.isChecked() ? 0 : 1;
 				profile.save();
-				((DrawerActivity)getActivity()).selectItem(0);
+
+				List<GrowthIndexInfo> birthdayData = new Select()
+						.from(GrowthIndexInfo.class)
+						.where("date = " + oldBirthday).execute();
+				for (GrowthIndexInfo data : birthdayData) {
+					data.delete();
+				}
+
+				GrowthIndexInfo birthHeight = new GrowthIndexInfo();
+				birthHeight.Date = profile.birthday;
+				birthHeight.Value = profile.shengao;
+				birthHeight.IndexType = GrowthIndexUtil.GI_HEIGHT;
+				birthHeight.save();
+
+				GrowthIndexInfo birthWeight = new GrowthIndexInfo();
+				birthWeight.Date = profile.birthday;
+				birthWeight.Value = profile.tizhong;
+				birthWeight.IndexType = GrowthIndexUtil.GI_WEIGHT;
+				birthWeight.save();
+
+				((DrawerActivity) getActivity()).selectItem(0);
 			}
 		});
 
@@ -119,6 +137,14 @@ public class DayOneProfileFragment extends Fragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
+
+		profile = new Select().from(Profile.class).executeSingle();
+		if (profile == null) {
+			profile = new Profile();
+			profile.birthday = DayUtil.Today();
+		}
+		oldBirthday = profile.birthday;
+		calendar = DayUtil.toCalendar(profile.birthday);
 
 		name.setText(profile.name);
 		if (profile.shengao > 0) {
