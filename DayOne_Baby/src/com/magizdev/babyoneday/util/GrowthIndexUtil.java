@@ -9,8 +9,8 @@ import com.activeandroid.query.Select;
 import com.magizdev.babyoneday.viewmodel.GrowthIndexInfo;
 
 public class GrowthIndexUtil {
-	public static final int GENDER_BOY = 0;
-	public static final int GENDER_GIRL = 1;
+	public static final int GENDER_BOY = 1;
+	public static final int GENDER_GIRL = 2;
 	public static final int GI_HEIGHT = 0;
 	public static final int GI_WEIGHT = 1;
 	public static final int GI_LOW = 0;

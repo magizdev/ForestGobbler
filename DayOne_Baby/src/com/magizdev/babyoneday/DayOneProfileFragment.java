@@ -22,6 +22,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.activeandroid.query.Select;
 import com.magizdev.babyoneday.util.DayUtil;
@@ -34,14 +35,12 @@ public class DayOneProfileFragment extends Fragment implements
 	protected static final int IMAGE_REQUEST_CODE = 1;
 	private static final int RESIZE_REQUEST_CODE = 2;
 	private View rootView;
-	private EditText name;
-	private RadioButton gender_boy;
-	private RadioButton gender_girl;
-	private EditText shengao;
-	private EditText tizhong;
+	private TextView name;
+	private TextView gender;
+	private TextView shengao;
+	private TextView tizhong;
 	private ImageButton pic;
-	private Button update;
-	private Button birthday;
+	private TextView birthday;
 	private Calendar calendar;
 	private Profile profile;
 	private String birthdayString;
@@ -64,65 +63,11 @@ public class DayOneProfileFragment extends Fragment implements
 				startActivityForResult(galleryIntent, IMAGE_REQUEST_CODE);
 			}
 		});
-		name = (EditText) rootView.findViewById(R.id.profile_name);
-		gender_boy = (RadioButton) rootView
-				.findViewById(R.id.profile_gender_boy);
-		gender_girl = (RadioButton) rootView
-				.findViewById(R.id.profile_gentder_girl);
-		shengao = (EditText) rootView.findViewById(R.id.profile_iniShengao);
-		tizhong = (EditText) rootView.findViewById(R.id.profile_iniTizhong);
-		update = (Button) rootView.findViewById(R.id.profile_update);
-		birthday = (Button) rootView.findViewById(R.id.profile_birthday);
-
-		birthday.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				DatePickerDialog dialog = new DatePickerDialog(getActivity(),
-						DayOneProfileFragment.this,
-						calendar.get(Calendar.YEAR), calendar
-								.get(Calendar.MONTH), calendar
-								.get(Calendar.DAY_OF_MONTH));
-				dialog.show();
-			}
-		});
-
-		update.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				profile.name = name.getText().toString();
-				profile.shengao = Float
-						.parseFloat(shengao.getText().toString());
-				profile.tizhong = Float
-						.parseFloat(tizhong.getText().toString());
-				profile.birthday = DayUtil.toDate(calendar.getTime());
-				profile.gender = gender_boy.isChecked() ? 0 : 1;
-				profile.save();
-
-				List<GrowthIndexInfo> birthdayData = new Select()
-						.from(GrowthIndexInfo.class)
-						.where("date = " + oldBirthday).execute();
-				for (GrowthIndexInfo data : birthdayData) {
-					data.delete();
-				}
-
-				GrowthIndexInfo birthHeight = new GrowthIndexInfo();
-				birthHeight.Date = profile.birthday;
-				birthHeight.Value = profile.shengao;
-				birthHeight.IndexType = GrowthIndexUtil.GI_HEIGHT;
-				birthHeight.save();
-
-				GrowthIndexInfo birthWeight = new GrowthIndexInfo();
-				birthWeight.Date = profile.birthday;
-				birthWeight.Value = profile.tizhong;
-				birthWeight.IndexType = GrowthIndexUtil.GI_WEIGHT;
-				birthWeight.save();
-
-				((DrawerActivity) getActivity()).selectItem(0);
-			}
-		});
+		name = (TextView) rootView.findViewById(R.id.profile_name);
+		gender = (TextView) rootView.findViewById(R.id.profile_gender);
+		shengao = (TextView) rootView.findViewById(R.id.profile_iniShengao);
+		tizhong = (TextView) rootView.findViewById(R.id.profile_iniTizhong);
+		birthday = (TextView) rootView.findViewById(R.id.profile_birthday);
 
 		return rootView;
 	}
@@ -147,16 +92,16 @@ public class DayOneProfileFragment extends Fragment implements
 		calendar = DayUtil.toCalendar(profile.birthday);
 
 		name.setText(profile.name);
-		if (profile.shengao > 0) {
-			shengao.setText(profile.shengao + "");
+		if (profile.height > 0) {
+			shengao.setText(profile.height + "");
 		}
-		if (profile.tizhong > 0) {
-			tizhong.setText(profile.tizhong + "");
+		if (profile.weight > 0) {
+			tizhong.setText(profile.weight + "");
 		}
-		if (profile.gender == 0) {
-			gender_boy.setChecked(true);
+		if (profile.gender == Profile.GENDER_BOY) {
+			gender.setText(R.string.gender_boy);
 		} else {
-			gender_girl.setChecked(true);
+			gender.setText(R.string.gender_girl);
 		}
 		if (profile.pic != null) {
 			pic.setImageDrawable(new BitmapDrawable(profile.pic));

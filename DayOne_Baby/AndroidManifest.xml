@@ -46,6 +46,11 @@
                 android:value="com.magizdev.dayplan.BacklogItemActivity" />
         </activity>
         <activity
+            android:name=".profilewizard.WizardActivity"
+            android:label="@string/backlog_item_activity_label"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".PieChartBuilder"
             android:label="@string/dashboard_activity_label"
             android:launchMode="singleTop"

@@ -1,9 +1,8 @@
 package com.magizdev.babyoneday;
 
-import com.magizdev.babyoneday.util.Profile;
-
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -14,8 +13,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.magizdev.babyoneday.profilewizard.WizardActivity;
+import com.magizdev.babyoneday.util.Profile;
+import com.magizdev.babyoneday.viewmodel.DrawerAdapter;
 
 public class DrawerActivity extends FragmentActivity {
 	private String[] mPageTitles;
@@ -37,7 +39,7 @@ public class DrawerActivity extends FragmentActivity {
 		mTitle = mDrawerTitle = getTitle();
 		mPageTitles = getResources().getStringArray(R.array.Pages);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+		mDrawerList = (ListView) findViewById(R.id.left_drawer_list);
 
 		// set a custom shadow that overlays the main content when the drawer
 
@@ -46,8 +48,8 @@ public class DrawerActivity extends FragmentActivity {
 				GravityCompat.START);
 		// set up the drawer's list view with items and click listener
 
-		mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-				R.layout.product_item, R.id.productName, mPageTitles));
+		DrawerAdapter adapter = new DrawerAdapter(this, mPageTitles);
+		mDrawerList.setAdapter(adapter);
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 		// enable ActionBar app icon to behave as action to toggle nav drawer
@@ -78,7 +80,10 @@ public class DrawerActivity extends FragmentActivity {
 
 		if (savedInstanceState == null) {
 			if (Profile.Instance() == null) {
-				selectItem(2);
+				Intent profileWizardIntent = new Intent(this,
+						WizardActivity.class);
+				startActivity(profileWizardIntent);
+				// selectItem(2);
 			} else {
 				selectItem(0);
 			}
@@ -130,7 +135,9 @@ public class DrawerActivity extends FragmentActivity {
 		@Override
 		public void onItemClick(AdapterView parent, View view, int position,
 				long id) {
-			selectItem(position);
+			if (position > 0) {
+				selectItem(position - 1);
+			}
 		}
 	}
 

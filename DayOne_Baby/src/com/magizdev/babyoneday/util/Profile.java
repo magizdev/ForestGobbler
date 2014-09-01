@@ -11,6 +11,14 @@ import com.activeandroid.query.Select;
 
 @Table(name = "profile")
 public class Profile extends Model {
+	public static final String NAME = "NAME";
+	public static final String GENDER = "GENDER";
+	public static final String HEIGHT = "HEIGHT";
+	public static final String WEIGHT = "WEIGHT";
+	public static final String BIRTHDAY = "BIRTHDAY";
+	public static final String AVATAR = "AVATAR";
+	public static final int GENDER_BOY = 1;
+	public static final int GENDER_GIRL = 2;
 
 	private static Profile instance;
 
@@ -20,11 +28,11 @@ public class Profile extends Model {
 	@Column(name = "gender")
 	public int gender;
 
-	@Column(name = "shengao")
-	public float shengao;
+	@Column(name = "height")
+	public float height;
 
-	@Column(name = "tizhong")
-	public float tizhong;
+	@Column(name = "weight")
+	public float weight;
 
 	@Column(name = "birthday")
 	public int birthday;

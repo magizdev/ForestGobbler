@@ -6,7 +6,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_boy"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="vertical" >
@@ -15,6 +14,7 @@
             android:id="@+id/giInputArea2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:orientation="horizontal" >
 
             <EditText
@@ -22,7 +22,6 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:background="@android:drawable/edit_text"
                 android:inputType="numberDecimal" >
 
                 <requestFocus />
@@ -43,6 +42,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:padding="5dp"
+                android:background="@drawable/button_bg"
                 android:scaleType="fitCenter"
                 android:text="@string/gi_weight" />
         </LinearLayout>
@@ -51,6 +52,7 @@
             android:id="@+id/chartAreaWeight"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="10dp"
             android:background="@drawable/widget_bg"
             android:orientation="vertical" >
 

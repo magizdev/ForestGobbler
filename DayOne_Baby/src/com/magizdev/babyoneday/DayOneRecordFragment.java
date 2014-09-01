@@ -79,7 +79,7 @@ public class DayOneRecordFragment extends Fragment implements OnClickListener {
 		tabHost.setup();
 		setupTabs();
 		taskListView = (ListView) rootView.findViewById(R.id.listViewDayPlan);
-		taskListView.setBackgroundResource(R.drawable.widget_bg);
+		taskListView.setDividerHeight(0);
 		adapter = new DayOneAdapter(getActivity());
 		taskListView.setAdapter(adapter);
 		taskUtil = new ActivityUtil(getActivity());

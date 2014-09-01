@@ -6,7 +6,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_boy"
         android:focusable="true"
         android:focusableInTouchMode="true" >
 
@@ -18,17 +17,6 @@
             android:orientation="vertical" >
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Summary Area" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
@@ -37,8 +25,9 @@
                     android:id="@+id/btnWeiNai"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
+                    android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:background="#00000000"
+                    android:background="@drawable/button_bg"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_action_weinai"
                     android:text="@string/activity_breed" />
@@ -47,8 +36,9 @@
                     android:id="@+id/btnShuiJiao"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
+                    android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:background="#00000000"
+                    android:background="@drawable/button_bg"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_action_shuijiao"
                     android:text="@string/activity_sleep" />
@@ -57,8 +47,9 @@
                     android:id="@+id/btnXiaoBian"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
+                    android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:background="#00000000"
+                    android:background="@drawable/button_bg"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_action_xiaobian"
                     android:text="@string/activity_pee" />
@@ -67,18 +58,34 @@
                     android:id="@+id/btnDaBian"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
+                    android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:background="#00000000"
+                    android:background="@drawable/button_bg"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_action_dabian"
                     android:text="@string/activity_poo" />
             </LinearLayout>
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/summaryArea"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/widget_bg"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Summary Area" />
+        </LinearLayout>
+
         <ListView
             android:id="@+id/listViewDayPlan"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@id/summaryArea"
             android:layout_above="@id/activityArea" >
         </ListView>
     </RelativeLayout>
