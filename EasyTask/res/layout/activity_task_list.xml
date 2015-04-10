@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000" >
@@ -12,7 +13,8 @@
         android:orientation="vertical" >
     </LinearLayout>
 
-    <RelativeLayout
+    <!--
+    RelativeLayout
         android:id="@+id/inputArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,34 +56,56 @@
             android:inputType="text"
             android:singleLine="true" >
         </EditText>
-    </RelativeLayout>
-
-    <!--
-    ListView
-        android:id="@+id/taskList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/inputArea"
-        android:layout_below="@id/adContainer"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="1dp"
-        android:animateLayoutChanges="true"
-        android:listSelector="@drawable/list_selector"
-        android:background="#FFFFFF" >
-    </ListView>
+    </RelativeLayout
     -->
 
-    <com.magizdev.easytask.util.HeaderListView
+    <com.baoyz.swipemenulistview.SwipeMenuListView
         android:id="@+id/taskList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/inputArea"
         android:layout_below="@id/adContainer"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="1dp"
         android:animateLayoutChanges="true"
-        android:background="#FFFFFF"
-        android:listSelector="@drawable/list_selector" >
-    </com.magizdev.easytask.util.HeaderListView>
+        android:background="#FFFFFF" />
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/multiple_actions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        fab:fab_addButtonColorNormal="#FFFFFF"
+        fab:fab_addButtonColorPressed="@color/white_pressed"
+        fab:fab_addButtonPlusIconColor="@color/half_black"
+        fab:fab_labelStyle="@style/menu_labels_style" >
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_text_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/white"
+            fab:fab_colorPressed="@color/white_pressed"
+            fab:fab_title="Add text task" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_voice_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/white"
+            fab:fab_colorPressed="@color/white_pressed"
+            fab:fab_title="Add voice task" />
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+    <!--
+        ListView
+        android:id="@+id/expandableListArea"
+        android:layout_below="@id/adContainer"
+        android:layout_above="@id/inputArea"
+        android:layout_width="match_parent"
+        android:layout_marginTop="5dp"
+        android:layout_height="match_parent"/
+    -->
 
 </RelativeLayout>

@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 import com.magizdev.easytask.util.AlarmUtil;
 import com.magizdev.easytask.viewmodel.EasyTaskInfo;
-import com.magizdev.easytask.viewmodel.EasyTaskUtil;
+import com.magizdev.easytask.viewmodel.EasyTaskRepository;
 
 public class TaskEditActivity extends Activity implements OnClickListener {
 	private final static String DATE = "yyyy/MM/dd";
@@ -51,7 +51,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 	RelativeLayout areaPicker;
 	Button btnSave;
 	Button btnCancel;
-	EasyTaskUtil util;
+	EasyTaskRepository util;
 	long easyTaskId;
 	int mAnimationTime;
 
@@ -63,7 +63,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_edit);
-		util = new EasyTaskUtil(this);
+		util = new EasyTaskRepository(this);
 		txtTitle = (EditText) findViewById(R.id.txtTitle);
 		txtNote = (EditText) findViewById(R.id.txtNote);
 		timePicker = (TimePicker) findViewById(R.id.timePicker);
@@ -155,11 +155,11 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 
 		if (easyTaskId != 0) {
 			EasyTaskInfo taskInfo = util.getTask(easyTaskId);
-			Date startDate = taskInfo.StartDate;
+			Date startDate = taskInfo.NotifyDate;
 			GregorianCalendar startDateCalendar = new GregorianCalendar();
 			startDateCalendar.setTime(startDate);
 			txtTitle.setText(taskInfo.Title);
-			txtNote.setText(taskInfo.Note);
+			txtNote.setText(taskInfo.Title);
 			SimpleDateFormat dateFormat = new SimpleDateFormat(DATE);
 			SimpleDateFormat timeFormat = new SimpleDateFormat(TIME);
 			btnDate.setText(dateFormat.format(startDate));
@@ -260,10 +260,10 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		calendar.set(GregorianCalendar.HOUR_OF_DAY, timePicker.getCurrentHour());
 		calendar.set(GregorianCalendar.MINUTE, timePicker.getCurrentMinute());
 		calendar.set(GregorianCalendar.SECOND, 0);
-		EasyTaskInfo task = new EasyTaskInfo(0, txtTitle.getText().toString(),
-				txtNote.getText().toString(), new Date(), calendar.getTime(),
-				"local", null);
-		util.updateTask(easyTaskId, task);
+		EasyTaskInfo task = new EasyTaskInfo(txtTitle.getText().toString(), null,
+				 new Date(), calendar.getTime(),
+				false, EasyTaskInfo.STATUS_DEFAULT);
+		task.save();
 		setResult(RESULT_OK);
 		AlarmUtil.updateAlarm(this);
 		finish();

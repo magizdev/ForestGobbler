@@ -4,8 +4,8 @@ var Schema=mongoose.Schema;
 module.exports.mongoose=mongoose;
 module.exports.Schema=Schema;
 
-var username="magizdev_user";
-var password="qwerasdf";
+var username="";
+var password="";
 var address = '@ds041198.mongolab.com:41198/game_rank';
 connect();
 

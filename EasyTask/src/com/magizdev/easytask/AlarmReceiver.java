@@ -9,14 +9,14 @@ import android.media.RingtoneManager;
 
 import com.magizdev.easytask.util.AlarmUtil;
 import com.magizdev.easytask.viewmodel.EasyTaskInfo;
-import com.magizdev.easytask.viewmodel.EasyTaskUtil;
+import com.magizdev.easytask.viewmodel.EasyTaskRepository;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		long id = intent.getLongExtra("easyTaskId", 0l);
-		EasyTaskUtil util = new EasyTaskUtil(context);
+		EasyTaskRepository util = new EasyTaskRepository(context);
 		EasyTaskInfo task = util.getTask(id);
 		NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);

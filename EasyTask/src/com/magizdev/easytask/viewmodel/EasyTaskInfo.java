@@ -1,39 +1,47 @@
 package com.magizdev.easytask.viewmodel;
 
-import java.util.Calendar;
 import java.util.Date;
 
-public class EasyTaskInfo {
-	public long Id;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
+@Table(name = "tasks")
+public class EasyTaskInfo extends Model {
+	public static final int STATUS_DEFAULT = 0;
+	public static final int STATUS_COMPLETE = 1;
+	public static final int STATUS_CANCEL = 2;
+
+	@Column(name = "title")
 	public String Title;
-	public String Note;
+
+	@Column(name = "voice")
+	public String Voice;
+
+	@Column(name = "createDate")
 	public Date CreateDate;
-	public Date StartDate;
-	public String Source;
-	public String SourceId;
 
-	public boolean getEnableNotification() {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(StartDate);
-		int year = calendar.get(Calendar.YEAR);
-		return year > 2000;
-	}
+	@Column(name = "notifyDate")
+	public Date NotifyDate;
+
+	@Column(name = "enableNotify")
+	public boolean EnableNotify;
+
+	@Column(name = "status")
+	public int Status;
 	
-	public void disableNotification(){
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(StartDate);
-		calendar.set(Calendar.YEAR, 1999);
-		StartDate = calendar.getTime();
+	public EasyTaskInfo(){
+		super();
 	}
 
-	public EasyTaskInfo(long id, String title, String note, Date createDate,
-			Date startDate, String source, String sourceId) {
-		this.Id = id;
+	public EasyTaskInfo(String title, String voice, Date createDate,
+			Date notifyDate, Boolean enableNotify, int status) {
+		super();
 		this.Title = title;
-		this.Note = note;
+		this.Voice = voice;
 		this.CreateDate = createDate;
-		this.StartDate = startDate;
-		this.Source = source;
-		this.SourceId = sourceId;
+		this.NotifyDate = notifyDate;
+		this.EnableNotify = enableNotify;
+		this.Status = status;
 	}
 }
